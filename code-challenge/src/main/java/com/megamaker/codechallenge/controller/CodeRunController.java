@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.controller;
 
-import com.megamaker.codechallenge.domain.UserAnswer;
+import com.megamaker.codechallenge.dto.RequestUserAnswer;
 import com.megamaker.codechallenge.service.CodeRunService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +15,7 @@ public class CodeRunController {
     private final CodeRunService codeRunService;
 
     @PostMapping("/answer")
-    public String checkAnswer(@RequestBody UserAnswer userAnswer) {
+    public String checkAnswer(@RequestBody RequestUserAnswer requestUserAnswer) {
         //codeRunService.run();
         return null;
     }
