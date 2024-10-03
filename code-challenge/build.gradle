@@ -42,6 +42,6 @@ processResources.dependsOn('copyConfig')
 
 tasks.register('copyConfig', Copy) {
 	from './code-challenge-config'
-	include 'application*.yaml'
+	include 'application*.y*ml'
 	into 'src/main/resources'
 }
