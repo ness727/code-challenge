@@ -2,13 +2,12 @@ package com.megamaker.codechallenge.entity;
 
 import com.megamaker.codechallenge.domain.Level;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(name = "problems")
 @Entity
 public class Problem extends BaseTimeDate {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
