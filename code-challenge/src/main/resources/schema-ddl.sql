@@ -26,7 +26,7 @@ create table user_problems(
 
 create table problems(
     id bigint primary key auto_increment,
-    level_id integer,
+    level integer,
     title varchar(255),
     content text,
     problem_picture_id bigint,
