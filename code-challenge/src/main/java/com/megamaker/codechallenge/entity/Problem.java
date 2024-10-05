@@ -4,6 +4,8 @@ import com.megamaker.codechallenge.domain.Level;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -20,7 +22,6 @@ public class Problem extends BaseTimeDate {
 
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "problem_picture_id")
-    private ProblemPicture problemPicture;
+    @OneToMany(mappedBy = "problem")
+    private List<ProblemPicture> problemPictureList;
 }
