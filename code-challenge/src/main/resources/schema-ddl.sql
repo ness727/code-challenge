@@ -29,7 +29,6 @@ create table problems(
     level integer,
     title varchar(255),
     content text,
-    problem_picture_id bigint,
     testcase_id bigint,
     created_at datetime default current_timestamp on update current_timestamp,
     updated_at datetime default current_timestamp on update current_timestamp
@@ -44,6 +43,7 @@ create table testcases(
 
 create table problem_pictures(
     id bigint primary key auto_increment,
+    problem_id bigint,
     name varchar(100),
     url varchar(255)
 );
@@ -70,7 +70,7 @@ alter table user_problems add foreign key(user_id) references users(id);
 alter table user_problems add foreign key(problem_id) references problems(id);
 # alter table user_problems add foreign key(user_problem_status_id) references user_problem_status(id);
 # alter table problems add foreign key(level_id) references levels(id);
-alter table problems add foreign key(problem_picture_id) references problem_pictures(id);
 alter table problems add foreign key(testcase_id) references testcases(id);
+alter table problem_pictures add foreign key(problem_id) references problems(id);
 alter table user_badges add foreign key(user_id) references users(id);
 alter table user_badges add foreign key(badge_id) references badges(id);
