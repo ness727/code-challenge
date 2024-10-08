@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(name = "problem_pictures")
 @Entity
 public class ProblemPicture {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
