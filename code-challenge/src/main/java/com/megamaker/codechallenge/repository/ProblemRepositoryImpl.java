@@ -9,6 +9,7 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,7 +20,6 @@ import java.util.List;
 
 import static com.megamaker.codechallenge.entity.QProblem.problem;
 
-@Transactional
 @Repository
 public class ProblemRepositoryImpl implements ProblemRepository {
     private final EntityManager entityManager;
@@ -74,6 +74,10 @@ public class ProblemRepositoryImpl implements ProblemRepository {
 
     @Override
     public Problem find(Long id) {
-        return entityManager.find(Problem.class, id);
+        return queryFactory.selectFrom(problem)
+                .leftJoin(problem.problemPictureList).fetchJoin()
+                .leftJoin(problem.testcaseList).fetchJoin()
+                .where(problem.id.eq(id))
+                .fetchFirst();
     }
 }

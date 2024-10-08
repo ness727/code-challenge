@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,9 +28,9 @@ public class Problem extends BaseTimeDate {
     @Column(name = "input_output")
     private String inputOutput;
 
-    @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
-    private List<ProblemPicture> problemPictureList;
+    @OneToMany(mappedBy = "problem")
+    private Set<ProblemPicture> problemPictureList;
 
-    @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
-    private List<Testcase> testcaseList;
+    @OneToMany(mappedBy = "problem")
+    private Set<Testcase> testcaseList;
 }
