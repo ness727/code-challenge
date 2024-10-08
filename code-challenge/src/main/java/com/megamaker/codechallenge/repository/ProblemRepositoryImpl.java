@@ -71,4 +71,9 @@ public class ProblemRepositoryImpl implements ProblemRepository {
                     return new OrderSpecifier(direction, expression);
                 }).toArray(OrderSpecifier[]::new);
     }
+
+    @Override
+    public Problem find(Long id) {
+        return entityManager.find(Problem.class, id);
+    }
 }

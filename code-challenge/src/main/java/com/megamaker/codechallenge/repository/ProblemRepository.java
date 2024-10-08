@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface ProblemRepository {
     List<Problem> findAll(ProblemSearchCond problemSearchCond, Pageable pageable);
+    Problem find(Long id);
 }

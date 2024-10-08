@@ -20,8 +20,16 @@ public class Problem extends BaseTimeDate {
     @Enumerated
     private Level level;
 
-    private String content;
+    private String description;
 
-    @OneToMany(mappedBy = "problem")
+    private String limitation;
+
+    @Column(name = "input_output")
+    private String inputOutput;
+
+    @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
     private List<ProblemPicture> problemPictureList;
+
+    @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
+    private List<Testcase> testcaseList;
 }

@@ -1,15 +1,13 @@
 package com.megamaker.codechallenge.controller;
 
 import com.megamaker.codechallenge.dto.ProblemSearchCond;
+import com.megamaker.codechallenge.dto.ResponseListProblem;
 import com.megamaker.codechallenge.dto.ResponseProblem;
 import com.megamaker.codechallenge.service.ProblemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,9 +31,14 @@ public class ProblemController {
     private final ProblemService problemService;
 
     @GetMapping("/list")
-    public List<ResponseProblem> getList(
+    public List<ResponseListProblem> getList(
             @ModelAttribute ProblemSearchCond problemSearchCond,
             @PageableDefault(sort = "title", direction = ASC) Pageable pageable) {
         return problemService.getList(problemSearchCond, pageable);
+    }
+
+    @GetMapping("/{problemId}")
+    public ResponseProblem get(@PathVariable Long problemId) {
+        return problemService.get(problemId);
     }
 }
