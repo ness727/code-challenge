@@ -1,0 +1,3 @@
+[submodule "code-challenge/code-challenge-config"]
+	path = code-challenge/code-challenge-config
+	url = https://github.com/ness727/code-challenge-config.git
