@@ -24,12 +24,24 @@ repositories {
 }
 
 dependencies {
+	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// Spring Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// OAuth2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// MapStruct
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// Data JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// MariaDB
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.4.1'
 
 	// Querydsl
