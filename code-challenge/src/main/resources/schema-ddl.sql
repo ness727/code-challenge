@@ -1,9 +1,10 @@
 create table users(
     id bigint primary key auto_increment,
-    user_id varchar(255) unique,
-    provider_id varchar(50),
+    provider tinyint,
+    provider_id varchar(50) unique,
     nickname varchar(50),
     score integer,
+    role tinyint,
     created_at datetime default current_timestamp on update current_timestamp,
     updated_at datetime default current_timestamp on update current_timestamp
 );
