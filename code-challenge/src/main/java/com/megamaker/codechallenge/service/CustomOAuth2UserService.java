@@ -32,7 +32,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         log.info("OAuth2User.getAttributes = {}", oAuth2User.getAttributes());
 
         Optional<User> foundUser = userRepository.findByProviderId(oAuth2Response.getProviderId());
-        Role role = Role.USER;
+        Role role;
         if (foundUser.isEmpty()) {
             User newUser = User.builder()
                     .provider(oAuth2Response.getProvider())
@@ -42,6 +42,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .role(Role.USER)
                     .build();
             userRepository.save(newUser);
+            role = Role.USER;
         } else {
             role = foundUser.get().getRole();
         }
