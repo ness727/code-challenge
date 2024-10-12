@@ -23,8 +23,8 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .oauth2Login((oauth2) ->
-                        oauth2.userInfoEndpoint((userInfoEndpointConfig) ->
-                                userInfoEndpointConfig.userService(customOAuth2UserService)
+                        oauth2.userInfoEndpoint((endpointConfig) ->
+                                endpointConfig.userService(customOAuth2UserService)
                         )
                 )
                 .authorizeHttpRequests((auth) -> auth

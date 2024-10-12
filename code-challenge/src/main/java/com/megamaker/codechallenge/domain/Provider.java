@@ -7,13 +7,13 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Arrays;
 
-public enum OAuth2ClientEnum {
+public enum Provider {
     GITHUB("github"),
     GOOGLE("google");
 
     private final String registrationId;
 
-    OAuth2ClientEnum(String registrationId) {
+    Provider(String registrationId) {
         this.registrationId = registrationId;
     }
 
@@ -21,8 +21,8 @@ public enum OAuth2ClientEnum {
         return registrationId;
     }
 
-    public static OAuth2ClientEnum getOAuth2Client(String registrationId) {
-        return Arrays.stream(OAuth2ClientEnum.values())
+    private static Provider getOAuth2Client(String registrationId) {
+        return Arrays.stream(Provider.values())
                 .filter((e) -> e.getRegistrationId().equals(registrationId))
                 .findFirst()
                 .orElse(null);

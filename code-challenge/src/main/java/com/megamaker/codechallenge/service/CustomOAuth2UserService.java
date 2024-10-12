@@ -1,28 +1,51 @@
 package com.megamaker.codechallenge.service;
 
-import com.megamaker.codechallenge.domain.OAuth2ClientEnum;
+import com.megamaker.codechallenge.domain.Provider;
+import com.megamaker.codechallenge.domain.Role;
 import com.megamaker.codechallenge.dto.CustomOAuth2User;
 import com.megamaker.codechallenge.dto.OAuth2Response;
+import com.megamaker.codechallenge.entity.User;
+import com.megamaker.codechallenge.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
+@Transactional
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+    private final UserRepository userRepository;
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        OAuth2Response oAuth2Response = OAuth2ClientEnum.getOAuth2Response(oAuth2User, registrationId);
+        OAuth2Response oAuth2Response = Provider.getOAuth2Response(oAuth2User, registrationId);
         log.info("OAuth2User.getAttributes = {}", oAuth2User.getAttributes());
 
-        // 나중에 enum으로 분리하기
-        String role = "ROLE_USER";
+        Optional<User> foundUser = userRepository.findByProviderId(oAuth2Response.getProviderId());
+        Role role = Role.USER;
+        if (foundUser.isEmpty()) {
+            User newUser = User.builder()
+                    .provider(oAuth2Response.getProvider())
+                    .providerId(oAuth2Response.getProviderId())
+                    .nickname(oAuth2Response.getName())
+                    .score(0)
+                    .role(Role.USER)
+                    .build();
+            userRepository.save(newUser);
+        } else {
+            role = foundUser.get().getRole();
+        }
 
-        return new CustomOAuth2User(oAuth2Response, role);
+        return new CustomOAuth2User(oAuth2Response, role.name());
     }
 }
