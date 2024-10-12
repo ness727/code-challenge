@@ -19,6 +19,9 @@ public class User extends BaseTimeDate {
     @Column(name = "user_id")
     private String userId;
 
+    @Column(name = "provider_id")
+    private String providerId;
+
     private String nickname;
 
     private Integer score;
