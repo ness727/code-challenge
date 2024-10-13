@@ -28,6 +28,7 @@ create table problems(
     input_output varchar(255),
     solved_count bigint default 0 not null,
     try_count bigint default 0 not null,
+    correct_rate float default 0 not null,
     created_at datetime default current_timestamp on update current_timestamp,
     updated_at datetime default current_timestamp on update current_timestamp
 );

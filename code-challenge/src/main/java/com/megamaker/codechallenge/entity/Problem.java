@@ -34,6 +34,9 @@ public class Problem extends BaseTimeDate {
     @Column(name = "try_count")
     private Long tryCount;
 
+    @Column(name = "correct_rate")
+    private Float correctRate;
+
     @OneToMany(mappedBy = "problem")
     private Set<ProblemPicture> problemPictureList;
 
