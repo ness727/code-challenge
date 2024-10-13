@@ -20,6 +20,7 @@ public class ResponseProblem {
     private String description;
     private String limitation;
     private String inputOutput;
+    private Float correctRate;
     private List<ResponseProblemPicture> problemPictureList;
     private List<ResponseTestcase> testcaseList;
 }
