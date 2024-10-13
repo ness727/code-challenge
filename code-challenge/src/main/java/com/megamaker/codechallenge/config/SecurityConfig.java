@@ -1,4 +1,4 @@
-package com.megamaker.config;
+package com.megamaker.codechallenge.config;
 
 import com.megamaker.codechallenge.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/oauth2/**", "/login").permitAll()
-                        .anyRequest().authenticated()
-                ).build();
+                        //.anyRequest().authenticated()
+                        .anyRequest().permitAll()
+                )
+                .build();
     }
 }
