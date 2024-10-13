@@ -28,6 +28,12 @@ public class Problem extends BaseTimeDate {
     @Column(name = "input_output")
     private String inputOutput;
 
+    @Column(name = "solved_count")
+    private Long solvedCount;
+
+    @Column(name = "try_count")
+    private Long tryCount;
+
     @OneToMany(mappedBy = "problem")
     private Set<ProblemPicture> problemPictureList;
 
