@@ -1,9 +1,6 @@
 package com.megamaker.codechallenge.dto;
 
-import com.megamaker.codechallenge.domain.Level;
-import com.megamaker.codechallenge.entity.ProblemPicture;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.megamaker.codechallenge.domain.problem.Level;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

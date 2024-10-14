@@ -1,7 +1,7 @@
 package com.megamaker.codechallenge.service;
 
-import com.megamaker.codechallenge.domain.Provider;
-import com.megamaker.codechallenge.domain.Role;
+import com.megamaker.codechallenge.domain.problem.Provider;
+import com.megamaker.codechallenge.domain.user.Role;
 import com.megamaker.codechallenge.dto.CustomOAuth2User;
 import com.megamaker.codechallenge.dto.OAuth2Response;
 import com.megamaker.codechallenge.entity.User;

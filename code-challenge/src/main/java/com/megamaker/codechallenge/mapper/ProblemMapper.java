@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.mapper;
 
-import com.megamaker.codechallenge.domain.Level;
+import com.megamaker.codechallenge.domain.problem.Level;
 import com.megamaker.codechallenge.dto.ResponseListProblem;
 import com.megamaker.codechallenge.dto.ResponseProblem;
 import com.megamaker.codechallenge.dto.ResponseProblemPicture;

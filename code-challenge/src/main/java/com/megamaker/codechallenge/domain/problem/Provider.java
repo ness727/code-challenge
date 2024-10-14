@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.domain;
+package com.megamaker.codechallenge.domain.problem;
 
 import com.megamaker.codechallenge.dto.GithubResponse;
 import com.megamaker.codechallenge.dto.GoogleResponse;

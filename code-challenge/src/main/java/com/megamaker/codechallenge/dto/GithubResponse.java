@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.dto;
 
-import com.megamaker.codechallenge.domain.Provider;
+import com.megamaker.codechallenge.domain.problem.Provider;
 
 import java.util.Map;
 

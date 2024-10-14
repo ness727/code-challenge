@@ -1,10 +1,9 @@
 package com.megamaker.codechallenge.entity;
 
-import com.megamaker.codechallenge.domain.Level;
+import com.megamaker.codechallenge.domain.problem.Level;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
 import java.util.Set;
 
 @Getter
