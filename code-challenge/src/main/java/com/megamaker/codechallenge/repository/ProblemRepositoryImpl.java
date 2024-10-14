@@ -28,6 +28,8 @@ public class ProblemRepositoryImpl implements ProblemRepository {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
+    // -------- 전체 조회 ---------
+    
     @Override
     public List<Problem> findAll(ProblemSearchCond problemSearchCond, Pageable pageable) {
         BooleanBuilder builder = getCondResult(problemSearchCond);
@@ -41,6 +43,7 @@ public class ProblemRepositoryImpl implements ProblemRepository {
                 .fetch();
     }
 
+    // 검색 로직
     private static BooleanBuilder getCondResult(ProblemSearchCond problemSearchCond) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         String title = problemSearchCond.getTitle();
@@ -57,6 +60,7 @@ public class ProblemRepositoryImpl implements ProblemRepository {
         return booleanBuilder;
     }
 
+    // 정렬 로직
     private static OrderSpecifier[] getOrderSpecifiers(Pageable pageable) {
         return pageable.getSort().stream()
                 .map((Sort.Order order) -> {
@@ -64,12 +68,15 @@ public class ProblemRepositoryImpl implements ProblemRepository {
                     Expression<?> expression = switch (order.getProperty()) {
                         case "title" -> problem.title;
                         case "level" -> problem.level;
+                        case "correctRate" -> problem.correctRate;
                         default -> null;
                     };
                     return new OrderSpecifier(direction, expression);
                 }).toArray(OrderSpecifier[]::new);
     }
 
+    // -------- 단건 조회 ---------
+    
     @Override
     public Problem find(Long id) {
         return queryFactory.selectFrom(problem)

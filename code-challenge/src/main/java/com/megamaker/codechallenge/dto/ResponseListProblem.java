@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class ResponseListProblem {
     private String title;
     private String level;
+    private Float correctRate;
 }
