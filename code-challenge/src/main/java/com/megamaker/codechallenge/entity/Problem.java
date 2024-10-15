@@ -1,10 +1,9 @@
 package com.megamaker.codechallenge.entity;
 
-import com.megamaker.codechallenge.domain.Level;
+import com.megamaker.codechallenge.domain.problem.Level;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -27,6 +26,15 @@ public class Problem extends BaseTimeDate {
 
     @Column(name = "input_output")
     private String inputOutput;
+
+    @Column(name = "solved_count")
+    private Long solvedCount;
+
+    @Column(name = "try_count")
+    private Long tryCount;
+
+    @Column(name = "correct_rate")
+    private Float correctRate;
 
     @OneToMany(mappedBy = "problem")
     private Set<ProblemPicture> problemPictureList;

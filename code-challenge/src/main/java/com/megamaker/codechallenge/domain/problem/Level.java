@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.domain;
+package com.megamaker.codechallenge.domain.problem;
 
 public enum Level {
     LV0(0, "레벨 0"),

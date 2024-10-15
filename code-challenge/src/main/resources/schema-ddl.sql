@@ -1,9 +1,10 @@
 create table users(
     id bigint primary key auto_increment,
-    user_id varchar(255) unique,
-    provider_id varchar(50),
+    provider tinyint,
+    provider_id varchar(50) unique,
     nickname varchar(50),
     score integer,
+    role tinyint,
     created_at datetime default current_timestamp on update current_timestamp,
     updated_at datetime default current_timestamp on update current_timestamp
 );
@@ -25,6 +26,9 @@ create table problems(
     description text,
     limitation varchar(255),
     input_output varchar(255),
+    solved_count bigint default 0 not null,
+    try_count bigint default 0 not null,
+    correct_rate float default 0 not null,
     created_at datetime default current_timestamp on update current_timestamp,
     updated_at datetime default current_timestamp on update current_timestamp
 );

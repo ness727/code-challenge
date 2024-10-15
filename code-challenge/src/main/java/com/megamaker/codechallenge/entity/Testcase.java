@@ -1,7 +1,7 @@
 package com.megamaker.codechallenge.entity;
 
-import com.megamaker.codechallenge.domain.TestcaseDataType;
-import com.megamaker.codechallenge.domain.TestcaseType;
+import com.megamaker.codechallenge.domain.problem.TestcaseDataType;
+import com.megamaker.codechallenge.domain.problem.TestcaseType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
