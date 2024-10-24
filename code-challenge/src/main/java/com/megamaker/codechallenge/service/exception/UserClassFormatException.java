@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.exception;
+package com.megamaker.codechallenge.service.exception;
 
 public class UserClassFormatException extends UserCodeRunException {
     public UserClassFormatException(String message) {
