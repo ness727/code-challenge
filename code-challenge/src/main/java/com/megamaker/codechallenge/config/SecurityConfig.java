@@ -22,12 +22,12 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final MessageSource messageSource;
 
-    @Bean
-    public WebSecurityCustomizer configure() {
-        return web -> web.ignoring()
-                .requestMatchers("/img/**", "/css/**", "/js/**", "/assets/**",
-                        "/error", "/actuator/**");  // 정적 자원은 필터 무시
-    }
+//    @Bean
+//    public WebSecurityCustomizer configure() {
+//        return web -> web.ignoring()
+//                .requestMatchers("/img/**", "/css/**", "/js/**", "/assets/**",
+//                        "/error", "/actuator/**");  // 정적 자원은 필터 무시
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

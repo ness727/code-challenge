@@ -1,6 +1,8 @@
 package com.megamaker.codechallenge.service;
 
 import com.megamaker.codechallenge.exception.UserClassFormatException;
+import com.megamaker.codechallenge.exception.UserClassLoadException;
+import com.megamaker.codechallenge.exception.UserMethodLoadException;
 import org.springframework.stereotype.Service;
 
 import javax.tools.JavaCompiler;
@@ -8,7 +10,6 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -20,10 +21,10 @@ import java.net.URLClassLoader;
 
 @Service
 public class CodeRunService {
-    static final String CLASS_SOLUTION = "class Solution";
-    static final String SOLUTION = "Solution";
+    private static final String CLASS_SOLUTION = "class Solution";
+    private static final String SOLUTION = "Solution";
 
-    public void run(String sourceCode) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public void run(String sourceCode) {
         // 컴파일러 인스턴스 얻기
         JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
         try (StandardJavaFileManager fileManager = javac.getStandardFileManager(null, null, null)) {
@@ -32,28 +33,37 @@ public class CodeRunService {
             File tempJavaFile = File.createTempFile(SOLUTION, ".java");  // 결과 파일 예: Solution237529.java
             String newClassName;
 
-            if (!sourceCode.contains(CLASS_SOLUTION)) throw new UserClassFormatException("클래스 형식에 맞춰서 작성해주세요.");
+            if (!sourceCode.contains(CLASS_SOLUTION)) throw new UserClassFormatException("클래스 형식에 맞춰 작성해주세요.");
             else newClassName = tempJavaFile.getName().split("\\.")[0];
 
+            // 클래스명 임시 파일명과 동일하게 변경
             try (Writer writer = new BufferedWriter(new FileWriter(tempJavaFile))) {
                 sourceCode = sourceCode.replaceFirst(CLASS_SOLUTION, "class " + newClassName);
                 writer.write(sourceCode);
             }
 
-            // 파일 컴파일
+            // javac 컴파일
             Iterable<? extends JavaFileObject> fileObjects = fileManager.getJavaFileObjects(tempJavaFile);
             javac.getTask(null, fileManager, null, null, null, fileObjects).call();
 
             // 클래스 로드
             URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{tempJavaFile.getParentFile().toURI().toURL()});
-            Class<?> loadedClass = Class.forName(newClassName, true, classLoader);
+            Class<?> loadedClass = null;
+            try {
+                loadedClass = Class.forName(newClassName, true, classLoader);
+            } catch (ClassNotFoundException e) {
+                throw new UserClassLoadException(e);
+            }
 
             // 인스턴스 생성 및 메서드 호출
-            Object instance = loadedClass.getDeclaredConstructor().newInstance();
-            Method method = loadedClass.getMethod("sayHello");
-
-            // 메인 로직 메서드 실행
-            method.invoke(instance);
+            try {
+                Object instance = loadedClass.getDeclaredConstructor().newInstance();
+                Method method = loadedClass.getMethod("sayHello");
+                // 메인 로직 메서드 실행
+                method.invoke(instance);
+            } catch (Exception e) {
+                throw new UserMethodLoadException(e);
+            }
 
             // .java 파일 삭제
             tempJavaFile.delete();
@@ -62,8 +72,7 @@ public class CodeRunService {
             File classFile = new File("./", newClassName + ".class");
             classFile.delete();
         } catch (IOException e) {
-            
+            throw new RuntimeException("FileManager 오류");
         }
-
     }
 }
