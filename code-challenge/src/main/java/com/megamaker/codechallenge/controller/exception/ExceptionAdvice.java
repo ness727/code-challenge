@@ -20,46 +20,40 @@ public class ExceptionAdvice {
     // Controller 예외 처리
     @ExceptionHandler(UserRequestLangException.class)
     public ErrorResult userRequestLang() {
-        String code = ms.getMessage("code.user_request_lang", null, null);
-        String message = ms.getMessage("message.user_request_lang", null, null);
-        return new ErrorResult(code, message);
+        return createErrorResult("user_request_lang");
     }
 
     // Service 예외 처리
     @ExceptionHandler(UserClassFormatException.class)
     public ErrorResult userClassFormat() {
-        String code = ms.getMessage("code.user_class_format", null, null);
-        String message = ms.getMessage("message.user_class_format", null, null);
-        return new ErrorResult(code, message);
+        return createErrorResult("user_class_format");
     }
 
     @ExceptionHandler(UserClassLoadException.class)
     public ErrorResult userClassLoad() {
-        String code = ms.getMessage("code.user_class_load", null, null);
-        String message = ms.getMessage("message.user_class_load", null, null);
-        return new ErrorResult(code, message);
+        return createErrorResult("user_class_load");
     }
 
     @ExceptionHandler(UserMethodLoadException.class)
     public ErrorResult userMethodLoad() {
-        String code = ms.getMessage("code.user_method_load", null, null);
-        String message = ms.getMessage("message.user_method_load", null, null);
-        return new ErrorResult(code, message);
+        return createErrorResult("user_method_load");
     }
 
     @ExceptionHandler(UserCodeRuntimeException.class)
     public ErrorResult userCodeRuntime() {
-        String code = ms.getMessage("code.user_code_runtime", null, null);
-        String message = ms.getMessage("message.user_code_runtime", null, null);
-        return new ErrorResult(code, message);
+        return createErrorResult("user_code_runtime");
     }
 
     // 그 외의 모든 예외 처리
     @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ErrorResult etcException() {
-        String code = ms.getMessage("code.etc", null, null);
-        String message = ms.getMessage("message.etc", null, null);
+        return createErrorResult("etc");
+    }
+
+    private ErrorResult createErrorResult(String exName) {
+        String code = ms.getMessage("code." + exName, null, null);
+        String message = ms.getMessage("message." + exName, null, null);
         return new ErrorResult(code, message);
     }
 }
