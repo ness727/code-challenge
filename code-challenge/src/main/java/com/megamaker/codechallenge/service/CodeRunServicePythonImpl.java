@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CodeRunServicePythonImpl implements CodeRunService {
     @Override
-    public void run(RequestUserAnswer requestUserAnswer) {
+    public String run(RequestUserAnswer requestUserAnswer) {
         log.info("python 코드 실행");
+        return null;
     }
 }

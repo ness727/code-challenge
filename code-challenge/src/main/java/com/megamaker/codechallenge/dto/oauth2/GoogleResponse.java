@@ -1,24 +1,24 @@
-package com.megamaker.codechallenge.dto;
+package com.megamaker.codechallenge.dto.oauth2;
 
 import com.megamaker.codechallenge.domain.problem.Provider;
 
 import java.util.Map;
 
-public class GithubResponse implements OAuth2Response {
+public class GoogleResponse implements OAuth2Response {
     private final Map<String, Object> attribute;
 
-    public GithubResponse(Map<String, Object> attribute) {
+    public GoogleResponse(Map<String, Object> attribute) {
         this.attribute = attribute;
     }
 
     @Override
     public Provider getProvider() {
-        return Provider.GITHUB;
+        return Provider.GOOGLE;
     }
 
     @Override
     public String getProviderId() {
-        return attribute.get("id").toString();
+        return attribute.get("sub").toString();
     }
 
     @Override
@@ -28,6 +28,6 @@ public class GithubResponse implements OAuth2Response {
 
     @Override
     public String getName() {
-        return attribute.get("login").toString();
+        return attribute.get("name").toString();
     }
 }

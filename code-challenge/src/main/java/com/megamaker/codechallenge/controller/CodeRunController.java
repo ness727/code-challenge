@@ -5,54 +5,38 @@ import com.megamaker.codechallenge.dto.RequestUserAnswer;
 import com.megamaker.codechallenge.service.CodeRunService;
 import com.megamaker.codechallenge.service.CodeRunServiceJavaImpl;
 import com.megamaker.codechallenge.service.CodeRunServicePythonImpl;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/code")
-@RequiredArgsConstructor
 @RestController
 public class CodeRunController {
-    private final List<CodeRunService> codeRunServiceList;
+    private final Map<String, CodeRunService> codeRunServiceMap;
+
+    public CodeRunController(CodeRunServiceJavaImpl codeRunServiceJava,
+                             CodeRunServicePythonImpl codeRunServicePython) {
+        codeRunServiceMap = Map.of(
+                "java", codeRunServiceJava,
+                "python", codeRunServicePython
+        );
+    }
 
     @PostMapping("/answer")
     public String checkAnswer(@RequestBody RequestUserAnswer requestUserAnswer) {
-        CodeRunService codeRunService = Arrays.stream(Lang.values())
-                .filter(lang -> lang.name().equals(requestUserAnswer.getLang().toUpperCase()))
-                .map(Lang::getcodeRunImplClass)
-                .map(codeRunImplClass ->
-                        codeRunServiceList.stream()
-                                .filter(codeRunImplClass::isInstance)
-                                .findFirst()
-                                .orElseThrow(UserRequestLangException::new)
-                )
-                .findAny()
-                .orElseThrow(UserRequestLangException::new);
+        String lang = requestUserAnswer.getLang().toLowerCase();
+        String time;
 
-        codeRunService.run(requestUserAnswer);
+        if (codeRunServiceMap.containsKey(lang)) {
+            CodeRunService codeRunService = codeRunServiceMap.get(lang);
+            time = codeRunService.run(requestUserAnswer);
+        } else throw new UserRequestLangException();
 
-        return "good";
-    }
-
-    private enum Lang {
-        JAVA(CodeRunServiceJavaImpl.class),
-        PYTHON(CodeRunServicePythonImpl.class);
-
-        private final Class<? extends CodeRunService> codeRunImplClass;
-
-        Lang(Class<? extends CodeRunService> codeRunImplClass) {
-            this.codeRunImplClass = codeRunImplClass;
-        }
-
-        public Class<? extends CodeRunService> getcodeRunImplClass() {
-            return codeRunImplClass;
-        }
+        return time;
     }
 }

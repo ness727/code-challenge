@@ -3,15 +3,17 @@ package com.megamaker.codechallenge.service;
 import com.megamaker.codechallenge.dto.RequestUserAnswer;
 import com.megamaker.codechallenge.service.exception.UserClassFormatException;
 import com.megamaker.codechallenge.service.exception.UserClassLoadException;
+import com.megamaker.codechallenge.service.exception.UserCodeRuntimeException;
 import com.megamaker.codechallenge.service.exception.UserMethodLoadException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -21,26 +23,29 @@ import java.net.URLClassLoader;
  * 답안의 메서드명은 main()으로 고정
  */
 
+@RequiredArgsConstructor
 @Service
 public class CodeRunServiceJavaImpl implements CodeRunService {
     private static final String CLASS_SOLUTION = "class Solution";
     private static final String SOLUTION = "Solution";
     private static final String METHOD = "main";
 
+    private final InternalMethod internalMethod;
+
     @Override
-    public void run(RequestUserAnswer requestUserAnswer) {
+    public String run(RequestUserAnswer requestUserAnswer) {
         String sourceCode = requestUserAnswer.getSourceCode();
 
+        if (!sourceCode.contains(CLASS_SOLUTION)) throw new UserClassFormatException();
+        
         // 컴파일러 인스턴스 얻기
         JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
         try (StandardJavaFileManager fileManager = javac.getStandardFileManager(null, null, null)) {
-
             // 소스 파일 생성
             File tempJavaFile = File.createTempFile(SOLUTION, ".java");  // 결과 파일 예: Solution237529.java
             String newClassName;
 
-            if (!sourceCode.contains(CLASS_SOLUTION)) throw new UserClassFormatException("클래스 형식에 맞춰 작성해주세요.");
-            else newClassName = tempJavaFile.getName().split("\\.")[0];
+            newClassName = tempJavaFile.getName().split("\\.")[0];
 
             // 클래스명 임시 파일명과 동일하게 변경
             try (Writer writer = new BufferedWriter(new FileWriter(tempJavaFile))) {
@@ -59,30 +64,36 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
                 loadedClass = Class.forName(newClassName, true, classLoader);
             } catch (ClassNotFoundException e) {
                 throw new UserClassLoadException();
+            } finally {
+                deleteFiles(tempJavaFile, null);  // .java 삭제
             }
 
             // 인스턴스 생성 및 메서드 호출
             try {
                 Object instance = loadedClass.getDeclaredConstructor().newInstance();
                 Method method = loadedClass.getMethod(METHOD);
-                // 메인 로직 메서드 실행
-                runUserMethod(instance, method);
+
+                return internalMethod.runUserMethod(instance, method, requestUserAnswer);  // 메인 로직 메서드 실행
+            } catch (NoSuchMethodException | SecurityException e) {
+                throw new UserMethodLoadException();  // 메서드명 다를 때
             } catch (Exception e) {
-                throw new UserMethodLoadException();
+                throw new UserCodeRuntimeException();  // 유저 코드 런타임 예외
+            } finally {
+                deleteFiles(null, newClassName);  // .class 삭제
             }
-
-            // .java 파일 삭제
-            tempJavaFile.delete();
-
-            // .class 파일 삭제
-            File classFile = new File("./", newClassName + ".class");
-            classFile.delete();
         } catch (IOException e) {
             throw new RuntimeException("FileManager 오류");
         }
     }
 
-    protected static void runUserMethod(Object instance, Method method) throws IllegalAccessException, InvocationTargetException {
-        method.invoke(instance);
+    private void deleteFiles(File javaFile, String className) {
+        // .java 파일 삭제
+        if (javaFile != null) javaFile.delete();
+
+        // .class 파일 삭제
+        if (StringUtils.hasText(className)) {
+            File classFile = new File(System.getProperty("java.io.tmpdir") + className + ".class");
+            classFile.delete();
+        }
     }
 }

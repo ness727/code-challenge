@@ -2,8 +2,8 @@ package com.megamaker.codechallenge.service;
 
 import com.megamaker.codechallenge.domain.problem.Provider;
 import com.megamaker.codechallenge.domain.user.Role;
-import com.megamaker.codechallenge.dto.CustomOAuth2User;
-import com.megamaker.codechallenge.dto.OAuth2Response;
+import com.megamaker.codechallenge.dto.oauth2.CustomOAuth2User;
+import com.megamaker.codechallenge.dto.oauth2.OAuth2Response;
 import com.megamaker.codechallenge.entity.User;
 import com.megamaker.codechallenge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2Response oAuth2Response = Provider.getOAuth2Response(oAuth2User, registrationId);
-        log.info("OAuth2User.getAttributes = {}", oAuth2User.getAttributes());
+        // log.info("OAuth2User.getAttributes = {}", oAuth2User.getAttributes());
 
         Optional<User> foundUser = userRepository.findByProviderId(oAuth2Response.getProviderId());
         Role role;

@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.dto;
+package com.megamaker.codechallenge.dto.oauth2;
 
 import com.megamaker.codechallenge.domain.problem.Provider;
 
