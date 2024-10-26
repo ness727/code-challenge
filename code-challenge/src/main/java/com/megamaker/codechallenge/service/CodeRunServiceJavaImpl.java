@@ -5,7 +5,7 @@ import com.megamaker.codechallenge.service.exception.UserClassFormatException;
 import com.megamaker.codechallenge.service.exception.UserClassLoadException;
 import com.megamaker.codechallenge.service.exception.UserCodeRuntimeException;
 import com.megamaker.codechallenge.service.exception.UserMethodLoadException;
-import jakarta.annotation.Nullable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -14,7 +14,6 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -24,14 +23,17 @@ import java.net.URLClassLoader;
  * 답안의 메서드명은 main()으로 고정
  */
 
+@RequiredArgsConstructor
 @Service
 public class CodeRunServiceJavaImpl implements CodeRunService {
     private static final String CLASS_SOLUTION = "class Solution";
     private static final String SOLUTION = "Solution";
     private static final String METHOD = "main";
 
+    private final InternalMethod internalMethod;
+
     @Override
-    public void run(RequestUserAnswer requestUserAnswer) {
+    public String run(RequestUserAnswer requestUserAnswer) {
         String sourceCode = requestUserAnswer.getSourceCode();
 
         if (!sourceCode.contains(CLASS_SOLUTION)) throw new UserClassFormatException();
@@ -71,7 +73,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
                 Object instance = loadedClass.getDeclaredConstructor().newInstance();
                 Method method = loadedClass.getMethod(METHOD);
 
-                runUserMethod(instance, method);  // 메인 로직 메서드 실행
+                return internalMethod.runUserMethod(instance, method, requestUserAnswer);  // 메인 로직 메서드 실행
             } catch (NoSuchMethodException | SecurityException e) {
                 throw new UserMethodLoadException();  // 메서드명 다를 때
             } catch (Exception e) {
@@ -93,9 +95,5 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
             File classFile = new File(System.getProperty("java.io.tmpdir") + className + ".class");
             classFile.delete();
         }
-    }
-    
-    protected static void runUserMethod(Object instance, Method method) throws IllegalAccessException, InvocationTargetException {
-        method.invoke(instance);
     }
 }

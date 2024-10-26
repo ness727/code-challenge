@@ -30,11 +30,13 @@ public class CodeRunController {
     @PostMapping("/answer")
     public String checkAnswer(@RequestBody RequestUserAnswer requestUserAnswer) {
         String lang = requestUserAnswer.getLang().toLowerCase();
+        String time;
+
         if (codeRunServiceMap.containsKey(lang)) {
             CodeRunService codeRunService = codeRunServiceMap.get(lang);
-            codeRunService.run(requestUserAnswer);
+            time = codeRunService.run(requestUserAnswer);
         } else throw new UserRequestLangException();
 
-        return "good";
+        return time;
     }
 }
