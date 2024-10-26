@@ -3,6 +3,7 @@ package com.megamaker.codechallenge.service;
 import com.megamaker.codechallenge.dto.RequestUserAnswer;
 import com.megamaker.codechallenge.service.exception.UserClassFormatException;
 import com.megamaker.codechallenge.service.exception.UserClassLoadException;
+import com.megamaker.codechallenge.service.exception.UserCodeRuntimeException;
 import com.megamaker.codechallenge.service.exception.UserMethodLoadException;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
             File tempJavaFile = File.createTempFile(SOLUTION, ".java");  // 결과 파일 예: Solution237529.java
             String newClassName;
 
-            if (!sourceCode.contains(CLASS_SOLUTION)) throw new UserClassFormatException("클래스 형식에 맞춰 작성해주세요.");
+            if (!sourceCode.contains(CLASS_SOLUTION)) throw new UserClassFormatException();
             else newClassName = tempJavaFile.getName().split("\\.")[0];
 
             // 클래스명 임시 파일명과 동일하게 변경
@@ -67,8 +68,10 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
                 Method method = loadedClass.getMethod(METHOD);
                 // 메인 로직 메서드 실행
                 runUserMethod(instance, method);
+            } catch (NoSuchMethodException | SecurityException e) {
+                throw new UserMethodLoadException();  // 메서드명 다를 때
             } catch (Exception e) {
-                throw new UserMethodLoadException();
+                throw new UserCodeRuntimeException();  // 유저 코드 런타임 예외
             }
 
             // .java 파일 삭제
