@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.domain.problem;
+package com.megamaker.codechallenge.securityconfig;
 
 import com.megamaker.codechallenge.dto.oauth2.GithubResponse;
 import com.megamaker.codechallenge.dto.oauth2.GoogleResponse;

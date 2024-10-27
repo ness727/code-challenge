@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.config;
+package com.megamaker.codechallenge.securityconfig;
 
 import com.megamaker.codechallenge.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletResponse;
