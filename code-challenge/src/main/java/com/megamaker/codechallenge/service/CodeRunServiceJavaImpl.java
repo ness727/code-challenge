@@ -1,11 +1,17 @@
 package com.megamaker.codechallenge.service;
 
+import com.megamaker.codechallenge.domain.problem.TypeConverter;
 import com.megamaker.codechallenge.dto.RequestUserAnswer;
+import com.megamaker.codechallenge.entity.Problem;
+import com.megamaker.codechallenge.repository.ProblemRepository;
 import com.megamaker.codechallenge.service.exception.UserClassFormatException;
 import com.megamaker.codechallenge.service.exception.UserClassLoadException;
 import com.megamaker.codechallenge.service.exception.UserCodeRuntimeException;
 import com.megamaker.codechallenge.service.exception.UserMethodLoadException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -23,6 +29,7 @@ import java.net.URLClassLoader;
  * 답안의 메서드명은 main()으로 고정
  */
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CodeRunServiceJavaImpl implements CodeRunService {
@@ -31,13 +38,17 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
     private static final String METHOD = "main";
 
     private final InternalMethod internalMethod;
+    private final ProblemRepository problemRepository;
 
     @Override
     public String run(RequestUserAnswer requestUserAnswer) {
         String sourceCode = requestUserAnswer.getSourceCode();
 
         if (!sourceCode.contains(CLASS_SOLUTION)) throw new UserClassFormatException();
-        
+
+        Problem foundProblem = problemRepository.findById(requestUserAnswer.getProblemId())
+                .orElseThrow(() -> new EmptyResultDataAccessException(1));
+
         // 컴파일러 인스턴스 얻기
         JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
         try (StandardJavaFileManager fileManager = javac.getStandardFileManager(null, null, null)) {
@@ -71,8 +82,13 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
             // 인스턴스 생성 및 메서드 호출
             try {
                 Object instance = loadedClass.getDeclaredConstructor().newInstance();
-                Method method = loadedClass.getMethod(METHOD);
 
+                // 해당 문제의 파라미터 타입 가져옴
+                String[] splitParams = foundProblem.getParams().split(",");
+                Class<?>[] paramClasses = TypeConverter.convertAll(splitParams);
+                Method method = loadedClass.getMethod(METHOD, paramClasses);
+
+                // 사용자 메서드 실행
                 return internalMethod.runUserMethod(instance, method, requestUserAnswer);  // 메인 로직 메서드 실행
             } catch (NoSuchMethodException | SecurityException e) {
                 throw new UserMethodLoadException();  // 메서드명 다를 때

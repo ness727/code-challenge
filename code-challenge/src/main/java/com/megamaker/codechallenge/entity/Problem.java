@@ -20,6 +20,11 @@ public class Problem extends BaseTimeDate {
     @Enumerated
     private Level level;
 
+    private String params;
+
+    @Column(name = "return_type")
+    private String returnType;
+
     private String description;
 
     private String limitation;

@@ -6,6 +6,7 @@ import com.megamaker.codechallenge.dto.ResponseProblem;
 import com.megamaker.codechallenge.mapper.ProblemMapper;
 import com.megamaker.codechallenge.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class ProblemService {
     }
 
     public ResponseProblem get(Long id) {
-        return ProblemMapper.INSTANCE.toResponseProblem(problemRepository.find(id));
+        return ProblemMapper.INSTANCE.toResponseProblem(problemRepository.findById(id)
+                .orElseThrow(() -> new EmptyResultDataAccessException(1)));
     }
 }
