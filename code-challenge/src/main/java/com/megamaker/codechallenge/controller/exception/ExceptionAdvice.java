@@ -5,12 +5,17 @@ import com.megamaker.codechallenge.service.exception.UserClassLoadException;
 import com.megamaker.codechallenge.service.exception.UserCodeRuntimeException;
 import com.megamaker.codechallenge.service.exception.UserMethodLoadException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@Slf4j
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
 @RequiredArgsConstructor
 @RestControllerAdvice(basePackages = "com.megamaker.codechallenge.controller")
@@ -34,20 +39,29 @@ public class ExceptionAdvice {
         return createErrorResult("user_class_load");
     }
 
-    @ExceptionHandler(UserMethodLoadException.class)
-    public ErrorResult userMethodLoad() {
+    @ExceptionHandler
+    public ErrorResult userMethodLoad(UserMethodLoadException e) {
+        log.error("유저 메서드 조회 오류", e);
         return createErrorResult("user_method_load");
     }
 
-    @ExceptionHandler(UserCodeRuntimeException.class)
-    public ErrorResult userCodeRuntime() {
+    @ExceptionHandler
+    public ErrorResult userCodeRuntime(UserCodeRuntimeException e) {
+        log.error("유저 코드 런타임 예외", e);
         return createErrorResult("user_code_runtime");
+    }
+
+    @ExceptionHandler({EmptyResultDataAccessException.class, InvalidDataAccessApiUsageException.class})
+    public ErrorResult emptyDataAccess(DataAccessException e) {
+        log.error("DB 데이터 조회 오류", e);
+        return createErrorResult("empty_data_access");
     }
 
     // 그 외의 모든 예외 처리
     @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
-    public ErrorResult etcException() {
+    @ExceptionHandler
+    public ErrorResult etcException(Exception e) {
+        log.error("기타 예외 발생", e);
         return createErrorResult("etc");
     }
 
