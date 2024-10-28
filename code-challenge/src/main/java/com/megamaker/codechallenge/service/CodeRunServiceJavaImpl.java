@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.service;
 
-import com.megamaker.codechallenge.domain.problem.TypeConverter;
+import com.megamaker.codechallenge.domain.problem.JavaTypeClazz;
 import com.megamaker.codechallenge.dto.RequestUserAnswer;
 import com.megamaker.codechallenge.entity.Problem;
 import com.megamaker.codechallenge.repository.ProblemRepository;
@@ -10,7 +10,6 @@ import com.megamaker.codechallenge.service.exception.UserCodeRuntimeException;
 import com.megamaker.codechallenge.service.exception.UserMethodLoadException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -74,7 +73,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
             try {
                 loadedClass = Class.forName(newClassName, true, classLoader);
             } catch (ClassNotFoundException e) {
-                throw new UserClassLoadException();
+                throw new UserClassLoadException(e);
             } finally {
                 deleteFiles(tempJavaFile, null);  // .java 삭제
             }
@@ -85,15 +84,15 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
 
                 // 해당 문제의 파라미터 타입 가져옴
                 String[] splitParams = foundProblem.getParams().split(",");
-                Class<?>[] paramClasses = TypeConverter.convertAll(splitParams);
+                Class<?>[] paramClasses = JavaTypeClazz.convertAll(splitParams);
                 Method method = loadedClass.getMethod(METHOD, paramClasses);
 
                 // 사용자 메서드 실행
                 return internalMethod.runUserMethod(instance, method, requestUserAnswer);  // 메인 로직 메서드 실행
             } catch (NoSuchMethodException | SecurityException e) {
-                throw new UserMethodLoadException();  // 메서드명 다를 때
+                throw new UserMethodLoadException(e);  // 메서드명 다를 때
             } catch (Exception e) {
-                throw new UserCodeRuntimeException();  // 유저 코드 런타임 예외
+                throw new UserCodeRuntimeException(e);  // 유저 코드 런타임 예외
             } finally {
                 deleteFiles(null, newClassName);  // .class 삭제
             }
