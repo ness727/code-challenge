@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.config;
+package com.megamaker.codechallenge.securityconfig;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

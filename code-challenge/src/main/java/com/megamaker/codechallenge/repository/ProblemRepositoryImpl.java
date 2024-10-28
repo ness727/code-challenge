@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.megamaker.codechallenge.entity.QProblem.problem;
 
@@ -78,11 +79,13 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     // -------- 단건 조회 ---------
     
     @Override
-    public Problem find(Long id) {
-        return queryFactory.selectFrom(problem)
-                .leftJoin(problem.problemPictureList).fetchJoin()
-                .leftJoin(problem.testcaseList).fetchJoin()
-                .where(problem.id.eq(id))
-                .fetchFirst();
+    public Optional<Problem> findById(Long id) {
+        return Optional.ofNullable(
+                queryFactory.selectFrom(problem)
+                        .leftJoin(problem.problemPictureList).fetchJoin()
+                        .leftJoin(problem.testcaseList).fetchJoin()
+                        .where(problem.id.eq(id))
+                        .fetchFirst()
+        );
     }
 }

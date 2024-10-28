@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.entity;
 
-import com.megamaker.codechallenge.domain.problem.Provider;
+import com.megamaker.codechallenge.securityconfig.Provider;
 import com.megamaker.codechallenge.domain.user.Role;
 import jakarta.persistence.*;
 import lombok.*;

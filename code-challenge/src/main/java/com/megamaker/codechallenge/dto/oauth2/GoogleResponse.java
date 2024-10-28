@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.dto.oauth2;
 
-import com.megamaker.codechallenge.domain.problem.Provider;
+import com.megamaker.codechallenge.securityconfig.Provider;
 
 import java.util.Map;
 

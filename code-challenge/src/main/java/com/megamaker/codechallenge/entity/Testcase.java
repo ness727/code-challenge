@@ -1,7 +1,5 @@
 package com.megamaker.codechallenge.entity;
 
-import com.megamaker.codechallenge.domain.problem.TestcaseDataType;
-import com.megamaker.codechallenge.domain.problem.TestcaseType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,9 +17,7 @@ public class Testcase {
 
     private String content;
 
-    private TestcaseDataType dataType; // content의 데이터 타입 ex) 0: int ...
-
-    private TestcaseType type; // 0: 값 타입, 1: 배열 ...
+    private String result;
 
     @ManyToOne
     @JoinColumn(name = "problem_id")

@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.config;
+package com.megamaker.codechallenge.securityconfig;
 
 import com.megamaker.codechallenge.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,15 +35,15 @@ public class SecurityConfig {
                         oauth2.userInfoEndpoint((endpointConfig) ->
                                 endpointConfig.userService(customOAuth2UserService)
                         )
-                        .defaultSuccessUrl("http://localhost:3000", true)
+                        .defaultSuccessUrl(allowedFront, true)
                 )
                 .authorizeHttpRequests((auth) -> auth
                                 // 로그인 관련
                                 .requestMatchers("/", "/oauth2/**", "/login", "/error").permitAll()
                                 // 문제 리스트 보기만 허용
                                 .requestMatchers("/problem/list/**").permitAll()
-                                .anyRequest().authenticated()
-                        //.anyRequest().permitAll()
+                                //.anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 
                 // 로그인하지 않았으면 401 응답
