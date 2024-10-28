@@ -1,7 +1,7 @@
 package com.megamaker.codechallenge.service.exception;
 
 public class UserCodeRuntimeException extends RuntimeException {
-    public UserCodeRuntimeException() {
-        super();
+    public UserCodeRuntimeException(Throwable cause) {
+        super(cause);
     }
 }

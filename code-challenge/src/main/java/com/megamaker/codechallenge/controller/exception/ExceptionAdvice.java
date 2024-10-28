@@ -23,51 +23,48 @@ public class ExceptionAdvice {
     private final MessageSource ms;
 
     // Controller 예외 처리
-    @ExceptionHandler(UserRequestLangException.class)
-    public ErrorResult userRequestLang() {
-        return createErrorResult("user_request_lang");
+    @ExceptionHandler
+    public ErrorResult userRequestLang(UserRequestLangException e) {
+        return createErrorResult("user_request_lang", e);
     }
 
     // Service 예외 처리
-    @ExceptionHandler(UserClassFormatException.class)
-    public ErrorResult userClassFormat() {
-        return createErrorResult("user_class_format");
+    @ExceptionHandler
+    public ErrorResult userClassFormat(UserClassFormatException e) {
+        return createErrorResult("user_class_format", e);
     }
 
-    @ExceptionHandler(UserClassLoadException.class)
-    public ErrorResult userClassLoad() {
-        return createErrorResult("user_class_load");
+    @ExceptionHandler
+    public ErrorResult userClassLoad(UserClassLoadException e) {
+        return createErrorResult("user_class_load", e);
     }
 
     @ExceptionHandler
     public ErrorResult userMethodLoad(UserMethodLoadException e) {
-        log.error("유저 메서드 조회 오류", e);
-        return createErrorResult("user_method_load");
+        return createErrorResult("user_method_load", e);
     }
 
     @ExceptionHandler
     public ErrorResult userCodeRuntime(UserCodeRuntimeException e) {
-        log.error("유저 코드 런타임 예외", e);
-        return createErrorResult("user_code_runtime");
+        return createErrorResult("user_code_runtime", e);
     }
 
     @ExceptionHandler({EmptyResultDataAccessException.class, InvalidDataAccessApiUsageException.class})
     public ErrorResult emptyDataAccess(DataAccessException e) {
-        log.error("DB 데이터 조회 오류", e);
-        return createErrorResult("empty_data_access");
+        return createErrorResult("empty_data_access", e);
     }
 
     // 그 외의 모든 예외 처리
     @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
     public ErrorResult etcException(Exception e) {
-        log.error("기타 예외 발생", e);
-        return createErrorResult("etc");
+        return createErrorResult("etc", e);
     }
 
-    private ErrorResult createErrorResult(String exName) {
+    private ErrorResult createErrorResult(String exName, Exception e) {
         String code = ms.getMessage("code." + exName, null, null);
         String message = ms.getMessage("message." + exName, null, null);
+        log.error(message, e);
         return new ErrorResult(code, message);
     }
 }
