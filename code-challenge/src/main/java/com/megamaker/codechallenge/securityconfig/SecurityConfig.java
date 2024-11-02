@@ -21,7 +21,10 @@ public class SecurityConfig {
 
     @Value("${custom.config.cors.allowedOrigins.front}")
     private String allowedFront;
-    
+
+    @Value("${login.success-uri}")
+    private String loginSuccessUri;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -35,15 +38,15 @@ public class SecurityConfig {
                         oauth2.userInfoEndpoint((endpointConfig) ->
                                 endpointConfig.userService(customOAuth2UserService)
                         )
-                        .defaultSuccessUrl(allowedFront, true)
+                        .defaultSuccessUrl(loginSuccessUri, true)
                 )
                 .authorizeHttpRequests((auth) -> auth
                                 // 로그인 관련
-                                .requestMatchers("/", "/oauth2/**", "/login", "/error").permitAll()
+                                .requestMatchers("/", "/oauth2/**", "/login", "/error", "/login-check").permitAll()
                                 // 문제 리스트 보기만 허용
                                 .requestMatchers("/problem/list/**").permitAll()
-                                //.anyRequest().authenticated()
-                        .anyRequest().permitAll()
+                                .anyRequest().authenticated()
+                        //.anyRequest().permitAll()
                 )
                 
                 // 로그인하지 않았으면 401 응답
