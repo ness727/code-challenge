@@ -2,8 +2,11 @@ package com.megamaker.codechallenge.service;
 
 import com.megamaker.codechallenge.domain.problem.JavaTypeClazz;
 import com.megamaker.codechallenge.dto.RequestUserAnswer;
+import com.megamaker.codechallenge.dto.ResponseUserCodeResult;
 import com.megamaker.codechallenge.entity.Problem;
+import com.megamaker.codechallenge.entity.Testcase;
 import com.megamaker.codechallenge.repository.ProblemRepository;
+import com.megamaker.codechallenge.repository.TestcaseRepository;
 import com.megamaker.codechallenge.service.exception.UserClassFormatException;
 import com.megamaker.codechallenge.service.exception.UserClassLoadException;
 import com.megamaker.codechallenge.service.exception.UserCodeRuntimeException;
@@ -19,9 +22,13 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.io.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 답안의 클래스명은 Solution으로 고정
@@ -36,11 +43,11 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
     private static final String SOLUTION = "Solution";
     private static final String METHOD = "main";
 
-    private final InternalMethod internalMethod;
     private final ProblemRepository problemRepository;
+    private final TestcaseRepository testcaseRepository;
 
     @Override
-    public String run(RequestUserAnswer requestUserAnswer) {
+    public List<ResponseUserCodeResult> run(RequestUserAnswer requestUserAnswer) {
         String sourceCode = requestUserAnswer.getSourceCode();
 
         if (!sourceCode.contains(CLASS_SOLUTION)) throw new UserClassFormatException();
@@ -88,7 +95,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
                 Method method = loadedClass.getMethod(METHOD, paramClasses);
 
                 // 사용자 메서드 실행
-                return internalMethod.runUserMethod(instance, method, requestUserAnswer);  // 메인 로직 메서드 실행
+                return runUserMethod(instance, method, requestUserAnswer);  // 메인 로직 메서드 실행
             } catch (NoSuchMethodException | SecurityException e) {
                 throw new UserMethodLoadException(e);  // 메서드명 다를 때
             } catch (Exception e) {
@@ -109,6 +116,86 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
         if (StringUtils.hasText(className)) {
             File classFile = new File(System.getProperty("java.io.tmpdir") + className + ".class");
             classFile.delete();
+        }
+    }
+
+    public List<ResponseUserCodeResult> runUserMethod(Object instance, Method method,
+                                                      RequestUserAnswer requestUserAnswer) throws IllegalAccessException, InvocationTargetException {
+        List<Testcase> testcaseList = testcaseRepository.findByProblemId(requestUserAnswer.getProblemId());
+        List<ResponseUserCodeResult> result = new ArrayList<>();
+
+        for (Testcase testcase : testcaseList) {
+            String[] paramArr = testcase.getContent().split("/");  // 파라미터 개수만큼 나누기
+            Object[] paramTypeResult = new Object[paramArr.length];
+
+            for (int i = 0 ; i < paramArr.length; i++) {
+                Class<?> paramType = method.getParameterTypes()[i];  // 파라미터 타입
+                String[] paramDataArr = paramArr[i].split(",");
+
+                Object convResult;
+                if (paramType.isArray()) {  // 배열일 때
+                    // 배열 내의 타입 구하기
+                    Class<?> componentType = paramType.getComponentType();
+                    convResult = convert(paramDataArr, componentType);
+                } else {  // 배열 아닐 때
+                    convResult = convert(paramDataArr[0], paramType);
+                }
+
+                paramTypeResult[i] = convResult;
+            }
+
+            long startTime = System.currentTimeMillis();
+            Object userCodeReturn = method.invoke(instance, paramTypeResult);  // 유저 메서드 실행
+            long endTime = System.currentTimeMillis() - startTime;
+
+//            // 반환 타입 검증
+//            Object convTestcaseResult;
+//            if (returnType.isArray()) {  // 배열일 때
+//                // 배열 내의 타입 구하기
+//                Class<?> componentType = returnType.getComponentType();
+//                String[] split = testcase.getResult().split(",");
+//                Object[] arrResult = new Object[split.length];
+//
+//                for (int i = 0; i < split.length; i++) {
+//                    arrResult[i] = convert(split[i], componentType);
+//                }
+//                convTestcaseResult = arrResult;
+//            } else {  // 배열 아닐 때
+//                convTestcaseResult = convert(testcase.getResult(), returnType);
+//            }
+            result.add(new ResponseUserCodeResult(endTime, testcase.getResult(), userCodeReturn));
+        }
+        return result;
+    }
+
+    /**
+     * 배열 또는 단일 값일 때, String 값을 해당 class 타입으로 변경
+     */
+
+    // 단일 값일 때
+    private Object convert(String single, Class<?> targetClazz) {
+        try {
+            Method convMethod = JavaTypeClazz.toMethod(targetClazz);
+            return convMethod.invoke(null, single);  // String을 해당 타입으로 변환
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new UserCodeRuntimeException(e);
+        }
+    }
+
+    // 배열일 때
+    private Object convert(String[] arr, Class<?> targetClazz) {
+        try {
+            Method convMethod = JavaTypeClazz.toMethod(targetClazz);
+            Object newArray = Array.newInstance(targetClazz, arr.length);
+
+            for (int i = 0; i < arr.length; i++) Array.set(newArray, i, convMethod.invoke(null, arr[i]));
+            return newArray;
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new UserCodeRuntimeException(e);
         }
     }
 }
