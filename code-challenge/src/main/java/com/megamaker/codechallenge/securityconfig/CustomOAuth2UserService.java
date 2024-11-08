@@ -1,11 +1,10 @@
-package com.megamaker.codechallenge.service;
+package com.megamaker.codechallenge.securityconfig;
 
-import com.megamaker.codechallenge.securityconfig.Provider;
 import com.megamaker.codechallenge.domain.user.Role;
-import com.megamaker.codechallenge.dto.oauth2.CustomOAuth2User;
-import com.megamaker.codechallenge.dto.oauth2.OAuth2Response;
 import com.megamaker.codechallenge.entity.User;
 import com.megamaker.codechallenge.repository.UserRepository;
+import com.megamaker.codechallenge.securityconfig.oauth2.CustomOAuth2User;
+import com.megamaker.codechallenge.securityconfig.oauth2.OAuth2Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

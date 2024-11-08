@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.dto.oauth2;
+package com.megamaker.codechallenge.securityconfig.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,4 +32,6 @@ public class CustomOAuth2User implements OAuth2User {
     public String getUsername() {
         return oAuth2Response.getProvider().name() + " " + oAuth2Response.getName();
     }
+
+    public String getProviderId() { return oAuth2Response.getProviderId(); }
 }
