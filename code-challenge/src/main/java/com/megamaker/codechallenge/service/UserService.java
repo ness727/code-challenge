@@ -15,8 +15,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void edit(RequestUserEdit requestUserEdit) {
-        User foundUser = userRepository.findByProviderId(requestUserEdit.getProviderId())
+    public void edit(String providerId, RequestUserEdit requestUserEdit) {
+        User foundUser = userRepository.findByProviderId(providerId)
                 .orElseThrow(UserNotFoundException::new);
         foundUser.setNickname(requestUserEdit.getNickname());
     }
