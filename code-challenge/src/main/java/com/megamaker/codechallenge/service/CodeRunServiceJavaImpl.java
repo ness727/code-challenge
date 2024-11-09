@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -148,22 +149,21 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
             Object userCodeReturn = method.invoke(instance, paramTypeResult);  // 유저 메서드 실행
             long endTime = System.currentTimeMillis() - startTime;
 
-//            // 반환 타입 검증
-//            Object convTestcaseResult;
-//            if (returnType.isArray()) {  // 배열일 때
-//                // 배열 내의 타입 구하기
-//                Class<?> componentType = returnType.getComponentType();
-//                String[] split = testcase.getResult().split(",");
-//                Object[] arrResult = new Object[split.length];
-//
-//                for (int i = 0; i < split.length; i++) {
-//                    arrResult[i] = convert(split[i], componentType);
-//                }
-//                convTestcaseResult = arrResult;
-//            } else {  // 배열 아닐 때
-//                convTestcaseResult = convert(testcase.getResult(), returnType);
-//            }
-            result.add(new ResponseUserCodeResult(endTime, testcase.getResult(), userCodeReturn));
+            boolean isCorrect = true;
+            // 리턴 값이 배열일 때
+            if (userCodeReturn.getClass().isArray()) {
+                String[] userCodeReturnArr =
+                        Arrays.stream((Object[]) userCodeReturn)
+                                .map(String::valueOf)
+                                .toArray(String[]::new);
+                String[] testcaseReturnArr = testcase.getResult().split(",");
+
+                isCorrect = Arrays.equals(userCodeReturnArr, testcaseReturnArr);
+            } else {  // 리턴 값이 단일 값일 때
+                isCorrect = testcase.getResult().equals(String.valueOf(userCodeReturn));
+            }
+
+            result.add(new ResponseUserCodeResult(endTime, testcase.getResult(), userCodeReturn, isCorrect));
         }
         return result;
     }
