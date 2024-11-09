@@ -3,6 +3,7 @@ package com.megamaker.admin.controller;
 import com.megamaker.admin.dto.RequestProblem;
 import com.megamaker.admin.service.ProblemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,8 @@ public class ProblemController {
     private final ProblemService problemService;
 
     @PostMapping
-    public void save(@RequestBody RequestProblem requestProblem) {
+    public ResponseEntity save(@RequestBody RequestProblem requestProblem) {
         problemService.save(requestProblem);
+        return ResponseEntity.noContent().build();
     }
 }
