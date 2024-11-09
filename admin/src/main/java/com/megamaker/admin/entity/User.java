@@ -1,4 +1,4 @@
-package com.megamaker.admin.domain;
+package com.megamaker.admin.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
