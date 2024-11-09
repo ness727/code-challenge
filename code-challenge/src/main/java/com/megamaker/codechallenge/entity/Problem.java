@@ -20,6 +20,8 @@ public class Problem extends BaseTimeDate {
     @Enumerated
     private Level level;
 
+    private Byte score;
+
     private String params;
 
     @Column(name = "return_type")

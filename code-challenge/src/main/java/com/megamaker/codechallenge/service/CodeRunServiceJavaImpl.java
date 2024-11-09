@@ -5,16 +5,19 @@ import com.megamaker.codechallenge.dto.RequestUserAnswer;
 import com.megamaker.codechallenge.dto.ResponseUserCodeResult;
 import com.megamaker.codechallenge.entity.Problem;
 import com.megamaker.codechallenge.entity.Testcase;
+import com.megamaker.codechallenge.entity.User;
 import com.megamaker.codechallenge.repository.ProblemRepository;
 import com.megamaker.codechallenge.repository.TestcaseRepository;
-import com.megamaker.codechallenge.service.exception.UserClassFormatException;
-import com.megamaker.codechallenge.service.exception.UserClassLoadException;
-import com.megamaker.codechallenge.service.exception.UserCodeRuntimeException;
-import com.megamaker.codechallenge.service.exception.UserMethodLoadException;
+import com.megamaker.codechallenge.repository.UserRepository;
+import com.megamaker.codechallenge.securityconfig.oauth2.CustomOAuth2User;
+import com.megamaker.codechallenge.service.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.tools.JavaCompiler;
@@ -46,7 +49,9 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
 
     private final ProblemRepository problemRepository;
     private final TestcaseRepository testcaseRepository;
+    private final UserRepository userRepository;
 
+    @Transactional
     @Override
     public List<ResponseUserCodeResult> run(RequestUserAnswer requestUserAnswer) {
         String sourceCode = requestUserAnswer.getSourceCode();
@@ -96,7 +101,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
                 Method method = loadedClass.getMethod(METHOD, paramClasses);
 
                 // 사용자 메서드 실행
-                return runUserMethod(instance, method, requestUserAnswer);  // 메인 로직 메서드 실행
+                return runUserMethod(instance, method, requestUserAnswer, foundProblem.getScore());  // 메인 로직 메서드 실행
             } catch (NoSuchMethodException | SecurityException e) {
                 throw new UserMethodLoadException(e);  // 메서드명 다를 때
             } catch (Exception e) {
@@ -121,7 +126,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
     }
 
     public List<ResponseUserCodeResult> runUserMethod(Object instance, Method method,
-                                                      RequestUserAnswer requestUserAnswer) throws IllegalAccessException, InvocationTargetException {
+                                                      RequestUserAnswer requestUserAnswer, Byte score) throws IllegalAccessException, InvocationTargetException {
         List<Testcase> testcaseList = testcaseRepository.findByProblemId(requestUserAnswer.getProblemId());
         List<ResponseUserCodeResult> result = new ArrayList<>();
 
@@ -162,9 +167,22 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
             } else {  // 리턴 값이 단일 값일 때
                 isCorrect = testcase.getResult().equals(String.valueOf(userCodeReturn));
             }
-
             result.add(new ResponseUserCodeResult(endTime, testcase.getResult(), userCodeReturn, isCorrect));
         }
+
+        // 정답인 유저에게 문제 점수만큼 유저 점수 추가
+        boolean isAllCorrect = result.stream()
+                .filter(ResponseUserCodeResult::getIsCorrect)
+                .toArray().length == result.size();
+        if (isAllCorrect) {
+            SecurityContext context = SecurityContextHolder.getContext();
+            CustomOAuth2User userAuth = (CustomOAuth2User) context.getAuthentication().getPrincipal();
+            User foundUser = userRepository.findByProviderId(userAuth.getProviderId())
+                    .orElseThrow(UserNotFoundException::new);
+
+            foundUser.setScore(foundUser.getScore() + score);
+        }
+        
         return result;
     }
 

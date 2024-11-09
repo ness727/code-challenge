@@ -11,6 +11,7 @@ public class ResponseUserCodeResult {
     private Long runtime;
     private String testcaseAnswer;
     private Object userAnswer;
+    private Boolean isCorrect;
 
     public String getRuntime() {
         return runtime + "ms";

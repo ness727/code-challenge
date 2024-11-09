@@ -36,7 +36,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             User newUser = User.builder()
                     .provider(oAuth2Response.getProvider())
                     .providerId(oAuth2Response.getProviderId())
-                    .nickname(oAuth2Response.getName())
+                    .providerNickname(oAuth2Response.getName())
                     .score(0)
                     .role(Role.USER)
                     .build();
