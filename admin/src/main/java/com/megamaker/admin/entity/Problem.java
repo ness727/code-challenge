@@ -5,9 +5,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @DynamicInsert
+@Setter
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -46,8 +49,8 @@ public class Problem extends BaseTimeDate {
     private Float correctRate;
 
     @OneToMany(mappedBy = "problem")
-    private Set<ProblemPicture> problemPictureList;
+    private List<ProblemPicture> problemPictureList;
 
-    @OneToMany(mappedBy = "problem")
-    private Set<Testcase> testcaseList;
+    @OneToMany(mappedBy = "problem", cascade = CascadeType.PERSIST)
+    private List<Testcase> testcaseList;
 }
