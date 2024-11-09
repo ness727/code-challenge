@@ -131,7 +131,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
         List<ResponseUserCodeResult> result = new ArrayList<>();
 
         for (Testcase testcase : testcaseList) {
-            String[] paramArr = testcase.getContent().split("/");  // 파라미터 개수만큼 나누기
+            String[] paramArr = testcase.getParamData().split("/");  // 파라미터 개수만큼 나누기
             Object[] paramTypeResult = new Object[paramArr.length];
 
             for (int i = 0 ; i < paramArr.length; i++) {
