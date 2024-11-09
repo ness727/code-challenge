@@ -2,18 +2,15 @@ package com.megamaker.admin.entity;
 
 import com.megamaker.admin.domain.Level;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Set;
 
+@DynamicInsert
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@DynamicInsert  // insert 시 null 값 제외
 @Table(name = "problems")
 @Entity
 public class Problem extends BaseTimeDate {
@@ -24,6 +21,8 @@ public class Problem extends BaseTimeDate {
 
     @Enumerated
     private Level level;
+
+    private Byte score;
 
     private String params;
 

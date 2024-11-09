@@ -1,37 +1,35 @@
 package com.megamaker.admin.entity;
 
+import com.megamaker.admin.domain.Role;
+import com.megamaker.admin.securityconfig.Provider;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import java.time.LocalDateTime;
-
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+@Table(name = "users")
 @Entity
-@Getter @Setter
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+public class User extends BaseTimeDate {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false, unique = true)
-    private String userId;
+    @Enumerated(EnumType.ORDINAL)
+    private Provider provider;
 
-    @Column(name = "provider_id", nullable = false)
+    @Column(name = "provider_id")
     private String providerId;
 
-    @Column(name = "nickname")
+    @Column(name = "provider_nickname")
+    private String providerNickname;
+
     private String nickname;
 
-    @Column(name = "score")
-    private int score;
+    private Integer score;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-
+    @Enumerated(EnumType.ORDINAL)
+    private Role role;
 }
+
