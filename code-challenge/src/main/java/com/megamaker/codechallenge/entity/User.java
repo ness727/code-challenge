@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -20,6 +21,9 @@ public class User extends BaseTimeDate {
 
     @Column(name = "provider_id")
     private String providerId;
+
+    @Column(name = "provider_nickname")
+    private String providerNickname;
 
     private String nickname;
 

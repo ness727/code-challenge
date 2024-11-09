@@ -1,13 +1,13 @@
-package com.megamaker.codechallenge.dto;
+package com.megamaker.admin.dto;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
-public class ResponseTestcase {
+public class RequestTestcase {
     private String paramData;
+    private String result;
 }

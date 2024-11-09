@@ -1,9 +1,6 @@
 package com.megamaker.codechallenge.controller.exception;
 
-import com.megamaker.codechallenge.service.exception.UserClassFormatException;
-import com.megamaker.codechallenge.service.exception.UserClassLoadException;
-import com.megamaker.codechallenge.service.exception.UserCodeRuntimeException;
-import com.megamaker.codechallenge.service.exception.UserMethodLoadException;
+import com.megamaker.codechallenge.service.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -52,6 +49,11 @@ public class ExceptionAdvice {
     @ExceptionHandler({EmptyResultDataAccessException.class, InvalidDataAccessApiUsageException.class})
     public ErrorResult emptyDataAccess(DataAccessException e) {
         return createErrorResult("empty_data_access", e);
+    }
+
+    @ExceptionHandler
+    public ErrorResult userNotFoundException(UserNotFoundException e) {
+        return createErrorResult("user_not_found", e);
     }
 
     // 그 외의 모든 예외 처리

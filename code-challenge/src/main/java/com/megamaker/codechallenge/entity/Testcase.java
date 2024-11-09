@@ -15,7 +15,8 @@ public class Testcase {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String content;
+    @Column(name = "param_data")
+    private String paramData;
 
     private String result;
 

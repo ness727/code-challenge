@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.dto.oauth2;
+package com.megamaker.codechallenge.securityconfig.oauth2;
 
 import com.megamaker.codechallenge.securityconfig.Provider;
 

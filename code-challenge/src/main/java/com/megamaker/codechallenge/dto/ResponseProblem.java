@@ -14,6 +14,7 @@ import java.util.List;
 public class ResponseProblem {
     private String title;
     private Level level;
+    private Byte score;
     private String description;
     private String limitation;
     private String inputOutput;

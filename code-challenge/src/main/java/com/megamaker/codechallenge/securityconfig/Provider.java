@@ -1,8 +1,8 @@
 package com.megamaker.codechallenge.securityconfig;
 
-import com.megamaker.codechallenge.dto.oauth2.GithubResponse;
-import com.megamaker.codechallenge.dto.oauth2.GoogleResponse;
-import com.megamaker.codechallenge.dto.oauth2.OAuth2Response;
+import com.megamaker.codechallenge.securityconfig.oauth2.GithubResponse;
+import com.megamaker.codechallenge.securityconfig.oauth2.GoogleResponse;
+import com.megamaker.codechallenge.securityconfig.oauth2.OAuth2Response;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Arrays;
