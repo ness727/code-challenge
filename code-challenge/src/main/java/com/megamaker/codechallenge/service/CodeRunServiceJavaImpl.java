@@ -50,6 +50,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
     private final ProblemRepository problemRepository;
     private final TestcaseRepository testcaseRepository;
     private final UserRepository userRepository;
+    private final BadgeService badgeService;
 
     @Transactional
     @Override
@@ -101,7 +102,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
                 Method method = loadedClass.getMethod(METHOD, paramClasses);
 
                 // 사용자 메서드 실행
-                return runUserMethod(instance, method, requestUserAnswer, foundProblem.getScore());  // 메인 로직 메서드 실행
+                return runUserMethod(instance, method, requestUserAnswer, foundProblem);  // 메인 로직 메서드 실행
             } catch (NoSuchMethodException | SecurityException e) {
                 throw new UserMethodLoadException(e);  // 메서드명 다를 때
             } catch (Exception e) {
@@ -126,7 +127,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
     }
 
     public List<ResponseUserCodeResult> runUserMethod(Object instance, Method method,
-                                                      RequestUserAnswer requestUserAnswer, Byte score) throws IllegalAccessException, InvocationTargetException {
+                                                      RequestUserAnswer requestUserAnswer, Problem problem) throws IllegalAccessException, InvocationTargetException {
         List<Testcase> testcaseList = testcaseRepository.findByProblemId(requestUserAnswer.getProblemId());
         List<ResponseUserCodeResult> result = new ArrayList<>();
 
@@ -169,20 +170,23 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
             }
             result.add(new ResponseUserCodeResult(endTime, testcase.getResult(), userCodeReturn, isCorrect));
         }
+        
+        SecurityContext context = SecurityContextHolder.getContext();
+        CustomOAuth2User userAuth = (CustomOAuth2User) context.getAuthentication().getPrincipal();
+        User foundUser = userRepository.findByProviderId(userAuth.getProviderId())
+                .orElseThrow(UserNotFoundException::new);
 
         // 정답인 유저에게 문제 점수만큼 유저 점수 추가
         boolean isAllCorrect = result.stream()
                 .filter(ResponseUserCodeResult::getIsCorrect)
                 .toArray().length == result.size();
         if (isAllCorrect) {
-            SecurityContext context = SecurityContextHolder.getContext();
-            CustomOAuth2User userAuth = (CustomOAuth2User) context.getAuthentication().getPrincipal();
-            User foundUser = userRepository.findByProviderId(userAuth.getProviderId())
-                    .orElseThrow(UserNotFoundException::new);
+            foundUser.addScoreAndSolveCnt(problem.getScore());  // 유저 점수 추가
+            problem.addSolvedCount();  // 문제 정답자 카운트 증가
+            
+            badgeService.correctCondCheck(foundUser); // 정답 시 뱃지 획득 조건 검사
+        } else problem.addTryCount();  // 문제 시도자 카운트 증가
 
-            foundUser.setScore(foundUser.getScore() + score);
-        }
-        
         return result;
     }
 
