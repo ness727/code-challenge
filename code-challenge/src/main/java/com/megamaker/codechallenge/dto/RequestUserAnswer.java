@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class RequestUserAnswer {
-    private Long userId;
     private Long problemId;
     private String lang;
     private String sourceCode;
