@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.Arrays;
 
 public enum Provider {
+    TEST("test"),
     GITHUB("github"),
     GOOGLE("google");
 
@@ -32,6 +33,7 @@ public enum Provider {
         return switch (getOAuth2Client(registrationId)) {
             case GITHUB -> new GithubResponse(oAuth2User.getAttributes());
             case GOOGLE -> new GoogleResponse(oAuth2User.getAttributes());
+            default -> null;
         };
     }
 }

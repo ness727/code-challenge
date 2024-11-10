@@ -1,6 +1,5 @@
 package com.megamaker.codechallenge.securityconfig;
 
-import com.megamaker.codechallenge.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,9 +39,17 @@ public class SecurityConfig {
                         )
                         .defaultSuccessUrl(loginSuccessUri, true)
                 )
+                .logout((logoutConfig) -> logoutConfig
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl(allowedFront)
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .permitAll()
+                )
                 .authorizeHttpRequests((auth) -> auth
                                 // 로그인 관련
-                                .requestMatchers("/", "/oauth2/**", "/login", "/error", "/login-check").permitAll()
+                                .requestMatchers("/", "/oauth2/**", "/login", "/error",
+                                        "/login-check").permitAll()
                                 // 문제 리스트 보기만 허용
                                 .requestMatchers("/problem/list/**").permitAll()
                                 .anyRequest().authenticated()
