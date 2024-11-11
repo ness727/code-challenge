@@ -40,6 +40,9 @@ public class User extends BaseTimeDate {
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<UserBadge> userBadgeList;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<UserProblem> userProblemList;
+
     public void addScoreAndSolveCnt(Byte problemScore) {
         this.score += problemScore;
         this.solveCount++;
