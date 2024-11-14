@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.util.Set;
 
+@Setter
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -41,11 +42,26 @@ public class Problem extends BaseTimeDate {
     private Long tryCount;
 
     @Column(name = "correct_rate")
-    private Float correctRate;
+    private String correctRate;
 
     @OneToMany(mappedBy = "problem")
     private Set<ProblemPicture> problemPictureList;
 
-    @OneToMany(mappedBy = "problem")
+    @OneToMany(mappedBy = "problem", cascade = CascadeType.PERSIST)
     private Set<Testcase> testcaseList;
+
+    public void addSolvedCount() {
+        this.solvedCount++;
+        this.tryCount++;
+        reCalcCorrectRate();
+    }
+
+    public void addTryCount() {
+        this.tryCount++;
+        reCalcCorrectRate();
+    }
+
+    private void reCalcCorrectRate() {
+        this.correctRate = String.valueOf((Float.valueOf(solvedCount) / tryCount) * 100).split("\\.")[0];
+    }
 }

@@ -6,8 +6,10 @@ import com.megamaker.codechallenge.dto.ResponseUserCodeResult;
 import com.megamaker.codechallenge.entity.Problem;
 import com.megamaker.codechallenge.entity.Testcase;
 import com.megamaker.codechallenge.entity.User;
+import com.megamaker.codechallenge.entity.UserProblem;
 import com.megamaker.codechallenge.repository.ProblemRepository;
 import com.megamaker.codechallenge.repository.TestcaseRepository;
+import com.megamaker.codechallenge.repository.UserProblemRepository;
 import com.megamaker.codechallenge.repository.UserRepository;
 import com.megamaker.codechallenge.securityconfig.oauth2.CustomOAuth2User;
 import com.megamaker.codechallenge.service.exception.*;
@@ -33,6 +35,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 답안의 클래스명은 Solution으로 고정
@@ -50,6 +53,8 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
     private final ProblemRepository problemRepository;
     private final TestcaseRepository testcaseRepository;
     private final UserRepository userRepository;
+    private final BadgeService badgeService;
+    private final UserProblemRepository userProblemRepository;
 
     @Transactional
     @Override
@@ -101,7 +106,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
                 Method method = loadedClass.getMethod(METHOD, paramClasses);
 
                 // 사용자 메서드 실행
-                return runUserMethod(instance, method, requestUserAnswer, foundProblem.getScore());  // 메인 로직 메서드 실행
+                return runUserMethod(instance, method, requestUserAnswer, foundProblem);  // 메인 로직 메서드 실행
             } catch (NoSuchMethodException | SecurityException e) {
                 throw new UserMethodLoadException(e);  // 메서드명 다를 때
             } catch (Exception e) {
@@ -126,7 +131,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
     }
 
     public List<ResponseUserCodeResult> runUserMethod(Object instance, Method method,
-                                                      RequestUserAnswer requestUserAnswer, Byte score) throws IllegalAccessException, InvocationTargetException {
+                                                      RequestUserAnswer requestUserAnswer, Problem problem) throws IllegalAccessException, InvocationTargetException {
         List<Testcase> testcaseList = testcaseRepository.findByProblemId(requestUserAnswer.getProblemId());
         List<ResponseUserCodeResult> result = new ArrayList<>();
 
@@ -169,20 +174,34 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
             }
             result.add(new ResponseUserCodeResult(endTime, testcase.getResult(), userCodeReturn, isCorrect));
         }
+        
+        SecurityContext context = SecurityContextHolder.getContext();
+        CustomOAuth2User userAuth = (CustomOAuth2User) context.getAuthentication().getPrincipal();
+        User foundUser = userRepository.findByProviderId(userAuth.getProviderId())
+                .orElseThrow(UserNotFoundException::new);
 
         // 정답인 유저에게 문제 점수만큼 유저 점수 추가
         boolean isAllCorrect = result.stream()
                 .filter(ResponseUserCodeResult::getIsCorrect)
                 .toArray().length == result.size();
         if (isAllCorrect) {
-            SecurityContext context = SecurityContextHolder.getContext();
-            CustomOAuth2User userAuth = (CustomOAuth2User) context.getAuthentication().getPrincipal();
-            User foundUser = userRepository.findByProviderId(userAuth.getProviderId())
-                    .orElseThrow(UserNotFoundException::new);
+            // 이미 풀었던 문제일 때
+            Optional<UserProblem> foundUserProblem = userProblemRepository.findByUserIdAndProblemId(foundUser.getId(), problem.getId());
+            if (foundUserProblem.isPresent()) {
+                foundUserProblem.get().setAnswer(requestUserAnswer.getSourceCode());
+            } else {
+                // UserProblem 엔티티 새로 추가
+                UserProblem newUserProblem = new UserProblem(null, foundUser, problem, requestUserAnswer.getSourceCode());
+                userProblemRepository.save(newUserProblem);
 
-            foundUser.setScore(foundUser.getScore() + score);
-        }
-        
+                foundUser.addScoreAndSolveCnt(problem.getScore());  // 유저 점수 추가
+                problem.addSolvedCount();  // 문제 정답자 카운트 증가
+
+                badgeService.correctCondCheck(foundUser); // 정답 시 뱃지 획득 조건 검사
+            }
+
+        } else problem.addTryCount();  // 문제 시도자 카운트 증가
+
         return result;
     }
 

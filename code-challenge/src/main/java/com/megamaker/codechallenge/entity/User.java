@@ -5,6 +5,8 @@ import com.megamaker.codechallenge.domain.user.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,9 +29,23 @@ public class User extends BaseTimeDate {
 
     private String nickname;
 
+    @Column(name = "solve_count")
+    private Integer solveCount;
+
     private Integer score;
 
     @Enumerated(EnumType.ORDINAL)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<UserBadge> userBadgeList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<UserProblem> userProblemList;
+
+    public void addScoreAndSolveCnt(Byte problemScore) {
+        this.score += problemScore;
+        this.solveCount++;
+    }
 }
 

@@ -2,9 +2,10 @@ package com.megamaker.codechallenge.controller;
 
 import com.megamaker.codechallenge.dto.user.RequestUserEdit;
 import com.megamaker.codechallenge.dto.user.ResponseUser;
-import com.megamaker.codechallenge.securityconfig.oauth2.CustomOAuth2User;
+import com.megamaker.codechallenge.repository.TokenRepository;
 import com.megamaker.codechallenge.service.UserService;
 import com.megamaker.codechallenge.service.exception.UserNotFoundException;
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,25 +18,33 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserController {
     private final UserService userService;
+    private final TokenRepository tokenRepository;
 
     @GetMapping
     public ResponseUser get(Authentication auth) {
-        CustomOAuth2User oAuth2User = getCustomOAuth2User(auth);
+        String providerId = authToProviderId(auth);
 
-        return userService.get(oAuth2User.getProviderId());
+        return userService.get(providerId);
     }
 
     @PutMapping
     public ResponseEntity edit(Authentication auth, @RequestBody RequestUserEdit requestUserEdit) {
-        CustomOAuth2User oAuth2User = getCustomOAuth2User(auth);
+        String providerId = authToProviderId(auth);
 
-        userService.edit(oAuth2User.getProviderId(), requestUserEdit);
+        userService.edit(providerId, requestUserEdit);
         return ResponseEntity.noContent().build();
     }
 
-    private static CustomOAuth2User getCustomOAuth2User(Authentication auth) {
+    @GetMapping("/token")
+    public String getToken(@RequestHeader(name = "Key") String key) {
+        String token = tokenRepository.get(key);
+
+        if (StringUtils.isEmpty(token)) throw new UserNotFoundException();
+        return token;
+    }
+
+    private static String authToProviderId(Authentication auth) {
         if (auth == null) throw new UserNotFoundException();
-        CustomOAuth2User oAuth2User = (CustomOAuth2User) auth.getPrincipal();
-        return oAuth2User;
+        return (String) auth.getPrincipal();
     }
 }
