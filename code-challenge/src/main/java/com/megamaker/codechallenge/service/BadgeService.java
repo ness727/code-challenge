@@ -30,7 +30,7 @@ public class BadgeService {
         // 뱃지 획득 조건 검사
 
         // 문제 풀이 수 관련 뱃지
-        if (user.getSolveCount() == 1) {
+        if (user.getSolveCount() == 10) {
             newBadgeSet.add(BadgeEnum.SOLVED10);
         } else if (user.getSolveCount() == 20) {
             newBadgeSet.add(BadgeEnum.SOLVED20);
