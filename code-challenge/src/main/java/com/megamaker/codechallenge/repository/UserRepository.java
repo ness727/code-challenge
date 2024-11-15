@@ -11,4 +11,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // 점수 상위 유저 3명 조회
     List<User> findTop3ByOrderByScoreDesc();
+
+    // 점수 상위 유저 10명 조회
+    List<User> findTop10ByOrderByScoreDesc();
 }

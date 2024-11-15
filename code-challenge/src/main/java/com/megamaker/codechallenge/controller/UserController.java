@@ -2,6 +2,7 @@ package com.megamaker.codechallenge.controller;
 
 import com.megamaker.codechallenge.dto.user.RequestUserEdit;
 import com.megamaker.codechallenge.dto.user.ResponseUser;
+import com.megamaker.codechallenge.dto.user.ResponseUserRank;
 import com.megamaker.codechallenge.repository.TokenRepository;
 import com.megamaker.codechallenge.service.UserService;
 import com.megamaker.codechallenge.service.exception.UserNotFoundException;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,6 +46,11 @@ public class UserController {
 
         if (StringUtils.isEmpty(token)) throw new UserNotFoundException();
         return token;
+    }
+
+    @GetMapping("/rank")
+    public List<ResponseUserRank> getRank() {
+        return userService.getRank();
     }
 
     private static String authToProviderId(Authentication auth) {
