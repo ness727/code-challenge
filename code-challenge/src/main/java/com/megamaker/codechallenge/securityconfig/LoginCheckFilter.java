@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.securityconfig;
 
-import com.megamaker.codechallenge.entity.User;
+import com.megamaker.codechallenge.domain.entity.User;
 import com.megamaker.codechallenge.repository.UserRepository;
 import com.megamaker.codechallenge.service.exception.UserNotFoundException;
 import io.jsonwebtoken.JwtParser;

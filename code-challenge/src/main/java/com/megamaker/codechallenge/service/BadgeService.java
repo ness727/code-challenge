@@ -1,9 +1,9 @@
 package com.megamaker.codechallenge.service;
 
 import com.megamaker.codechallenge.domain.user.BadgeEnum;
-import com.megamaker.codechallenge.entity.Badge;
-import com.megamaker.codechallenge.entity.User;
-import com.megamaker.codechallenge.entity.UserBadge;
+import com.megamaker.codechallenge.domain.entity.Badge;
+import com.megamaker.codechallenge.domain.entity.User;
+import com.megamaker.codechallenge.domain.entity.UserBadge;
 import com.megamaker.codechallenge.repository.BadgeRepository;
 import com.megamaker.codechallenge.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

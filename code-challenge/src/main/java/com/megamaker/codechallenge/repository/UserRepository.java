@@ -1,7 +1,6 @@
 package com.megamaker.codechallenge.repository;
 
-import com.megamaker.codechallenge.entity.User;
-import org.springframework.data.domain.Sort;
+import com.megamaker.codechallenge.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -18,15 +18,16 @@ import java.util.List;
 @Service
 public class ProblemService {
     private final ProblemRepository problemRepository;
+    private final ProblemMapper problemMapper;
 
     public List<ResponseListProblem> getList(ProblemSearchCond problemSearchCond, Pageable pageable) {
         return problemRepository.findAll(problemSearchCond, pageable).stream()
-                .map(ProblemMapper.INSTANCE::toResponseListProblem)
+                .map(problemMapper::toResponseListProblem)
                 .toList();
     }
 
     public ResponseProblem get(Long id) {
-        return ProblemMapper.INSTANCE.toResponseProblem(problemRepository.findById(id)
+        return problemMapper.toResponseProblem(problemRepository.findById(id)
                 .orElseThrow(() -> new EmptyResultDataAccessException(1)));
     }
 }

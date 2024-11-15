@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.repository;
 
-import com.megamaker.codechallenge.entity.UserProblem;
+import com.megamaker.codechallenge.domain.entity.UserProblem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

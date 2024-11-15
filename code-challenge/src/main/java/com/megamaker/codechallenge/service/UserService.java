@@ -2,7 +2,7 @@ package com.megamaker.codechallenge.service;
 
 import com.megamaker.codechallenge.dto.user.RequestUserEdit;
 import com.megamaker.codechallenge.dto.user.ResponseUser;
-import com.megamaker.codechallenge.entity.User;
+import com.megamaker.codechallenge.domain.entity.User;
 import com.megamaker.codechallenge.mapper.UserMapper;
 import com.megamaker.codechallenge.repository.UserRepository;
 import com.megamaker.codechallenge.service.exception.UserNotFoundException;
@@ -17,10 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public ResponseUser get(String providerId) {
         User foundUser = findUser(providerId);
-        return UserMapper.INSTANCE.toResponseUser(foundUser);
+        log.info("{}", foundUser.getNickname());
+        return userMapper.toResponseUser(foundUser);
     }
 
     public void edit(String providerId, RequestUserEdit requestUserEdit) {

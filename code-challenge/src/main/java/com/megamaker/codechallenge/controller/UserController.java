@@ -24,7 +24,9 @@ public class UserController {
     public ResponseUser get(Authentication auth) {
         String providerId = authToProviderId(auth);
 
-        return userService.get(providerId);
+        ResponseUser responseUser = userService.get(providerId);
+        log.info("{}", responseUser);
+        return responseUser;
     }
 
     @PutMapping
