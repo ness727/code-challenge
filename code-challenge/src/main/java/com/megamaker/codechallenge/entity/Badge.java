@@ -4,7 +4,6 @@ import com.megamaker.codechallenge.domain.user.BadgeEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Setter
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

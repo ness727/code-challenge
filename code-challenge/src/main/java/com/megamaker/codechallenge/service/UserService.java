@@ -19,16 +19,17 @@ public class UserService {
     private final UserRepository userRepository;
 
     public ResponseUser get(String providerId) {
-        User foundUser = userRepository.findByProviderId(providerId)
-                .orElseThrow(UserNotFoundException::new);
-
-        log.info(foundUser.getProviderNickname());
+        User foundUser = findUser(providerId);
         return UserMapper.INSTANCE.toResponseUser(foundUser);
     }
 
     public void edit(String providerId, RequestUserEdit requestUserEdit) {
-        User foundUser = userRepository.findByProviderId(providerId)
+        User foundUser = findUser(providerId);
+        foundUser.updateNickname(requestUserEdit.getNickname());
+    }
+
+    private User findUser(String providerId) {
+        return userRepository.findByProviderId(providerId)
                 .orElseThrow(UserNotFoundException::new);
-        foundUser.setProviderNickname(requestUserEdit.getNickname());
     }
 }

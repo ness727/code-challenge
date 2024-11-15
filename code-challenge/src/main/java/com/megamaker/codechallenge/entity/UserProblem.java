@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -24,4 +23,8 @@ public class UserProblem extends BaseTimeDate {
     private Problem problem;
 
     private String answer;
+
+    public void updateUserAnswer(String answer) {
+        this.answer = answer;
+    }
 }
