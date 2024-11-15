@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.entity;
+package com.megamaker.codechallenge.domain.entity;
 
 import com.megamaker.codechallenge.domain.user.BadgeEnum;
 import jakarta.persistence.*;
@@ -15,4 +15,7 @@ public class Badge {
     private BadgeEnum id;
 
     private String description;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 }

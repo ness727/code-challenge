@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.entity;
+package com.megamaker.codechallenge.domain.entity;
 
 import com.megamaker.codechallenge.securityconfig.Provider;
 import com.megamaker.codechallenge.domain.user.Role;

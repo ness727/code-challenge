@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.entity;
+package com.megamaker.codechallenge.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,17 +9,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "problem_pictures")
+@Table(name = "testcases")
 @Entity
-public class ProblemPicture {
+public class Testcase {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(name = "param_data")
+    private String paramData;
 
-    private String url;
+    private String result;
 
     @ManyToOne
     @JoinColumn(name = "problem_id")
-    private Problem problem;
+    public Problem problem;
 }

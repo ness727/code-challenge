@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.entity;
+package com.megamaker.codechallenge.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
