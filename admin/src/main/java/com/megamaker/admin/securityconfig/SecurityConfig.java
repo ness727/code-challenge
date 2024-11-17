@@ -1,32 +1,45 @@
 package com.megamaker.admin.securityconfig;
 
+import com.megamaker.admin.repository.UserRepository;
+import jakarta.servlet.DispatcherType;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.jooq.DefaultConfigurationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Slf4j
+@RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-    private final String[] permitPathArr = {"/login", "/img/**", "/css/**", "/js/**", "/assets/**",
+    private final String[] permitPathArr = {"/login", "/api/**", "/img/**", "/css/**", "/js/**", "/assets/**",
             "/error", "/actuator/**"};
+    private final UserDetailService userDetailService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-                                // 로그인 관련
+                                .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
                                 .requestMatchers(permitPathArr).permitAll()
-                                //.anyRequest().authenticated()
-                        .anyRequest().permitAll()
+                                .anyRequest().authenticated()
+                        //.anyRequest().permitAll()
                 )
                 .formLogin(formConfig -> formConfig
-                        //.loginPage("/login")
+                        .loginPage("/")
+                        .loginProcessingUrl("/login")
                         .failureForwardUrl("/")
-                        .successForwardUrl("/")
+                        //.defaultSuccessUrl("/problem", true)
+                        .successHandler(new LoginSuccessHandler())
                         .permitAll()
                 )
                 .logout(logoutConfig -> logoutConfig
@@ -37,5 +50,16 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.userDetailsService(this.userDetailService)
+                .getSharedObject(AuthenticationManager.class);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
