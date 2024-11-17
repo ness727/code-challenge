@@ -1,7 +1,6 @@
 package com.megamaker.codechallenge.repository;
 
-import com.megamaker.codechallenge.entity.User;
-import org.springframework.data.domain.Sort;
+import com.megamaker.codechallenge.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,4 +11,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // 점수 상위 유저 3명 조회
     List<User> findTop3ByOrderByScoreDesc();
+
+    // 점수 상위 유저 10명 조회
+    List<User> findTop10ByOrderByScoreDesc();
 }

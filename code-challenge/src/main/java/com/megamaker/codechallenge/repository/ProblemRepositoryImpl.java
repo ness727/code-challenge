@@ -2,7 +2,7 @@ package com.megamaker.codechallenge.repository;
 
 import com.megamaker.codechallenge.domain.problem.Level;
 import com.megamaker.codechallenge.dto.ProblemSearchCond;
-import com.megamaker.codechallenge.entity.Problem;
+import com.megamaker.codechallenge.domain.entity.Problem;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
@@ -17,7 +17,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Optional;
 
-import static com.megamaker.codechallenge.entity.QProblem.problem;
+import static com.megamaker.codechallenge.domain.entity.QProblem.problem;
 
 @Repository
 public class ProblemRepositoryImpl implements ProblemRepository {

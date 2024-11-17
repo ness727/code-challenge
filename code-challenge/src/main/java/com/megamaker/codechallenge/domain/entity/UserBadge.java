@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.entity;
+package com.megamaker.codechallenge.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -6,7 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

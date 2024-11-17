@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.entity;
+package com.megamaker.codechallenge.domain.entity;
 
 import com.megamaker.codechallenge.securityconfig.Provider;
 import com.megamaker.codechallenge.domain.user.Role;
@@ -8,7 +8,6 @@ import lombok.*;
 import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -43,9 +42,13 @@ public class User extends BaseTimeDate {
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<UserProblem> userProblemList;
 
-    public void addScoreAndSolveCnt(Byte problemScore) {
+    public void addScoreAndSolveCount(Byte problemScore) {
         this.score += problemScore;
         this.solveCount++;
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
 

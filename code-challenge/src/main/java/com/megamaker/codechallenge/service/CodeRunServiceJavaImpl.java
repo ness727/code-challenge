@@ -3,10 +3,10 @@ package com.megamaker.codechallenge.service;
 import com.megamaker.codechallenge.domain.problem.JavaTypeClazz;
 import com.megamaker.codechallenge.dto.RequestUserAnswer;
 import com.megamaker.codechallenge.dto.ResponseUserCodeResult;
-import com.megamaker.codechallenge.entity.Problem;
-import com.megamaker.codechallenge.entity.Testcase;
-import com.megamaker.codechallenge.entity.User;
-import com.megamaker.codechallenge.entity.UserProblem;
+import com.megamaker.codechallenge.domain.entity.Problem;
+import com.megamaker.codechallenge.domain.entity.Testcase;
+import com.megamaker.codechallenge.domain.entity.User;
+import com.megamaker.codechallenge.domain.entity.UserProblem;
 import com.megamaker.codechallenge.repository.ProblemRepository;
 import com.megamaker.codechallenge.repository.TestcaseRepository;
 import com.megamaker.codechallenge.repository.UserProblemRepository;
@@ -188,19 +188,18 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
             // 이미 풀었던 문제일 때
             Optional<UserProblem> foundUserProblem = userProblemRepository.findByUserIdAndProblemId(foundUser.getId(), problem.getId());
             if (foundUserProblem.isPresent()) {
-                foundUserProblem.get().setAnswer(requestUserAnswer.getSourceCode());
+                foundUserProblem.get().updateUserAnswer(requestUserAnswer.getSourceCode());
             } else {
                 // UserProblem 엔티티 새로 추가
                 UserProblem newUserProblem = new UserProblem(null, foundUser, problem, requestUserAnswer.getSourceCode());
                 userProblemRepository.save(newUserProblem);
 
-                foundUser.addScoreAndSolveCnt(problem.getScore());  // 유저 점수 추가
-                problem.addSolvedCount();  // 문제 정답자 카운트 증가
+                foundUser.addScoreAndSolveCount(problem.getScore());  // 유저 점수 추가
+                problem.increaseCorrectAnswerCount();  // 문제 정답자 카운트 증가
 
                 badgeService.correctCondCheck(foundUser); // 정답 시 뱃지 획득 조건 검사
             }
-
-        } else problem.addTryCount();  // 문제 시도자 카운트 증가
+        } else problem.increaseWrongAnswerCount();  // 문제 시도자 카운트 증가
 
         return result;
     }

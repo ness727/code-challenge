@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.entity;
+package com.megamaker.codechallenge.domain.entity;
 
 import com.megamaker.codechallenge.domain.problem.Level;
 import jakarta.persistence.*;
@@ -6,7 +6,6 @@ import lombok.*;
 
 import java.util.Set;
 
-@Setter
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -50,13 +49,13 @@ public class Problem extends BaseTimeDate {
     @OneToMany(mappedBy = "problem", cascade = CascadeType.PERSIST)
     private Set<Testcase> testcaseList;
 
-    public void addSolvedCount() {
+    public void increaseCorrectAnswerCount() {
         this.solvedCount++;
         this.tryCount++;
         reCalcCorrectRate();
     }
 
-    public void addTryCount() {
+    public void increaseWrongAnswerCount() {
         this.tryCount++;
         reCalcCorrectRate();
     }

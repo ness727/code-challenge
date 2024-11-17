@@ -18,6 +18,8 @@ public class MemoryTokenRepository implements TokenRepository {
 
     @Override
     public String get(String key) {
-        return tokenMap.get(key);
+        String value = tokenMap.get(key);
+        tokenMap.remove(key);
+        return value;
     }
 }

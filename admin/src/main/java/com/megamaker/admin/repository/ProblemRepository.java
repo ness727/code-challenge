@@ -1,8 +1,16 @@
 package com.megamaker.admin.repository;
 
+import com.megamaker.admin.dto.problem.ProblemSearchCond;
 import com.megamaker.admin.entity.Problem;
-import com.megamaker.admin.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-public interface ProblemRepository extends JpaRepository<Problem, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface ProblemRepository {
+    Page<Problem> findAll(ProblemSearchCond problemSearchCond, Pageable pageable);
+    Optional<Problem> findById(Long id);
+
+    void save(Problem problem);
 }

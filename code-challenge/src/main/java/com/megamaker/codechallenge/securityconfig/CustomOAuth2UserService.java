@@ -1,7 +1,7 @@
 package com.megamaker.codechallenge.securityconfig;
 
 import com.megamaker.codechallenge.domain.user.Role;
-import com.megamaker.codechallenge.entity.User;
+import com.megamaker.codechallenge.domain.entity.User;
 import com.megamaker.codechallenge.repository.UserRepository;
 import com.megamaker.codechallenge.securityconfig.oauth2.CustomOAuth2User;
 import com.megamaker.codechallenge.securityconfig.oauth2.OAuth2Response;
