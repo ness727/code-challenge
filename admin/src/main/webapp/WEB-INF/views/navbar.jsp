@@ -1,28 +1,15 @@
+<%@ page import="com.megamaker.admin.entity.User" %>
 <%@ page contentType="text/html; UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <nav
         class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
 >
     <div class="container-fluid">
-        <nav
-                class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
-        >
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <button type="submit" class="btn btn-search pe-1">
-                        <i class="fa fa-search search-icon"></i>
-                    </button>
-                </div>
-                <input
-                        type="text"
-                        placeholder="Search ..."
-                        class="form-control"
-                />
-            </div>
-        </nav>
+
 
 <%--    로그인 했을 때만 표시    --%>
-        <c:if test="${not empty sessionScope['id']}">
+        <c:if test="${not empty auth}">
             <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
 
             <li class="nav-item topbar-icon dropdown hidden-caret">
@@ -55,7 +42,7 @@
                     </div>
                     <span class="profile-username">
                       <span class="op-7">Hi,</span>
-                      <span class="fw-bold">Hizrian</span>
+                      <span class="fw-bold">${auth.nickname}</span>
                     </span>
                 </a>
                 <ul class="dropdown-menu dropdown-user animated fadeIn">

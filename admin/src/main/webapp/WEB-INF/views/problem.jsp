@@ -1,21 +1,23 @@
 <%@ page contentType="text/html; UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Admin Page</title>
+    <title>Tables - Kaiadmin Bootstrap 5 Admin Dashboard</title>
     <meta
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
       name="viewport"
     />
     <link
       rel="icon"
-      href="/assets/img/kaiadmin/favicon.ico"
+      href="../assets/img/kaiadmin/favicon.ico"
       type="image/x-icon"
     />
 
     <!-- Fonts and icons -->
-    <script src="/assets/js/plugin/webfont/webfont.min.js"></script>
+    <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
       WebFont.load({
         google: { families: ["Public Sans:300,400,500,600,700"] },
@@ -26,7 +28,7 @@
             "Font Awesome 5 Brands",
             "simple-line-icons",
           ],
-          urls: ["assets/css/fonts.min.css"],
+          urls: ["../assets/css/fonts.min.css"],
         },
         active: function () {
           sessionStorage.fonts = true;
@@ -35,12 +37,12 @@
     </script>
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/assets/css/plugins.min.css" />
-    <link rel="stylesheet" href="/assets/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="../assets/css/kaiadmin.min.css" />
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link rel="stylesheet" href="/assets/css/demo.css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
   </head>
   <body>
     <div class="wrapper">
@@ -53,9 +55,9 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-              <a href="index.jsp" class="logo">
+              <a href="../../../webapp/WEB-INF/views/index.jsp" class="logo">
                 <img
-                  src="/assets/img/kaiadmin/logo_light.svg"
+                  src="../assets/img/kaiadmin/logo_light.svg"
                   alt="navbar brand"
                   class="navbar-brand"
                   height="20"
@@ -82,20 +84,114 @@
 
         <div class="container">
           <div class="page-inner">
-            <div class="container">
-              <form class="form-signin" method="post" action="/login">
-                <h2 class="form-signin-heading">Please sign in</h2>
-                <p>
-                  <label for="username" class="sr-only">Username</label>
-                  <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
-                </p>
-                <p>
-                  <label for="password" class="sr-only">Password</label>
-                  <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-                </p>
-                <input name="_csrf" type="hidden" value="qNso5ds5dgEUkEhpYnlk3f3bJveWsm9a1PMPiFunIzpY3GkXnukR0b1YQGM5oXtYB1RQ6M3pC5au01l34cJpujiVGw1rvg1y" />
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-              </form>
+            <div class="page-header">
+              <h3 class="fw-bold mb-3">Problems</h3>
+            </div>
+            <div class="row">
+
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <!-- 검색 상자 -->
+                      <nav
+                              class="col-md-4 navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
+                      >
+                        <form action="/problem/list" method="get" class="input-group">
+                          <input
+                                  type="text"
+                                  placeholder="Search ..."
+                                  class="form-control"
+                                  name="title"
+                                  value="${param.title}"
+                          />
+                          <input type="hidden" name="size" value="5" />
+                          <div class="input-group-prepend" style="padding-right: 10px">
+                            <button type="submit" class="btn btn-search pe-1">
+                              <i class="fa fa-search search-icon"></i>
+                            </button>
+                          </div>
+                        </form>
+                      </nav>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr class="container">
+                          <th scope="col">id</th>
+
+                          <th scope="col" class="d-flex">
+                            title
+                            <a href="?sort=title,asc&title=${param.title}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
+                            <a href="?sort=title,desc&title=${param.title}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
+                          </th>
+
+                          <th scope="col">level</th>
+                          <th scope="col">score</th>
+                          <th scope="col">solvedCount</th>
+                          <th scope="col">tryCount</th>
+                          <th scope="col" class="d-flex">
+                            correctRate
+                            <a href="?sort=correctRate,asc&title=${param.title}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
+                            <a href="?sort=correctRate,desc&title=${param.title}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
+                          </th>
+                          <th scope="col" class="col-auto"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <c:forEach var="problem" items="${problemPage.getContent()}">
+                        <tr>
+                          <td>${problem.id}</td>
+                          <td>${problem.title}</td>
+                          <td>${problem.level}</td>
+                          <td>${problem.score}</td>
+                          <td>${problem.solvedCount}</td>
+                          <td>${problem.tryCount}</td>
+                          <td>${problem.correctRate}</td>
+                          <td class="container">
+                            <div class="row">
+                              <a href="" class="col btn btn-secondary mx-2">수정</a>
+                              <a href="" class="col btn btn-danger mx-2">삭제</a>
+                            </div>
+                          </td>
+                        </tr>
+                      </c:forEach>
+                      </tbody>
+                    </table>
+
+                    <!-- 페이지네이션 -->
+                    <nav aria-label="..." class="row justify-content-md-center">
+                      <ul class="pagination col-md-auto">
+
+                        <c:set var="page" value="${(param.page == null) ? 1 : param.page}" />
+                        <c:set var="startNum" value="${page - (page - 1) % 5}" />
+
+                        <!-- 이전 페이지 버튼 -->
+                        <li class="page-item ${startNum <= 1 ? 'disabled' : ''} ">
+                          <a href="?page=${param.page - 5}&title=${param.title}&size=${param.size}&sort=${param.sort}" class="page-link">Previous</a>
+                        </li>
+
+                        <!-- 페이지 숫자 버튼 -->
+                        <c:forEach var="i" begin="0" end="4">
+                          <c:if test="${startNum + i <= problemPage.totalPages}">
+                            <li class="page-item ${startNum + i == page ? 'active' : ''}">
+                              <a class="page-link" href="?page=${startNum + i}&title=${param.title}&size=${param.size}&sort=${param.sort}">${startNum + i}</a>
+                            </li>
+                          </c:if>
+                        </c:forEach>
+
+                        <!-- 다음 페이지 버튼 -->
+                        <li class="page-item">
+                          <a class="page-link ${startNum + 5 > problemPage.totalPages ? 'disabled' : ''}"
+                             href="?page=${param.page + 5 > problemPage.totalPages ? problemPage.totalPages : param.page + 5}&title=${param.title}&size=${param.size}&sort=${param.sort}">Next</a>
+                        </li>
+                      </ul>
+                    </nav>
+
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -144,7 +240,7 @@
                 ></button>
                 <button
                   type="button"
-                  class="changeLogoHeaderColor"
+                  class="selected changeLogoHeaderColor"
                   data-color="blue"
                 ></button>
                 <button
@@ -255,7 +351,7 @@
                 ></button>
                 <button
                   type="button"
-                  class="selected changeTopBarColor"
+                  class="changeTopBarColor"
                   data-color="white"
                 ></button>
                 <br />
@@ -266,7 +362,7 @@
                 ></button>
                 <button
                   type="button"
-                  class="changeTopBarColor"
+                  class="selected changeTopBarColor"
                   data-color="blue2"
                 ></button>
                 <button
@@ -301,12 +397,12 @@
               <div class="btnSwitch">
                 <button
                   type="button"
-                  class="changeSideBarColor"
+                  class="selected changeSideBarColor"
                   data-color="white"
                 ></button>
                 <button
                   type="button"
-                  class="selected changeSideBarColor"
+                  class="changeSideBarColor"
                   data-color="dark"
                 ></button>
                 <button
@@ -325,37 +421,13 @@
       <!-- End Custom template -->
     </div>
     <!--   Core JS Files   -->
-    <script src="/assets/js/core/jquery-3.7.1.min.js"></script>
-    <script src="/assets/js/core/popper.min.js"></script>
-    <script src="/assets/js/core/bootstrap.min.js"></script>
+    <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
 
     <!-- jQuery Scrollbar -->
-    <script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-    <!-- Chart JS -->
-    <script src="/assets/js/plugin/chart.js/chart.min.js"></script>
-
-    <!-- jQuery Sparkline -->
-    <script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-    <!-- Chart Circle -->
-    <script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
-
-    <!-- Datatables -->
-    <script src="/assets/js/plugin/datatables/datatables.min.js"></script>
-
-    <!-- Bootstrap Notify -->
-    <script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-    <!-- jQuery Vector Maps -->
-    <script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-    <script src="/assets/js/plugin/jsvectormap/world.js"></script>
-
-    <!-- Sweet Alert -->
-    <script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-
+    <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
     <!-- Kaiadmin JS -->
-    <script src="/assets/js/kaiadmin.min.js"></script>
-
+    <script src="../assets/js/kaiadmin.min.js"></script>
   </body>
 </html>
