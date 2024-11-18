@@ -47,7 +47,7 @@
   <body>
     <div class="wrapper">
       <!-- Sidebar -->
-      <jsp:include page="sidebar.jsp"/>
+      <jsp:include page="../sidebar.jsp"/>
       <!-- End Sidebar -->
 
       <div class="main-panel">
@@ -78,7 +78,7 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          <jsp:include page="navbar.jsp"/>
+          <jsp:include page="../navbar.jsp"/>
           <!-- End Navbar -->
         </div>
 
@@ -151,7 +151,7 @@
                           <td>${problem.correctRate}</td>
                           <td class="container">
                             <div class="row">
-                              <a href="" class="col btn btn-secondary mx-2">수정</a>
+                              <a href="/problem/${problem.id}?page=${param.page}&title=${param.title}&size=${param.size}&sort=${param.sort}" class="col btn btn-secondary mx-2">수정</a>
                               <a href="" class="col btn btn-danger mx-2">삭제</a>
                             </div>
                           </td>
