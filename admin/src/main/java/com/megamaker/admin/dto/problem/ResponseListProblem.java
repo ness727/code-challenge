@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class ResponseProblem {
+public class ResponseListProblem {
     private Long id;
 
     private String title;
@@ -17,16 +17,6 @@ public class ResponseProblem {
     private Level level;
 
     private Byte score;
-
-    private String params;
-
-    private String returnType;
-
-    private String description;
-
-    private String limitation;
-
-    private String inputOutput;
 
     private Long solvedCount;
 

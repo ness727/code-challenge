@@ -93,8 +93,8 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     public Optional<Problem> findById(Long id) {
         return Optional.ofNullable(
                 queryFactory.selectFrom(problem)
-                        .leftJoin(problem.problemPictureList).fetchJoin()
-                        .leftJoin(problem.testcaseList).fetchJoin()
+                        //.leftJoin(problem.problemPictureList).fetchJoin()
+                        //.leftJoin(problem.testcaseList).fetchJoin()
                         .where(problem.id.eq(id))
                         .fetchFirst()
         );
