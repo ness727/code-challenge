@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.jooq.DefaultConfigurationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,6 +24,7 @@ public class SecurityConfig {
     private final String[] permitPathArr = {"/login", "/api/**", "/img/**", "/css/**", "/js/**", "/assets/**",
             "/error", "/actuator/**"};
     private final UserDetailService userDetailService;
+    private final Environment environment;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -39,7 +41,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .failureForwardUrl("/")
                         //.defaultSuccessUrl("/problem", true)
-                        .successHandler(new LoginSuccessHandler())
+                        .successHandler(new LoginSuccessHandler(environment))
                         .permitAll()
                 )
                 .logout(logoutConfig -> logoutConfig
