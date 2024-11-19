@@ -16,6 +16,8 @@ import com.megamaker.codechallenge.service.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -176,8 +178,8 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
         }
         
         SecurityContext context = SecurityContextHolder.getContext();
-        CustomOAuth2User userAuth = (CustomOAuth2User) context.getAuthentication().getPrincipal();
-        User foundUser = userRepository.findByProviderId(userAuth.getProviderId())
+        String providerId = (String) context.getAuthentication().getPrincipal();
+        User foundUser = userRepository.findByProviderId(providerId)
                 .orElseThrow(UserNotFoundException::new);
 
         // 정답인 유저에게 문제 점수만큼 유저 점수 추가
