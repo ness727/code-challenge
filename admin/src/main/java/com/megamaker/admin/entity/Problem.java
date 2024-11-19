@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@ToString
 @DynamicInsert
 @Setter
 @Getter
@@ -47,7 +48,7 @@ public class Problem extends BaseTimeDate {
     private Long tryCount;
 
     @Column(name = "correct_rate")
-    private Float correctRate;
+    private String correctRate;
 
     @OneToMany(mappedBy = "problem")
     private List<ProblemPicture> problemPictureList;
