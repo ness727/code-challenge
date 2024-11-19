@@ -84,7 +84,7 @@
             </div>
             <div class="row">
               <div class="col-md-12">
-                <div class="card">
+                <form method="post" action="/problem?page=${param.page}&search=${param.title}&size=${param.size}&sort=${param.sort}" class="card">
                   <div class="card-header">
                     <div class="card-title">Form Elements</div>
                   </div>
@@ -102,9 +102,10 @@
                               type="text"
                               class="form-control input-full"
                               placeholder="Enter Input"
+                              id="id"
                               name="id"
                               value="${problem.id}"
-                              disabled
+                              readonly
                             />
                           </div>
                         </div>
@@ -127,34 +128,174 @@
                         </div>
                         <div class="form-group form-inline">
                           <label
-                                  for="inlineinput"
+                                  for="level"
                                   class="col-md-3 col-form-label"
-                          >Inline Input</label
+                          >Level</label
                           >
-                          <div class="">
+                          <div>
+                            <select name="level" id="level" class="form-select">
+                              <c:forEach var="level" items="${levels}">
+                                <option value="${level.levelName}" ${problem.level == level ? 'selected' : ''}>
+                                        ${level.levelString}
+                                </option>
+                              </c:forEach>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group form-inline">
+                          <label
+                                  for="score"
+                                  class="col-md-3 col-form-label"
+                          >score</label
+                          >
+                          <div>
                             <input
                                     type="text"
                                     class="form-control input-full"
-                                    id="inlineinput"
+                                    id="score"
+                                    name="score"
+                                    value="${problem.score}"
                                     placeholder="Enter Input"
                             />
                           </div>
                         </div>
                         <div class="form-group form-inline">
                           <label
-                                  for="inlineinput"
+                                  for="params"
                                   class="col-md-3 col-form-label"
-                          >Inline Input</label
+                          >Params</label
                           >
-                          <div class="">
+                          <div>
                             <input
                                     type="text"
                                     class="form-control input-full"
-                                    id="inlineinput"
+                                    id="params"
+                                    name="params"
+                                    value="${problem.params}"
                                     placeholder="Enter Input"
                             />
                           </div>
                         </div>
+                        <div class="form-group form-inline">
+                          <label
+                                  for="returnType"
+                                  class="col-md-3 col-form-label"
+                          >ReturnType</label
+                          >
+                          <div>
+                            <input
+                                    type="text"
+                                    class="form-control input-full"
+                                    id="returnType"
+                                    name="returnType"
+                                    value="${problem.returnType}"
+                                    placeholder="Enter Input"
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group form-inline">
+                          <label
+                                  for="description"
+                                  class="col-md-3 col-form-label"
+                          >Description</label
+                          >
+                          <div>
+                            <input
+                                    type="text"
+                                    class="form-control input-full"
+                                    id="description"
+                                    name="description"
+                                    value="${problem.description}"
+                                    placeholder="Enter Input"
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group form-inline">
+                          <label
+                                  for="limitation"
+                                  class="col-md-3 col-form-label"
+                          >Limitation</label
+                          >
+                          <div>
+                            <input
+                                    type="text"
+                                    class="form-control input-full"
+                                    id="limitation"
+                                    name="limitation"
+                                    value="${problem.limitation}"
+                                    placeholder="Enter Input"
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group form-inline">
+                          <label
+                                  for="inputOutput"
+                                  class="col-md-3 col-form-label"
+                          >InputOutput</label
+                          >
+                          <div>
+                            <input
+                                    type="text"
+                                    class="form-control input-full"
+                                    id="inputOutput"
+                                    name="inputOutput"
+                                    value="${problem.inputOutput}"
+                                    placeholder="Enter Input"
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group form-inline">
+                          <label
+                                  for="solvedCount"
+                                  class="col-md-3 col-form-label"
+                          >SolvedCount</label
+                          >
+                          <div>
+                            <input
+                                    type="text"
+                                    class="form-control input-full"
+                                    id="solvedCount"
+                                    value="${problem.solvedCount}"
+                                    placeholder="Enter Input"
+                                    disabled
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group form-inline">
+                          <label
+                                  for="tryCount"
+                                  class="col-md-3 col-form-label"
+                          >TryCount</label
+                          >
+                          <div>
+                            <input
+                                    type="text"
+                                    class="form-control input-full"
+                                    id="tryCount"
+                                    value="${problem.tryCount}"
+                                    placeholder="Enter Input"
+                                    disabled
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group form-inline">
+                          <label
+                                  for="correctRate"
+                                  class="col-md-3 col-form-label"
+                          >CorrectRate</label
+                          >
+                          <div>
+                            <input
+                                    type="text"
+                                    class="form-control input-full"
+                                    id="correctRate"
+                                    value="${problem.correctRate}"
+                                    placeholder="Enter Input"
+                                    disabled
+                            />
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                   </div>
@@ -162,7 +303,7 @@
                     <input type="submit" class="btn btn-success" value="저장" />
                     <a href="/problem/list?page=${param.page}&title=${param.title}&size=${param.size}&sort=${param.sort}" class="btn btn-danger">취소</a>
                   </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 package com.megamaker.admin.entity;
 
 import com.megamaker.admin.domain.Level;
+import com.megamaker.admin.dto.problem.RequestProblemUpdate;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -53,4 +54,15 @@ public class Problem extends BaseTimeDate {
 
     @OneToMany(mappedBy = "problem", cascade = CascadeType.PERSIST)
     private List<Testcase> testcaseList;
+
+    public void update(RequestProblemUpdate request) {
+        this.title = request.getTitle();
+        this.level = request.getLevel();
+        this.score = request.getScore();
+        this.params = request.getParams();
+        this.returnType = request.getReturnType();
+        this.description = request.getDescription();
+        this.limitation = request.getLimitation();
+        this.inputOutput = request.getInputOutput();
+    }
 }

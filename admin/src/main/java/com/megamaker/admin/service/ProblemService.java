@@ -2,6 +2,7 @@ package com.megamaker.admin.service;
 
 import com.megamaker.admin.dto.RequestProblem;
 import com.megamaker.admin.dto.problem.ProblemSearchCond;
+import com.megamaker.admin.dto.problem.RequestProblemUpdate;
 import com.megamaker.admin.dto.problem.ResponseListProblem;
 import com.megamaker.admin.dto.problem.ResponseProblem;
 import com.megamaker.admin.entity.Problem;
@@ -18,12 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class ProblemService {
     private final ProblemMapper problemMapper;
     private final ProblemRepository problemRepository;
 
+    @Transactional
     public void save(RequestProblem requestProblem) {
         // 해당 문제 검색
         Problem problem = problemMapper.toProblem(requestProblem);
@@ -48,6 +49,14 @@ public class ProblemService {
     public ResponseProblem findById(Long id) {
         Problem foundProblem = problemRepository.findById(id)
                 .orElseThrow(() -> new EmptyResultDataAccessException(1));
+        return problemMapper.toResponseProblem(foundProblem);
+    }
+
+    @Transactional
+    public ResponseProblem update(RequestProblemUpdate requestProblemUpdate) {
+        Problem foundProblem = problemRepository.findById(requestProblemUpdate.getId())
+                .orElseThrow(() -> new EmptyResultDataAccessException(1));
+        foundProblem.update(requestProblemUpdate);
         return problemMapper.toResponseProblem(foundProblem);
     }
 }

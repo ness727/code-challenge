@@ -102,7 +102,7 @@
                                   type="text"
                                   placeholder="Search ..."
                                   class="form-control"
-                                  name="title"
+                                  name="search"
                                   value="${param.title}"
                           />
                           <input type="hidden" name="size" value="5" />
@@ -123,8 +123,8 @@
 
                           <th scope="col" class="d-flex">
                             title
-                            <a href="?sort=title,asc&title=${param.title}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
-                            <a href="?sort=title,desc&title=${param.title}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
+                            <a href="?sort=title,asc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
+                            <a href="?sort=title,desc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
                           </th>
 
                           <th scope="col">level</th>
@@ -133,8 +133,8 @@
                           <th scope="col">tryCount</th>
                           <th scope="col" class="d-flex">
                             correctRate
-                            <a href="?sort=correctRate,asc&title=${param.title}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
-                            <a href="?sort=correctRate,desc&title=${param.title}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
+                            <a href="?sort=correctRate,asc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
+                            <a href="?sort=correctRate,desc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
                           </th>
                           <th scope="col" class="col-auto"></th>
                         </tr>
@@ -151,7 +151,7 @@
                           <td>${problem.correctRate}</td>
                           <td class="container">
                             <div class="row">
-                              <a href="/problem/${problem.id}?page=${param.page}&title=${param.title}&size=${param.size}&sort=${param.sort}" class="col btn btn-secondary mx-2">수정</a>
+                              <a href="/problem/${problem.id}?page=${param.page}&search=${param.title}&size=${param.size}&sort=${param.sort}" class="col btn btn-secondary mx-2">수정</a>
                               <a href="" class="col btn btn-danger mx-2">삭제</a>
                             </div>
                           </td>
@@ -169,14 +169,14 @@
 
                         <!-- 이전 페이지 버튼 -->
                         <li class="page-item ${startNum <= 1 ? 'disabled' : ''} ">
-                          <a href="?page=${param.page - 5}&title=${param.title}&size=${param.size}&sort=${param.sort}" class="page-link">Previous</a>
+                          <a href="?page=${param.page - 5}&search=${param.title}&size=${param.size}&sort=${param.sort}" class="page-link">Previous</a>
                         </li>
 
                         <!-- 페이지 숫자 버튼 -->
                         <c:forEach var="i" begin="0" end="4">
                           <c:if test="${startNum + i <= problemPage.totalPages}">
                             <li class="page-item ${startNum + i == page ? 'active' : ''}">
-                              <a class="page-link" href="?page=${startNum + i}&title=${param.title}&size=${param.size}&sort=${param.sort}">${startNum + i}</a>
+                              <a class="page-link" href="?page=${startNum + i}&search=${param.title}&size=${param.size}&sort=${param.sort}">${startNum + i}</a>
                             </li>
                           </c:if>
                         </c:forEach>
@@ -184,7 +184,7 @@
                         <!-- 다음 페이지 버튼 -->
                         <li class="page-item">
                           <a class="page-link ${startNum + 5 > problemPage.totalPages ? 'disabled' : ''}"
-                             href="?page=${param.page + 5 > problemPage.totalPages ? problemPage.totalPages : param.page + 5}&title=${param.title}&size=${param.size}&sort=${param.sort}">Next</a>
+                             href="?page=${param.page + 5 > problemPage.totalPages ? problemPage.totalPages : param.page + 5}&search=${param.title}&size=${param.size}&sort=${param.sort}">Next</a>
                         </li>
                       </ul>
                     </nav>

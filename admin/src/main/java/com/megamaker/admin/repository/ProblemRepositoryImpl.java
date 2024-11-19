@@ -57,7 +57,7 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     // 검색 로직
     private static BooleanBuilder getCondResult(ProblemSearchCond problemSearchCond) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        String title = problemSearchCond.getTitle();
+        String title = problemSearchCond.getSearch();
         Level level = Level.intToEnum(problemSearchCond.getLevel());
 
         // 제목으로 검색
