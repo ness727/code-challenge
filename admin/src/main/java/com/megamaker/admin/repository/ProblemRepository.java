@@ -10,7 +10,10 @@ import java.util.Optional;
 
 public interface ProblemRepository {
     Page<Problem> findAll(ProblemSearchCond problemSearchCond, Pageable pageable);
+
     Optional<Problem> findById(Long id);
 
     void save(Problem problem);
+
+    void remove(Long id);
 }

@@ -10,6 +10,7 @@ import com.megamaker.admin.entity.Testcase;
 import com.megamaker.admin.mapper.ProblemMapper;
 import com.megamaker.admin.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,5 +59,10 @@ public class ProblemService {
                 .orElseThrow(() -> new EmptyResultDataAccessException(1));
         foundProblem.update(requestProblemUpdate);
         return problemMapper.toResponseProblem(foundProblem);
+    }
+
+    @Transactional
+    public void remove(Long id) {
+        problemRepository.remove(id);
     }
 }

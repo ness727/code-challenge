@@ -152,7 +152,11 @@
                           <td class="container">
                             <div class="row">
                               <a href="/problem/${problem.id}?page=${param.page}&search=${param.title}&size=${param.size}&sort=${param.sort}" class="col btn btn-secondary mx-2">수정</a>
-                              <a href="" class="col btn btn-danger mx-2">삭제</a>
+                              <form class="col" method="post" action="/problem?page=${param.page}&search=${param.title}&size=${param.size}&sort=${param.sort}">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                <input type="hidden" name="id" value="${problem.id}" />
+                                <input type="submit" class="col btn btn-danger mx-2" value="삭제">
+                              </form>
                             </div>
                           </td>
                         </tr>

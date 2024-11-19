@@ -101,7 +101,15 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     }
 
     // -------- 저장 ---------
+    @Override
     public void save(Problem problem) {
         entityManager.persist(problem);
+    }
+
+    // -------- 삭제 ---------
+    @Override
+    public void remove(Long id) {
+        Problem foundProblem = entityManager.getReference(Problem.class, id);
+        entityManager.remove(foundProblem);
     }
 }

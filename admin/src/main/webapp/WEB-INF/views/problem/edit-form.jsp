@@ -85,6 +85,8 @@
             <div class="row">
               <div class="col-md-12">
                 <form method="post" action="/problem?page=${param.page}&search=${param.title}&size=${param.size}&sort=${param.sort}" class="card">
+                  <input type="hidden" name="_method" value="PUT" />
+
                   <div class="card-header">
                     <div class="card-title">Form Elements</div>
                   </div>

@@ -53,7 +53,7 @@ public class Problem extends BaseTimeDate {
     @OneToMany(mappedBy = "problem")
     private List<ProblemPicture> problemPictureList;
 
-    @OneToMany(mappedBy = "problem", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "problem", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Testcase> testcaseList;
 
     public void update(RequestProblemUpdate request) {
