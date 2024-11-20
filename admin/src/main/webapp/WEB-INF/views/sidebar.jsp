@@ -41,7 +41,7 @@
                     <div class="collapse show" id="base">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="/user">
+                                <a href="/user/list?size=5">
                                     <span class="sub-item">Users</span>
                                 </a>
                             </li>

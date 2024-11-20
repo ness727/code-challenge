@@ -84,7 +84,7 @@
             </div>
             <div class="row">
               <div class="col-md-12">
-                <form method="post" action="/problem?page=${param.page}&search=${param.title}&size=${param.size}&sort=${param.sort}" class="card">
+                <form method="post" action="/user?page=${param.page}&search=${param.nickname}&size=${param.size}&sort=${param.sort}" class="card">
                   <input type="hidden" name="_method" value="PUT" />
 
                   <div class="card-header">
@@ -106,49 +106,104 @@
                               placeholder="Enter Input"
                               id="id"
                               name="id"
-                              value="${problem.id}"
+                              value="${user.id}"
                               readonly
                             />
                           </div>
                         </div>
                         <div class="form-group form-inline">
                           <label
-                                  for="title"
+                                  for="provider"
                                   class="col-md-3 col-form-label"
-                          >Title</label
+                          >Provider</label
                           >
-                          <div class="">
+                          <div>
                             <input
                                     type="text"
                                     class="form-control input-full"
-                                    id="title"
-                                    name="title"
-                                    value="${problem.title}"
+                                    id="provider"
+                                    name="provider"
+                                    value="${user.provider}"
+                                    placeholder="Enter Input"
+                                    disabled
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group form-inline">
+                          <label
+                                  for="providerId"
+                                  class="col-md-3 col-form-label"
+                          >ProviderId</label
+                          >
+                          <div>
+                            <input
+                                    type="text"
+                                    class="form-control input-full"
+                                    id="providerId"
+                                    name="providerId"
+                                    value="${user.providerId}"
+                                    placeholder="Enter Input"
+                                    disabled
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group form-inline">
+                          <label
+                                  for="providerNickname"
+                                  class="col-md-3 col-form-label"
+                          >ProviderNickname</label
+                          >
+                          <div>
+                            <input
+                                    type="text"
+                                    class="form-control input-full"
+                                    id="providerNickname"
+                                    name="providerNickname"
+                                    value="${user.providerNickname}"
+                                    placeholder="Enter Input"
+                                    disabled
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group form-inline">
+                          <label
+                                  for="nickname"
+                                  class="col-md-3 col-form-label"
+                          >Nickname</label
+                          >
+                          <div>
+                            <input
+                                    type="text"
+                                    class="form-control input-full"
+                                    id="nickname"
+                                    name="nickname"
+                                    value="${user.nickname}"
                                     placeholder="Enter Input"
                             />
                           </div>
                         </div>
                         <div class="form-group form-inline">
                           <label
-                                  for="level"
+                                  for="solveCount"
                                   class="col-md-3 col-form-label"
-                          >Level</label
+                          >SolveCount</label
                           >
                           <div>
-                            <select name="level" id="level" class="form-select">
-                              <c:forEach var="level" items="${levels}">
-                                <option value="${level.levelName}" ${problem.level == level ? 'selected' : ''}>
-                                        ${level.levelString}
-                                </option>
-                              </c:forEach>
-                            </select>
+                            <input
+                                    type="text"
+                                    class="form-control input-full"
+                                    id="solveCount"
+                                    name="solveCount"
+                                    value="${user.solveCount}"
+                                    placeholder="Enter Input"
+                            />
                           </div>
                         </div>
                         <div class="form-group form-inline">
                           <label
                                   for="score"
                                   class="col-md-3 col-form-label"
-                          >score</label
+                          >Score</label
                           >
                           <div>
                             <input
@@ -156,154 +211,31 @@
                                     class="form-control input-full"
                                     id="score"
                                     name="score"
-                                    value="${problem.score}"
+                                    value="${user.score}"
                                     placeholder="Enter Input"
                             />
                           </div>
                         </div>
                         <div class="form-group form-inline">
                           <label
-                                  for="params"
+                                  for="role"
                                   class="col-md-3 col-form-label"
-                          >Params</label
+                          >Role</label
                           >
                           <div>
-                            <input
-                                    type="text"
-                                    class="form-control input-full"
-                                    id="params"
-                                    name="params"
-                                    value="${problem.params}"
-                                    placeholder="Enter Input"
-                            />
+                            <select name="role" id="role" class="form-select">
+                              <c:forEach var="role" items="${roles}">
+                                <option value="${role.name()}">${role.name()}</option>
+                              </c:forEach>
+                            </select>
                           </div>
                         </div>
-                        <div class="form-group form-inline">
-                          <label
-                                  for="returnType"
-                                  class="col-md-3 col-form-label"
-                          >ReturnType</label
-                          >
-                          <div>
-                            <input
-                                    type="text"
-                                    class="form-control input-full"
-                                    id="returnType"
-                                    name="returnType"
-                                    value="${problem.returnType}"
-                                    placeholder="Enter Input"
-                            />
-                          </div>
-                        </div>
-                        <div class="form-group form-inline">
-                          <label
-                                  for="description"
-                                  class="col-md-3 col-form-label"
-                          >Description</label
-                          >
-                          <div>
-                            <input
-                                    type="text"
-                                    class="form-control input-full"
-                                    id="description"
-                                    name="description"
-                                    value="${problem.description}"
-                                    placeholder="Enter Input"
-                            />
-                          </div>
-                        </div>
-                        <div class="form-group form-inline">
-                          <label
-                                  for="limitation"
-                                  class="col-md-3 col-form-label"
-                          >Limitation</label
-                          >
-                          <div>
-                            <input
-                                    type="text"
-                                    class="form-control input-full"
-                                    id="limitation"
-                                    name="limitation"
-                                    value="${problem.limitation}"
-                                    placeholder="Enter Input"
-                            />
-                          </div>
-                        </div>
-                        <div class="form-group form-inline">
-                          <label
-                                  for="inputOutput"
-                                  class="col-md-3 col-form-label"
-                          >InputOutput</label
-                          >
-                          <div>
-                            <input
-                                    type="text"
-                                    class="form-control input-full"
-                                    id="inputOutput"
-                                    name="inputOutput"
-                                    value="${problem.inputOutput}"
-                                    placeholder="Enter Input"
-                            />
-                          </div>
-                        </div>
-                        <div class="form-group form-inline">
-                          <label
-                                  for="solvedCount"
-                                  class="col-md-3 col-form-label"
-                          >SolvedCount</label
-                          >
-                          <div>
-                            <input
-                                    type="text"
-                                    class="form-control input-full"
-                                    id="solvedCount"
-                                    value="${problem.solvedCount}"
-                                    placeholder="Enter Input"
-                                    disabled
-                            />
-                          </div>
-                        </div>
-                        <div class="form-group form-inline">
-                          <label
-                                  for="tryCount"
-                                  class="col-md-3 col-form-label"
-                          >TryCount</label
-                          >
-                          <div>
-                            <input
-                                    type="text"
-                                    class="form-control input-full"
-                                    id="tryCount"
-                                    value="${problem.tryCount}"
-                                    placeholder="Enter Input"
-                                    disabled
-                            />
-                          </div>
-                        </div>
-                        <div class="form-group form-inline">
-                          <label
-                                  for="correctRate"
-                                  class="col-md-3 col-form-label"
-                          >CorrectRate</label
-                          >
-                          <div>
-                            <input
-                                    type="text"
-                                    class="form-control input-full"
-                                    id="correctRate"
-                                    value="${problem.correctRate}"
-                                    placeholder="Enter Input"
-                                    disabled
-                            />
-                          </div>
-                        </div>
-
                       </div>
                     </div>
                   </div>
                   <div class="card-action">
                     <input type="submit" class="btn btn-success" value="저장" />
-                    <a href="/problem/list?page=${param.page}&title=${param.title}&size=${param.size}&sort=${param.sort}" class="btn btn-danger">취소</a>
+                    <a href="/user/list?page=${param.page}&title=${param.nickname}&size=${param.size}&sort=${param.sort}" class="btn btn-danger">취소</a>
                   </div>
                 </form>
               </div>

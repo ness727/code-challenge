@@ -85,7 +85,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">Problems</h3>
+              <h3 class="fw-bold mb-3">Users</h3>
             </div>
             <div class="row">
 
@@ -97,13 +97,13 @@
                       <nav
                               class="col-md-4 navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
                       >
-                        <form action="/problem/list" method="get" class="input-group">
+                        <form action="/user/list" method="get" class="input-group">
                           <input
                                   type="text"
                                   placeholder="Search ..."
                                   class="form-control"
                                   name="search"
-                                  value="${param.title}"
+                                  value="${param.nickname}"
                           />
                           <input type="hidden" name="size" value="5" />
                           <div class="input-group-prepend" style="padding-right: 10px">
@@ -122,42 +122,44 @@
                           <th scope="col">id</th>
 
                           <th scope="col" class="d-flex">
-                            title
-                            <a href="?sort=title,asc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
-                            <a href="?sort=title,desc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
+                            provider
+                            <a href="?sort=title,asc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
+                            <a href="?sort=title,desc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
                           </th>
 
-                          <th scope="col">level</th>
-                          <th scope="col">score</th>
-                          <th scope="col">solvedCount</th>
-                          <th scope="col">tryCount</th>
+                          <th scope="col">providerId</th>
+                          <th scope="col">providerNickname</th>
+                          <th scope="col">nickname</th>
+                          <th scope="col">solveCount</th>
                           <th scope="col" class="d-flex">
-                            correctRate
-                            <a href="?sort=correctRate,asc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
-                            <a href="?sort=correctRate,desc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
+                            score
+                            <a href="?sort=correctRate,asc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
+                            <a href="?sort=correctRate,desc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
                           </th>
+                          <th scope="col">role</th>
                           <th scope="col" style="min-width: 200px;"></th>
                         </tr>
                       </thead>
                       <tbody>
-                      <c:forEach var="problem" items="${problemPage.getContent()}">
+                      <c:forEach var="user" items="${userPage.getContent()}">
                         <tr>
-                          <td>${problem.id}</td>
-                          <td>${problem.title}</td>
-                          <td>${problem.level}</td>
-                          <td>${problem.score}</td>
-                          <td>${problem.solvedCount}</td>
-                          <td>${problem.tryCount}</td>
-                          <td>${problem.correctRate}</td>
+                          <td>${user.id}</td>
+                          <td>${user.provider}</td>
+                          <td>${user.providerId}</td>
+                          <td class="text-truncate" style="max-width: 30px;">${user.providerNickname}</td>
+                          <td>${user.nickname}</td>
+                          <td>${user.solveCount}</td>
+                          <td>${user.score}</td>
+                          <td>${user.role}</td>
                           <td class="container">
                             <div class="row">
                               <div class="col px-0">
-                                <a href="/problem/${problem.id}?page=${param.page}&search=${param.title}&size=${param.size}&sort=${param.sort}" class="col btn btn-secondary mx-2">수정</a>
+                                <a class="btn btn-secondary mx-2" href="/user/${user.id}?page=${param.page}&search=${param.nickname}&size=${param.size}&sort=${param.sort}">수정</a>
                               </div>
-                              <form class="col px-0" method="post" action="/problem?page=${param.page}&search=${param.title}&size=${param.size}&sort=${param.sort}">
+                              <form class="col px-0" method="post" action="/user?page=${param.page}&search=${param.nickname}&size=${param.size}&sort=${param.sort}">
                                 <input type="hidden" name="_method" value="DELETE" />
-                                <input type="hidden" name="id" value="${problem.id}" />
-                                <input type="submit" class="col btn btn-danger mx-2" value="삭제">
+                                <input type="hidden" name="id" value="${user.id}" />
+                                <input type="submit" class="btn btn-danger mx-2" value="삭제">
                               </form>
                             </div>
                           </td>
@@ -165,13 +167,10 @@
                       </c:forEach>
                       </tbody>
                     </table>
-
-
-
                   </div>
 
                   <!-- 페이지네이션 -->
-                  <nav aria-label="..." class="row justify-content-md-center mb-4">
+                  <nav aria-label="..." class="row justify-content-md-center mt-4 mb-4">
                     <ul class="pagination col-md-auto">
 
                       <c:set var="page" value="${(param.page == null) ? 1 : param.page}" />
@@ -179,22 +178,22 @@
 
                       <!-- 이전 페이지 버튼 -->
                       <li class="page-item ${startNum <= 1 ? 'disabled' : ''} ">
-                        <a href="?page=${param.page - 5}&search=${param.title}&size=${param.size}&sort=${param.sort}" class="page-link">Previous</a>
+                        <a href="?page=${param.page - 5}&search=${param.nickname}&size=${param.size}&sort=${param.sort}" class="page-link">Previous</a>
                       </li>
 
                       <!-- 페이지 숫자 버튼 -->
                       <c:forEach var="i" begin="0" end="4">
-                        <c:if test="${startNum + i <= problemPage.totalPages}">
+                        <c:if test="${startNum + i <= userPage.totalPages}">
                           <li class="page-item ${startNum + i == page ? 'active' : ''}">
-                            <a class="page-link" href="?page=${startNum + i}&search=${param.title}&size=${param.size}&sort=${param.sort}">${startNum + i}</a>
+                            <a class="page-link" href="?page=${startNum + i}&search=${param.nickname}&size=${param.size}&sort=${param.sort}">${startNum + i}</a>
                           </li>
                         </c:if>
                       </c:forEach>
 
                       <!-- 다음 페이지 버튼 -->
                       <li class="page-item">
-                        <a class="page-link ${startNum + 5 > problemPage.totalPages ? 'disabled' : ''}"
-                           href="?page=${param.page + 5 > problemPage.totalPages ? problemPage.totalPages : param.page + 5}&search=${param.title}&size=${param.size}&sort=${param.sort}">Next</a>
+                        <a class="page-link ${startNum + 5 > userPage.totalPages ? 'disabled' : ''}"
+                           href="?page=${param.page + 5 > userPage.totalPages ? userPage.totalPages : param.page + 5}&search=${param.nickname}&size=${param.size}&sort=${param.sort}">Next</a>
                       </li>
                     </ul>
                   </nav>

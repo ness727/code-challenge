@@ -1,4 +1,4 @@
-package com.megamaker.admin.dto;
+package com.megamaker.admin.dto.user;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

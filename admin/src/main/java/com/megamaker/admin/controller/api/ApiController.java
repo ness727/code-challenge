@@ -1,6 +1,6 @@
 package com.megamaker.admin.controller.api;
 
-import com.megamaker.admin.dto.RequestJoin;
+import com.megamaker.admin.dto.user.RequestJoin;
 import com.megamaker.admin.dto.RequestProblem;
 import com.megamaker.admin.service.ProblemService;
 import com.megamaker.admin.service.UserService;
