@@ -1,7 +1,7 @@
 package com.megamaker.admin.securityconfig;
 
-import com.megamaker.admin.domain.Role;
-import com.megamaker.admin.repository.UserRepository;
+import com.megamaker.admin.domain.user.Role;
+import com.megamaker.admin.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
