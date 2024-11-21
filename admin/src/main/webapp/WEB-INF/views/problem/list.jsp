@@ -100,10 +100,10 @@
                         <form action="/problem/list" method="get" class="input-group">
                           <input
                                   type="text"
-                                  placeholder="Search ..."
+                                  placeholder="title로 검색..."
                                   class="form-control"
                                   name="search"
-                                  value="${param.title}"
+                                  value="${param.search}"
                           />
                           <input type="hidden" name="size" value="5" />
                           <div class="input-group-prepend" style="padding-right: 10px">

@@ -7,7 +7,7 @@ import com.megamaker.admin.domain.problem.dto.ResponseListProblem;
 import com.megamaker.admin.domain.problem.dto.ResponseProblem;
 import com.megamaker.admin.domain.problem.Problem;
 import com.megamaker.admin.domain.problem.Testcase;
-import com.megamaker.admin.infra.mapper.ProblemMapper;
+import com.megamaker.admin.domain.problem.mapper.ProblemMapper;
 import com.megamaker.admin.domain.problem.ProblemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -62,6 +62,6 @@ public class ProblemService {
 
     @Transactional
     public void remove(Long id) {
-        problemRepository.remove(id);
+        problemRepository.removeById(id);
     }
 }

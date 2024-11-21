@@ -2,6 +2,7 @@ package com.megamaker.admin.domain.user;
 
 import com.megamaker.admin.domain.BaseTimeDate;
 import com.megamaker.admin.domain.user.Role;
+import com.megamaker.admin.domain.user.dto.RequestUserUpdate;
 import com.megamaker.admin.securityconfig.Provider;
 import jakarta.persistence.*;
 import lombok.*;
@@ -75,6 +76,11 @@ public class User extends BaseTimeDate implements UserDetails {
     @Override
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
+    }
+
+    public void update(RequestUserUpdate request) {
+        this.nickname = request.getNickname();
+        this.role = request.getRole();
     }
 }
 

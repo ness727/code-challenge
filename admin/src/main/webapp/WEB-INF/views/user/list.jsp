@@ -100,7 +100,7 @@
                         <form action="/user/list" method="get" class="input-group">
                           <input
                                   type="text"
-                                  placeholder="Search ..."
+                                  placeholder="nickname으로 검색..."
                                   class="form-control"
                                   name="search"
                                   value="${param.nickname}"

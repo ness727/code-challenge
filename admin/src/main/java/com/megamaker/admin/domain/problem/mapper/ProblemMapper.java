@@ -1,4 +1,4 @@
-package com.megamaker.admin.infra.mapper;
+package com.megamaker.admin.domain.problem.mapper;
 
 import com.megamaker.admin.domain.problem.dto.RequestProblem;
 import com.megamaker.admin.domain.problem.dto.RequestTestcase;

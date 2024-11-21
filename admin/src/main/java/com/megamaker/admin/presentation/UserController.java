@@ -1,20 +1,19 @@
 package com.megamaker.admin.presentation;
 
 import com.megamaker.admin.domain.user.Role;
+import com.megamaker.admin.domain.user.dto.RequestUserUpdate;
 import com.megamaker.admin.domain.user.dto.ResponseListUser;
 import com.megamaker.admin.domain.user.dto.ResponseUser;
 import com.megamaker.admin.domain.user.dto.UserSearchCond;
 import com.megamaker.admin.application.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 
@@ -40,18 +39,18 @@ public class UserController {
         model.addAttribute("roles", Role.values());
         return "user/edit-form";
     }
-//
-//    @PutMapping
-//    public String update(@ModelAttribute RequestProblemUpdate requestProblemUpdate, Model model,
-//                         HttpServletRequest request) {
-//        ResponseProblem updatedProblem = problemService.update(requestProblemUpdate);
-//        model.addAttribute("problem", updatedProblem);
-//        return "redirect:problem/" + updatedProblem.getId() + "?" + request.getQueryString();
-//    }
-//
-//    @DeleteMapping
-//    public String remove(@RequestParam Long id, HttpServletRequest request) {
-//        problemService.remove(id);
-//        return "redirect:problem/list?" + request.getQueryString();
-//    }
+
+    @PutMapping
+    public String update(@ModelAttribute RequestUserUpdate requestUserUpdate, Model model,
+                         HttpServletRequest request) {
+        ResponseUser updatedUser = userService.update(requestUserUpdate);
+        model.addAttribute("user", updatedUser);
+        return "redirect:user/" + updatedUser.getId() + "?" + request.getQueryString();
+    }
+
+    @DeleteMapping
+    public String remove(@RequestParam Long id, HttpServletRequest request) {
+        userService.remove(id);
+        return "redirect:user/list?" + request.getQueryString();
+    }
 }

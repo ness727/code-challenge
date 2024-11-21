@@ -1,4 +1,4 @@
-package com.megamaker.admin.infra.mapper;
+package com.megamaker.admin.domain.user.mapper;
 
 import com.megamaker.admin.domain.user.dto.ResponseListUser;
 import com.megamaker.admin.domain.user.dto.ResponseUser;

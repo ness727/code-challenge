@@ -115,7 +115,7 @@ public class ProblemRepositoryImpl implements ProblemRepository {
 
     // -------- 삭제 ---------
     @Override
-    public void remove(Long id) {
+    public void removeById(Long id) {
         Problem foundProblem = entityManager.getReference(Problem.class, id);
         entityManager.remove(foundProblem);
     }

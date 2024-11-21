@@ -14,5 +14,5 @@ public interface ProblemRepository {
 
     void save(Problem problem);
 
-    void remove(Long id);
+    void removeById(Long id);
 }

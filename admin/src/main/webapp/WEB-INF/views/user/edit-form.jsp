@@ -196,6 +196,7 @@
                                     name="solveCount"
                                     value="${user.solveCount}"
                                     placeholder="Enter Input"
+                                    disabled
                             />
                           </div>
                         </div>
@@ -213,6 +214,7 @@
                                     name="score"
                                     value="${user.score}"
                                     placeholder="Enter Input"
+                                    disabled
                             />
                           </div>
                         </div>
@@ -225,7 +227,7 @@
                           <div>
                             <select name="role" id="role" class="form-select">
                               <c:forEach var="role" items="${roles}">
-                                <option value="${role.name()}">${role.name()}</option>
+                                <option value="${role.name()}" ${role.name() eq user.role.name() ? 'selected' : ''} >${role.name()}</option>
                               </c:forEach>
                             </select>
                           </div>

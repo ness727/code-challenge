@@ -124,16 +124,10 @@ public class UserRepositoryImpl implements UserRepository {
         );
     }
 
-//    // -------- 저장 ---------
-//    @Override
-//    public void save(Problem problem) {
-//        entityManager.persist(problem);
-//    }
-//
-//    // -------- 삭제 ---------
-//    @Override
-//    public void remove(Long id) {
-//        Problem foundProblem = entityManager.getReference(Problem.class, id);
-//        entityManager.remove(foundProblem);
-//    }
+    // -------- 삭제 ---------
+    @Override
+    public void removeById(Long id) {
+        User foundUser = entityManager.getReference(User.class, id);
+        entityManager.remove(foundUser);
+    }
 }

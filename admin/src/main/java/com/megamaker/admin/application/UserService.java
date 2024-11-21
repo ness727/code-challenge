@@ -1,12 +1,9 @@
 package com.megamaker.admin.application;
 
 import com.megamaker.admin.domain.user.Role;
-import com.megamaker.admin.domain.user.dto.RequestJoin;
-import com.megamaker.admin.domain.user.dto.ResponseListUser;
-import com.megamaker.admin.domain.user.dto.ResponseUser;
-import com.megamaker.admin.domain.user.dto.UserSearchCond;
+import com.megamaker.admin.domain.user.dto.*;
 import com.megamaker.admin.domain.user.User;
-import com.megamaker.admin.infra.mapper.UserMapper;
+import com.megamaker.admin.domain.user.mapper.UserMapper;
 import com.megamaker.admin.domain.user.UserRepository;
 import com.megamaker.admin.securityconfig.Provider;
 import lombok.RequiredArgsConstructor;
@@ -46,18 +43,18 @@ public class UserService {
                 .orElseThrow(() -> new EmptyResultDataAccessException(1));
         return userMapper.toResponseUser(foundUser);
     }
-//
-//    @Transactional
-//    public ResponseProblem update(RequestProblemUpdate requestProblemUpdate) {
-//        Problem foundProblem = problemRepository.findById(requestProblemUpdate.getId())
-//                .orElseThrow(() -> new EmptyResultDataAccessException(1));
-//        foundProblem.update(requestProblemUpdate);
-//        return problemMapper.toResponseProblem(foundProblem);
-//    }
-//
-//    @Transactional
-//    public void remove(Long id) {
-//        problemRepository.remove(id);
-//    }
+
+    @Transactional
+    public ResponseUser update(RequestUserUpdate requestUserUpdate) {
+        User foundUser = userRepository.findById(requestUserUpdate.getId())
+                .orElseThrow(() -> new EmptyResultDataAccessException(1));
+        foundUser.update(requestUserUpdate);
+        return userMapper.toResponseUser(foundUser);
+    }
+
+    @Transactional
+    public void remove(Long id) {
+        userRepository.removeById(id);
+    }
 
 }
