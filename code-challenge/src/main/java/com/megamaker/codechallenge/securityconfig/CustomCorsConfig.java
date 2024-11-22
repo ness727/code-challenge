@@ -9,7 +9,8 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class CustomCorsConfig implements CorsConfigurationSource {
-    private final String allowedFront;
+    private final String allowedFrontDev;
+    private final String allowedFrontProd;
 
     @Override
     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
@@ -18,7 +19,7 @@ public class CustomCorsConfig implements CorsConfigurationSource {
         corsConfig.setAllowCredentials(true);
         corsConfig.setAllowedHeaders(List.of("*"));
         corsConfig.setAllowedMethods(List.of("*"));
-        corsConfig.setAllowedOrigins(List.of(allowedFront));
+        corsConfig.setAllowedOrigins(List.of(allowedFrontDev, allowedFrontProd));
         return corsConfig;
     }
 }

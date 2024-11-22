@@ -30,15 +30,18 @@ public class SecurityConfig {
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
 
-    @Value("${custom.config.cors.allowedOrigins.front}")
-    private String allowedFront;
+    @Value("${dev.cors.allowedOrigins.front}")
+    private String allowedFrontDev;
+
+    @Value("${prod.cors.allowedOrigins.front}")
+    private String allowedFrontProd;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(c ->
-                        c.configurationSource(new CustomCorsConfig(allowedFront))
+                        c.configurationSource(new CustomCorsConfig(allowedFrontDev, allowedFrontProd))
                 )
                 .sessionManagement(SessionManagementConfigurer::disable)
                 .addFilterAfter(new LoginCheckFilter(permitPathArr, userRepository, environment), UsernamePasswordAuthenticationFilter.class)
@@ -53,7 +56,7 @@ public class SecurityConfig {
                 )
                 .logout((logoutConfig) -> logoutConfig
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl(allowedFront)
+                        .logoutSuccessHandler(new LogoutSuccessHandler(environment))
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .permitAll()
