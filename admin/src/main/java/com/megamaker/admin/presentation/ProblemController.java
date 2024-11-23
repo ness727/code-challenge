@@ -1,13 +1,16 @@
 package com.megamaker.admin.presentation;
 
 import com.megamaker.admin.domain.problem.Level;
+import com.megamaker.admin.domain.problem.Testcase;
 import com.megamaker.admin.domain.problem.dto.ProblemSearchCond;
 import com.megamaker.admin.domain.problem.dto.RequestProblemUpdate;
 import com.megamaker.admin.domain.problem.dto.ResponseListProblem;
 import com.megamaker.admin.domain.problem.dto.ResponseProblem;
 import com.megamaker.admin.application.ProblemService;
+import com.megamaker.admin.domain.problem.mapper.ProblemUpdate;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,8 +18,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.data.domain.Sort.Direction.ASC;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/problem")
 @Controller
@@ -41,8 +47,8 @@ public class ProblemController {
     }
 
     @PutMapping
-    public String update(@ModelAttribute RequestProblemUpdate requestProblemUpdate, Model model,
-                         HttpServletRequest request) {
+    public String update(@ProblemUpdate RequestProblemUpdate requestProblemUpdate,
+                         Model model, HttpServletRequest request) {
         ResponseProblem updatedProblem = problemService.update(requestProblemUpdate);
         model.addAttribute("problem", updatedProblem);
         return "redirect:problem/" + updatedProblem.getId() + "?" + request.getQueryString();
