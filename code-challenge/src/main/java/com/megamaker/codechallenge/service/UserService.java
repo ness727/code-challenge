@@ -1,5 +1,6 @@
 package com.megamaker.codechallenge.service;
 
+import com.megamaker.codechallenge.domain.user.Role;
 import com.megamaker.codechallenge.dto.user.RequestUserEdit;
 import com.megamaker.codechallenge.dto.user.ResponseUser;
 import com.megamaker.codechallenge.domain.entity.User;
@@ -35,6 +36,10 @@ public class UserService {
     public List<ResponseUserRank> getRank() {
         List<User> foundUserList = userRepository.findTop10ByOrderByScoreDesc();
         return foundUserList.stream()
+                .filter(user ->
+                    user.getRole() != Role.ADMIN
+                        && user.getRole() != Role.MANAGER
+                )
                 .map(user -> {
                     if (user.getNickname() == null) {  // 닉네임 설정 안 되어 있을 때
                         return new ResponseUserRank(user.getProviderNickname() + "(GitHub)", user.getScore());
