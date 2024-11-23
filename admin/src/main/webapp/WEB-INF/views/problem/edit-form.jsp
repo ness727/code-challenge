@@ -246,6 +246,54 @@
                             />
                           </div>
                         </div>
+                        <div class="form-group form-inline mt-5">
+                          <h5>TestcaseList</h5>
+                          <div>
+                            <c:forEach var="testcase" items="${problem.testcaseList}" varStatus="status">
+                              <label
+                                      for="testcase.id"
+                                      class="col-md-3 col-form-label"
+                              >TestcaseId</label
+                              >
+                              <input
+                                      type="text"
+                                      class="form-control input-full"
+                                      id="testcase.id"
+                                      name="testcase.id"
+                                      value="${testcase.id}"
+                                      placeholder="Enter Input"
+                                      readonly
+                              />
+                              <label
+                                      for="testcase.paramData"
+                                      class="col-md-3 col-form-label"
+                              >ParamData</label
+                              >
+                              <input
+                                      type="text"
+                                      class="form-control input-full"
+                                      id="testcase.paramData"
+                                      name="testcase.paramData"
+                                      value="${testcase.paramData}"
+                                      placeholder="Enter Input"
+                              />
+                              <label
+                                      for="testcase.result"
+                                      class="col-md-3 col-form-label"
+                              >Result</label
+                              >
+                              <input
+                                      type="text"
+                                      class="form-control input-full"
+                                      id="testcase.result"
+                                      name="testcase.result"
+                                      value="${testcase.result}"
+                                      placeholder="Enter Input"
+                              />
+                              <hr/>
+                            </c:forEach>
+                          </div>
+                        </div>
                         <div class="form-group form-inline">
                           <label
                                   for="solvedCount"

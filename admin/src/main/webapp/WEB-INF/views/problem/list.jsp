@@ -123,8 +123,8 @@
 
                           <th scope="col" class="d-flex">
                             title
-                            <a href="?sort=title,asc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
-                            <a href="?sort=title,desc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
+                            <a href="?page=${param.page}&search=${param.title}&size=${param.size}&sort=title,asc"><i class="fa fa-sort-up search-icon"></i></a>
+                            <a href="?page=${param.page}&search=${param.title}&size=${param.size}&sort=title,desc"><i class="fa fa-sort-down search-icon"></i></a>
                           </th>
 
                           <th scope="col">level</th>
@@ -133,8 +133,8 @@
                           <th scope="col">tryCount</th>
                           <th scope="col" class="d-flex">
                             correctRate
-                            <a href="?sort=correctRate,asc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
-                            <a href="?sort=correctRate,desc&search=${param.title}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
+                            <a href="?page=${param.page}&search=${param.title}&size=${param.size}&sort=correctRate,asc"><i class="fa fa-sort-up search-icon"></i></a>
+                            <a href="?page=${param.page}&search=${param.title}&size=${param.size}&sort=correctRate,desc"><i class="fa fa-sort-down search-icon"></i></a>
                           </th>
                           <th scope="col" style="min-width: 200px;"></th>
                         </tr>
