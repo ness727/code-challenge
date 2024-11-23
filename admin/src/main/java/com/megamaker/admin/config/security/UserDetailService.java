@@ -1,4 +1,4 @@
-package com.megamaker.admin.securityconfig;
+package com.megamaker.admin.config.security;
 
 import com.megamaker.admin.domain.user.Role;
 import com.megamaker.admin.domain.user.UserRepository;

@@ -1,4 +1,4 @@
-package com.megamaker.admin.securityconfig;
+package com.megamaker.admin.config.security;
 
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
