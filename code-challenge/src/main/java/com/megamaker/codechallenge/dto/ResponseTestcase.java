@@ -10,4 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResponseTestcase {
     private String paramData;
+    private String result;
+
+    public String getParamData() {
+        return paramData;
+    }
 }
