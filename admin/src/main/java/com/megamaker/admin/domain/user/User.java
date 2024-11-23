@@ -1,9 +1,8 @@
 package com.megamaker.admin.domain.user;
 
 import com.megamaker.admin.domain.BaseTimeDate;
-import com.megamaker.admin.domain.user.Role;
 import com.megamaker.admin.domain.user.dto.RequestUserUpdate;
-import com.megamaker.admin.securityconfig.Provider;
+import com.megamaker.admin.config.security.Provider;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

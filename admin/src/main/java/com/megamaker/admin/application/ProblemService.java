@@ -33,7 +33,7 @@ public class ProblemService {
         List<Testcase> testcaseList = requestProblem.getTestcaseList().stream()
                 .map(t -> {
                     Testcase testcase = problemMapper.toTestcase(t);
-                    testcase.setProblem(problem);
+                    problem.addTestcase(testcase);
                     return testcase;
                 })
                 .toList();

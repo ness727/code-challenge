@@ -5,7 +5,7 @@ import com.megamaker.admin.domain.user.dto.*;
 import com.megamaker.admin.domain.user.User;
 import com.megamaker.admin.domain.user.mapper.UserMapper;
 import com.megamaker.admin.domain.user.UserRepository;
-import com.megamaker.admin.securityconfig.Provider;
+import com.megamaker.admin.config.security.Provider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;

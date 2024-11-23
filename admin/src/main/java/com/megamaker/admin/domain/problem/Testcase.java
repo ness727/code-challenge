@@ -3,14 +3,15 @@ package com.megamaker.admin.domain.problem;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Setter
+//@Setter
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "testcases")
-@Entity
+//@Table(name = "testcases")
+//@Entity
+@Embeddable
 public class Testcase {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "param_data")
@@ -18,7 +19,7 @@ public class Testcase {
 
     private String result;
 
-    @ManyToOne
-    @JoinColumn(name = "problem_id")
-    public Problem problem;
+//    @ManyToOne
+//    @JoinColumn(name = "problem_id")
+//    public Problem problem;
 }

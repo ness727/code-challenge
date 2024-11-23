@@ -1,7 +1,6 @@
 package com.megamaker.admin.domain.user.dto;
 
 import com.megamaker.admin.domain.user.Role;
-import com.megamaker.admin.securityconfig.Provider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

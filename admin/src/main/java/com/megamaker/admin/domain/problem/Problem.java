@@ -48,10 +48,13 @@ public class Problem extends BaseTimeDate {
     @Column(name = "correct_rate")
     private String correctRate;
 
-    @OneToMany(mappedBy = "problem")
+    @OneToMany(mappedBy = "problem", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<ProblemPicture> problemPictureList;
 
-    @OneToMany(mappedBy = "problem", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ElementCollection
+    @CollectionTable(name = "testcases", joinColumns = @JoinColumn(name = "problem_id"))
+    //@OrderColumn(name = "id")
+    //@OneToMany(mappedBy = "problem", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Testcase> testcaseList;
 
     public void update(RequestProblemUpdate request) {
@@ -63,5 +66,10 @@ public class Problem extends BaseTimeDate {
         this.description = request.getDescription();
         this.limitation = request.getLimitation();
         this.inputOutput = request.getInputOutput();
+        this.testcaseList = request.getTestcaseList();
+    }
+
+    public void addTestcase(Testcase testcase) {
+        testcaseList.add(testcase);
     }
 }

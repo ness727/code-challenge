@@ -1,10 +1,13 @@
 package com.megamaker.admin.domain.problem.dto;
 
 import com.megamaker.admin.domain.problem.Level;
+import com.megamaker.admin.domain.problem.Testcase;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,6 +30,8 @@ public class ResponseProblem {
     private String limitation;
 
     private String inputOutput;
+
+    private List<Testcase> testcaseList;
 
     private Long solvedCount;
 
