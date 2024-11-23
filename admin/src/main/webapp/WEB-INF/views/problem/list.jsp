@@ -136,7 +136,7 @@
                             <a href="?page=${param.page}&search=${param.title}&size=${param.size}&sort=correctRate,asc"><i class="fa fa-sort-up search-icon"></i></a>
                             <a href="?page=${param.page}&search=${param.title}&size=${param.size}&sort=correctRate,desc"><i class="fa fa-sort-down search-icon"></i></a>
                           </th>
-                          <th scope="col" style="min-width: 200px;"></th>
+                          <th scope="col"></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -149,7 +149,7 @@
                           <td>${problem.solvedCount}</td>
                           <td>${problem.tryCount}</td>
                           <td>${problem.correctRate}</td>
-                          <td class="container">
+                          <td class="container col-auto">
                             <div class="row">
                               <div class="col px-0">
                                 <a href="/problem/${problem.id}?page=${param.page}&search=${param.title}&size=${param.size}&sort=${param.sort}" class="col btn btn-secondary mx-2">수정</a>

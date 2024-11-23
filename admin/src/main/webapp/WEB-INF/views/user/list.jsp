@@ -151,7 +151,7 @@
                           <td>${user.solveCount}</td>
                           <td>${user.score}</td>
                           <td>${user.role}</td>
-                          <td class="container">
+                          <td class="container col-auto">
                             <div class="row">
                               <div class="col px-0">
                                 <a class="btn btn-secondary mx-2" href="/user/${user.id}?page=${param.page}&search=${param.nickname}&size=${param.size}&sort=${param.sort}">수정</a>
