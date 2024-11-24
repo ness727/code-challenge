@@ -1,8 +1,8 @@
 package com.megamaker.codechallenge.securityconfig;
 
-import com.megamaker.codechallenge.domain.entity.User;
-import com.megamaker.codechallenge.repository.UserRepository;
-import com.megamaker.codechallenge.service.exception.UserNotFoundException;
+import com.megamaker.codechallenge.domain.user.User;
+import com.megamaker.codechallenge.domain.user.UserRepository;
+import com.megamaker.codechallenge.application.exception.UserNotFoundException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
@@ -52,10 +52,10 @@ public class LoginCheckFilter extends OncePerRequestFilter {
             String userId = jwtParser.parseSignedClaims(jwt).getPayload().getSubject();
 
             // 회원 조회
-            User foundUser = userRepository.findByProviderId(userId).orElseThrow(UserNotFoundException::new);
+            User foundUser = userRepository.findByProviderProviderId(userId).orElseThrow(UserNotFoundException::new);
 
             Authentication auth = new UsernamePasswordAuthenticationToken(  // 새 유저 인증 객체 생성
-                    foundUser.getProviderId(),
+                    foundUser.getProvider().getProviderId(),
                     null,
                     List.of(new SimpleGrantedAuthority(foundUser.getRole().name()))
             );

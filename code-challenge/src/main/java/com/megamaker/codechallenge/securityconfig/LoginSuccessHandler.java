@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.securityconfig;
 
-import com.megamaker.codechallenge.repository.TokenRepository;
+import com.megamaker.codechallenge.domain.login.TokenRepository;
 import com.megamaker.codechallenge.securityconfig.oauth2.CustomOAuth2User;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.ServletException;
