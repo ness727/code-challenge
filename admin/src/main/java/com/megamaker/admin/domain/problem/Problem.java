@@ -53,8 +53,6 @@ public class Problem extends BaseTimeDate {
 
     @ElementCollection
     @CollectionTable(name = "testcases", joinColumns = @JoinColumn(name = "problem_id"))
-    //@OrderColumn(name = "id")
-    //@OneToMany(mappedBy = "problem", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Testcase> testcaseList;
 
     public void update(RequestProblemUpdate request) {
