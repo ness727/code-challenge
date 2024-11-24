@@ -251,16 +251,16 @@
                           <div>
                             <c:forEach var="testcase" items="${problem.testcaseList}" varStatus="status">
                               <label
-                                      for="testcase.id"
+                                      for="testcase.idx"
                                       class="col-md-3 col-form-label"
-                              >TestcaseId</label
+                              >TestcaseIdx</label
                               >
                               <input
                                       type="text"
                                       class="form-control input-full"
-                                      id="testcase.id"
-                                      name="testcase.id"
-                                      value="${testcase.id}"
+                                      id="testcase.idx"
+                                      name="testcase.idx"
+                                      value="${testcase.idx}"
                                       placeholder="Enter Input"
                                       readonly
                               />

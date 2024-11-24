@@ -1,6 +1,6 @@
 package com.megamaker.admin.domain.problem.dto;
 
-import com.megamaker.admin.domain.problem.Level;
+import com.megamaker.admin.domain.problem.vo.Level;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

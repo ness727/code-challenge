@@ -1,7 +1,6 @@
 package com.megamaker.admin.presentation;
 
-import com.megamaker.admin.domain.problem.Level;
-import com.megamaker.admin.domain.problem.Testcase;
+import com.megamaker.admin.domain.problem.vo.Level;
 import com.megamaker.admin.domain.problem.dto.ProblemSearchCond;
 import com.megamaker.admin.domain.problem.dto.RequestProblemUpdate;
 import com.megamaker.admin.domain.problem.dto.ResponseListProblem;
@@ -17,8 +16,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 

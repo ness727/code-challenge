@@ -122,7 +122,7 @@
                           <th scope="col">id</th>
 
                           <th scope="col" class="d-flex">
-                            provider
+                            providerEnum
                             <a href="?sort=title,asc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
                             <a href="?sort=title,desc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
                           </th>
@@ -142,11 +142,12 @@
                       </thead>
                       <tbody>
                       <c:forEach var="user" items="${userPage.getContent()}">
+                        <c:set var="provider" value="${user.provider}"/>
                         <tr>
                           <td>${user.id}</td>
-                          <td>${user.provider}</td>
-                          <td>${user.providerId}</td>
-                          <td class="text-truncate" style="max-width: 30px;">${user.providerNickname}</td>
+                          <td>${provider.providerEnum}</td>
+                          <td>${provider.providerId}</td>
+                          <td class="text-truncate" style="max-width: 30px;">${provider.providerNickname}</td>
                           <td>${user.nickname}</td>
                           <td>${user.solveCount}</td>
                           <td>${user.score}</td>

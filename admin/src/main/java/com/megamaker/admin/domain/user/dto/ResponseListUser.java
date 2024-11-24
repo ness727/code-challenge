@@ -1,7 +1,8 @@
 package com.megamaker.admin.domain.user.dto;
 
-import com.megamaker.admin.domain.user.Role;
-import com.megamaker.admin.config.security.Provider;
+import com.megamaker.admin.domain.user.vo.Provider;
+import com.megamaker.admin.domain.user.vo.Role;
+import com.megamaker.admin.config.security.ProviderEnum;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,10 +15,6 @@ public class ResponseListUser {
     private Long id;
 
     private Provider provider;
-
-    private String providerId;
-
-    private String providerNickname;
 
     private String nickname;
 

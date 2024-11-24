@@ -1,16 +1,17 @@
 package com.megamaker.admin.config.security;
 
-public enum Provider {
+import lombok.Getter;
+
+@Getter
+public enum ProviderEnum {
+    NONE("none"),
     GITHUB("github"),
     GOOGLE("google");
 
     private final String registrationId;
 
-    Provider(String registrationId) {
+    ProviderEnum(String registrationId) {
         this.registrationId = registrationId;
     }
 
-    public String getRegistrationId() {
-        return registrationId;
-    }
 }

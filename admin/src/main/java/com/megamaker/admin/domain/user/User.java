@@ -2,7 +2,9 @@ package com.megamaker.admin.domain.user;
 
 import com.megamaker.admin.domain.BaseTimeDate;
 import com.megamaker.admin.domain.user.dto.RequestUserUpdate;
-import com.megamaker.admin.config.security.Provider;
+import com.megamaker.admin.config.security.ProviderEnum;
+import com.megamaker.admin.domain.user.vo.Provider;
+import com.megamaker.admin.domain.user.vo.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,14 +25,8 @@ public class User extends BaseTimeDate implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Embedded
     private Provider provider;
-
-    @Column(name = "provider_id")
-    private String providerId;
-
-    @Column(name = "provider_nickname")
-    private String providerNickname;
 
     private String nickname;
 
@@ -49,12 +45,12 @@ public class User extends BaseTimeDate implements UserDetails {
 
     @Override
     public String getPassword() {
-        return providerNickname;
+        return provider.getProviderNickname();
     }
 
     @Override
     public String getUsername() {
-        return providerId;
+        return provider.getProviderId();
     }
 
     @Override

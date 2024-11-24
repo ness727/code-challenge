@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestTestcase {
+    private Integer idx;
     private String paramData;
     private String result;
 }

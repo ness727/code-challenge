@@ -5,7 +5,7 @@ import com.megamaker.admin.domain.problem.dto.RequestTestcase;
 import com.megamaker.admin.domain.problem.dto.ResponseListProblem;
 import com.megamaker.admin.domain.problem.dto.ResponseProblem;
 import com.megamaker.admin.domain.problem.Problem;
-import com.megamaker.admin.domain.problem.Testcase;
+import com.megamaker.admin.domain.problem.vo.Testcase;
 import org.mapstruct.*;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)

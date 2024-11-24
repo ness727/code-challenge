@@ -1,4 +1,4 @@
-package com.megamaker.admin.domain.problem;
+package com.megamaker.admin.domain.problem.vo;
 
 public enum Level {
     LV0(0, "LV0", "레벨 0"),

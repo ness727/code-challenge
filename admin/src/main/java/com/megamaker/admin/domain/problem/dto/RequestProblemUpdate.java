@@ -1,8 +1,7 @@
 package com.megamaker.admin.domain.problem.dto;
 
-import com.megamaker.admin.domain.problem.Level;
-import com.megamaker.admin.domain.problem.Testcase;
-import jakarta.persistence.Column;
+import com.megamaker.admin.domain.problem.vo.Level;
+import com.megamaker.admin.domain.problem.vo.Testcase;
 import lombok.*;
 
 import java.util.List;
