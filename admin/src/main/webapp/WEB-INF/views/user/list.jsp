@@ -137,7 +137,7 @@
                             <a href="?sort=correctRate,desc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
                           </th>
                           <th scope="col">role</th>
-                          <th scope="col" style="min-width: 200px;"></th>
+                          <th scope="col"></th>
                         </tr>
                       </thead>
                       <tbody>
