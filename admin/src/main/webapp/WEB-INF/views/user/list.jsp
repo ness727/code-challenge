@@ -123,8 +123,6 @@
 
                           <th scope="col" class="d-flex">
                             providerEnum
-                            <a href="?sort=title,asc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
-                            <a href="?sort=title,desc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
                           </th>
 
                           <th scope="col">providerId</th>
@@ -133,8 +131,8 @@
                           <th scope="col">solveCount</th>
                           <th scope="col" class="d-flex">
                             score
-                            <a href="?sort=correctRate,asc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
-                            <a href="?sort=correctRate,desc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
+                            <a href="?sort=score,asc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-up search-icon"></i></a>
+                            <a href="?sort=score,desc&search=${param.nickname}&page=${param.page}"><i class="fa fa-sort-down search-icon"></i></a>
                           </th>
                           <th scope="col">role</th>
                           <th scope="col" style="min-width: 200px;"></th>
