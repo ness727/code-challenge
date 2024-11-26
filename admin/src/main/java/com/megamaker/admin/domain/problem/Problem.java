@@ -2,6 +2,9 @@ package com.megamaker.admin.domain.problem;
 
 import com.megamaker.admin.domain.BaseTimeDate;
 import com.megamaker.admin.domain.problem.dto.RequestProblemUpdate;
+import com.megamaker.admin.domain.problem.vo.Level;
+import com.megamaker.admin.domain.problem.vo.ProblemPicture;
+import com.megamaker.admin.domain.problem.vo.Testcase;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -48,11 +51,14 @@ public class Problem extends BaseTimeDate {
     @Column(name = "correct_rate")
     private String correctRate;
 
-    @OneToMany(mappedBy = "problem", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ElementCollection
+    @CollectionTable(name = "problem_pictures", joinColumns = @JoinColumn(name = "problem_id"))
+    @OrderColumn(name = "problem_picture_idx")
     private List<ProblemPicture> problemPictureList;
 
     @ElementCollection
     @CollectionTable(name = "testcases", joinColumns = @JoinColumn(name = "problem_id"))
+    @OrderColumn(name = "testcase_idx")
     private List<Testcase> testcaseList;
 
     public void update(RequestProblemUpdate request) {

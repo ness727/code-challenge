@@ -85,6 +85,7 @@
             <div class="row">
               <div class="col-md-12">
                 <form method="post" action="/user?page=${param.page}&search=${param.nickname}&size=${param.size}&sort=${param.sort}" class="card">
+                  <c:set var="provider" value="${user.provider}"/>
                   <input type="hidden" name="_method" value="PUT" />
 
                   <div class="card-header">
@@ -113,7 +114,7 @@
                         </div>
                         <div class="form-group form-inline">
                           <label
-                                  for="provider"
+                                  for="providerEnum"
                                   class="col-md-3 col-form-label"
                           >Provider</label
                           >
@@ -121,9 +122,9 @@
                             <input
                                     type="text"
                                     class="form-control input-full"
-                                    id="provider"
-                                    name="provider"
-                                    value="${user.provider}"
+                                    id="providerEnum"
+                                    name="providerEnum"
+                                    value="${provider.providerEnum}"
                                     placeholder="Enter Input"
                                     disabled
                             />
@@ -141,7 +142,7 @@
                                     class="form-control input-full"
                                     id="providerId"
                                     name="providerId"
-                                    value="${user.providerId}"
+                                    value="${provider.providerId}"
                                     placeholder="Enter Input"
                                     disabled
                             />
@@ -159,7 +160,7 @@
                                     class="form-control input-full"
                                     id="providerNickname"
                                     name="providerNickname"
-                                    value="${user.providerNickname}"
+                                    value="${provider.providerNickname}"
                                     placeholder="Enter Input"
                                     disabled
                             />

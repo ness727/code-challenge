@@ -1,6 +1,7 @@
 package com.megamaker.admin.domain.user;
 
 import com.megamaker.admin.domain.user.dto.UserSearchCond;
+import com.megamaker.admin.domain.user.vo.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

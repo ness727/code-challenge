@@ -1,6 +1,6 @@
 package com.megamaker.admin.infra.jpa;
 
-import com.megamaker.admin.domain.user.Role;
+import com.megamaker.admin.domain.user.vo.Role;
 import com.megamaker.admin.domain.user.UserRepository;
 import com.megamaker.admin.domain.user.dto.UserSearchCond;
 import com.megamaker.admin.domain.user.User;
@@ -42,7 +42,7 @@ public class UserRepositoryImpl implements UserRepository {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         if (StringUtils.hasText(providerId)) {
-            booleanBuilder.and(user.providerId.eq(providerId));
+            booleanBuilder.and(user.provider.providerId.eq(providerId));
         }
         if (role != null) {
             booleanBuilder.and(user.role.eq(role));
@@ -92,7 +92,7 @@ public class UserRepositoryImpl implements UserRepository {
         // 닉네임으로 검색
         if (StringUtils.hasText(nickname)) {
             booleanBuilder.or(user.nickname.contains(nickname));  // 해당 글자 포함으로 검색
-            booleanBuilder.or(user.providerNickname.contains(nickname));
+            booleanBuilder.or(user.provider.providerNickname.contains(nickname));
         }
 
         return booleanBuilder;

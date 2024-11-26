@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.securityconfig.oauth2;
 
-import com.megamaker.codechallenge.securityconfig.Provider;
+import com.megamaker.codechallenge.securityconfig.ProviderEnum;
 
 import java.util.Map;
 
@@ -12,8 +12,8 @@ public class GithubResponse implements OAuth2Response {
     }
 
     @Override
-    public Provider getProvider() {
-        return Provider.GITHUB;
+    public ProviderEnum getProvider() {
+        return ProviderEnum.GITHUB;
     }
 
     @Override

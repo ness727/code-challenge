@@ -1,6 +1,6 @@
 package com.megamaker.admin.infra.jpa;
 
-import com.megamaker.admin.domain.problem.Level;
+import com.megamaker.admin.domain.problem.vo.Level;
 import com.megamaker.admin.domain.problem.ProblemRepository;
 import com.megamaker.admin.domain.problem.dto.ProblemSearchCond;
 import com.megamaker.admin.domain.problem.Problem;

@@ -6,7 +6,7 @@ import com.megamaker.admin.domain.problem.dto.RequestProblemUpdate;
 import com.megamaker.admin.domain.problem.dto.ResponseListProblem;
 import com.megamaker.admin.domain.problem.dto.ResponseProblem;
 import com.megamaker.admin.domain.problem.Problem;
-import com.megamaker.admin.domain.problem.Testcase;
+import com.megamaker.admin.domain.problem.vo.Testcase;
 import com.megamaker.admin.domain.problem.mapper.ProblemMapper;
 import com.megamaker.admin.domain.problem.ProblemRepository;
 import lombok.RequiredArgsConstructor;

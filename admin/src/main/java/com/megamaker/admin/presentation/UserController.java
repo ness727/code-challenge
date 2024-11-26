@@ -1,6 +1,6 @@
 package com.megamaker.admin.presentation;
 
-import com.megamaker.admin.domain.user.Role;
+import com.megamaker.admin.domain.user.vo.Role;
 import com.megamaker.admin.domain.user.dto.RequestUserUpdate;
 import com.megamaker.admin.domain.user.dto.ResponseListUser;
 import com.megamaker.admin.domain.user.dto.ResponseUser;

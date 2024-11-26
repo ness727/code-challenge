@@ -1,14 +1,12 @@
 package com.megamaker.codechallenge.securityconfig.oauth2;
 
-import com.megamaker.codechallenge.securityconfig.Provider;
-
-import java.util.Map;
+import com.megamaker.codechallenge.securityconfig.ProviderEnum;
 
 public class TestResponse implements OAuth2Response {
 
     @Override
-    public Provider getProvider() {
-        return Provider.TEST;
+    public ProviderEnum getProvider() {
+        return ProviderEnum.TEST;
     }
 
     @Override

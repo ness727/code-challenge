@@ -1,7 +1,7 @@
 package com.megamaker.admin.domain.problem.mapper;
 
-import com.megamaker.admin.domain.problem.Level;
-import com.megamaker.admin.domain.problem.Testcase;
+import com.megamaker.admin.domain.problem.vo.Level;
+import com.megamaker.admin.domain.problem.vo.Testcase;
 import com.megamaker.admin.domain.problem.dto.RequestProblemUpdate;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
@@ -27,13 +27,13 @@ public class ProblemUpdateArgumentResolver implements HandlerMethodArgumentResol
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
         // testcase 바인딩
-        String[] tcId = request.getParameterValues("testcase.id");
+        //String[] tcIdx = request.getParameterValues("testcase.idx");
         String[] tcParamData = request.getParameterValues("testcase.paramData");
         String[] tcResult = request.getParameterValues("testcase.result");
 
         List<Testcase> testcaseList = new ArrayList<>();
-        for (int i = 0; i < tcId.length; i++) {
-            testcaseList.add(new Testcase(Long.valueOf(tcId[i]), tcParamData[i], tcResult[i]));
+        for (int i = 0; i < tcResult.length; i++) {
+            testcaseList.add(new Testcase(tcParamData[i], tcResult[i]));
         }
 
         // 나머지 RequestProblemUpdate 바인딩
