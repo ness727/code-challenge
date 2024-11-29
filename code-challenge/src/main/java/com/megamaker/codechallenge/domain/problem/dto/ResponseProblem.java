@@ -23,6 +23,7 @@ public class ResponseProblem {
     private Float correctRate;
     private List<ResponseProblemPicture> problemPictureList;
     private List<ResponseTestcase> testcaseList;
+    private String userAnswer;
 
     public String getParams() {
         String[] split = params.split(",");
@@ -33,5 +34,9 @@ public class ResponseProblem {
         }
         sb.replace(sb.length() - 2, sb.length(), "");
         return sb.toString();
+    }
+
+    public void addUserAnswer(String userAnswer) {
+        this.userAnswer = userAnswer;
     }
 }

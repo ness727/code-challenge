@@ -1,9 +1,9 @@
 package com.megamaker.codechallenge.infra;
 
-import com.megamaker.codechallenge.domain.problem.ProblemRepository;
-import com.megamaker.codechallenge.domain.problem.vo.Level;
-import com.megamaker.codechallenge.domain.problem.dto.ProblemSearchCond;
 import com.megamaker.codechallenge.domain.problem.Problem;
+import com.megamaker.codechallenge.domain.problem.ProblemRepository;
+import com.megamaker.codechallenge.domain.problem.dto.ProblemSearchCond;
+import com.megamaker.codechallenge.domain.problem.vo.Level;
 import com.megamaker.codechallenge.domain.problem.vo.Testcase;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
@@ -86,8 +86,6 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     public Optional<Problem> findById(Long id) {
         return Optional.ofNullable(
                 queryFactory.selectFrom(problem)
-                        //.leftJoin(problem.problemPictureList).fetchJoin()
-                        //.leftJoin(problem.testcaseList).fetchJoin()
                         .where(problem.id.eq(id))
                         .fetchFirst()
         );

@@ -1,12 +1,15 @@
 package com.megamaker.codechallenge.presentation;
 
+import com.megamaker.codechallenge.application.exception.UserNotFoundException;
 import com.megamaker.codechallenge.domain.problem.dto.ProblemSearchCond;
 import com.megamaker.codechallenge.domain.problem.dto.ResponseListProblem;
 import com.megamaker.codechallenge.domain.problem.dto.ResponseProblem;
 import com.megamaker.codechallenge.application.ProblemService;
+import com.megamaker.codechallenge.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,8 +41,12 @@ public class ProblemController {
     }
 
     @GetMapping("/{problemId}")
-    public ResponseProblem get(@PathVariable Long problemId) {
-        return problemService.get(problemId);
+    public ResponseProblem get(@PathVariable Long problemId, Authentication auth) {
+        return problemService.findById(problemId, authToProviderId(auth));
     }
 
+    private static String authToProviderId(Authentication auth) {
+        if (auth == null) throw new UserNotFoundException();
+        return (String) auth.getPrincipal();
+    }
 }

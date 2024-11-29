@@ -30,10 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 답안의 클래스명은 Solution으로 고정
@@ -127,6 +124,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
         }
     }
 
+    @Transactional
     public List<ResponseUserCodeResult> runUserMethod(Object instance, Method method,
                                                       RequestUserAnswer requestUserAnswer, Problem problem) throws IllegalAccessException, InvocationTargetException {
         List<Testcase> testcaseList = problemRepository.findTestcaseListById(requestUserAnswer.getProblemId());
@@ -183,7 +181,9 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
                 .toArray().length == result.size();
         if (isAllCorrect) {
             // 이미 풀었던 문제일 때
-            Optional<UserProblem> foundUserProblem = userProblemRepository.findByUserIdAndProblemId(foundUser.getId(), problem.getId());
+            Optional<UserProblem> foundUserProblem = foundUser.getUserProblemList().stream()
+                    .filter(userProblem -> Objects.equals(userProblem.getProblem().getId(), problem.getId()))
+                    .findFirst();
             if (foundUserProblem.isPresent()) {
                 foundUserProblem.get().updateUserAnswer(requestUserAnswer.getSourceCode());
             } else {
