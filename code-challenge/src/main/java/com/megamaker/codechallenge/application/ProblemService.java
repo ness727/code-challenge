@@ -37,7 +37,9 @@ public class ProblemService {
         Optional<String> foundUserAnswer = userRepository.findAnswerByProviderIdAndProblemId(providerId, id);
 
         // 해당 사용자가 이미 푼 문제일 때 이전 유저 답 추가
-        foundUserAnswer.ifPresent(responseProblem::addUserAnswer);
+        if (foundUserAnswer.isPresent()) {
+            responseProblem.setSolvedTrue();
+        }
         return responseProblem;
     }
 }
