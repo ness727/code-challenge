@@ -1,7 +1,7 @@
 package com.megamaker.codechallenge.securityconfig;
 
-import com.megamaker.codechallenge.repository.TokenRepository;
-import com.megamaker.codechallenge.repository.UserRepository;
+import com.megamaker.codechallenge.domain.login.TokenRepository;
+import com.megamaker.codechallenge.domain.user.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.session.ConcurrentSessionFilter;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,15 +29,18 @@ public class SecurityConfig {
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
 
-    @Value("${custom.config.cors.allowedOrigins.front}")
-    private String allowedFront;
+    @Value("${dev.cors.allowedOrigins.front}")
+    private String allowedFrontDev;
+
+    @Value("${prod.cors.allowedOrigins.front}")
+    private String allowedFrontProd;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(c ->
-                        c.configurationSource(new CustomCorsConfig(allowedFront))
+                        c.configurationSource(new CustomCorsConfig(allowedFrontDev, allowedFrontProd))
                 )
                 .sessionManagement(SessionManagementConfigurer::disable)
                 .addFilterAfter(new LoginCheckFilter(permitPathArr, userRepository, environment), UsernamePasswordAuthenticationFilter.class)
@@ -53,7 +55,7 @@ public class SecurityConfig {
                 )
                 .logout((logoutConfig) -> logoutConfig
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl(allowedFront)
+                        .logoutSuccessHandler(new LogoutSuccessHandler(environment))
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .permitAll()
@@ -62,7 +64,7 @@ public class SecurityConfig {
                                 // 로그인 관련
                                 .requestMatchers(permitPathArr).permitAll()
                                 .anyRequest().authenticated()
-                        //.anyRequest().permitAll()
+//                        .anyRequest().permitAll()
                 )
 
                 // 로그인하지 않았으면 401 응답

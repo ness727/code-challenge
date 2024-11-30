@@ -1,8 +1,9 @@
 package com.megamaker.codechallenge.securityconfig;
 
-import com.megamaker.codechallenge.domain.user.Role;
-import com.megamaker.codechallenge.domain.entity.User;
-import com.megamaker.codechallenge.repository.UserRepository;
+import com.megamaker.codechallenge.domain.user.vo.Provider;
+import com.megamaker.codechallenge.domain.user.vo.Role;
+import com.megamaker.codechallenge.domain.user.User;
+import com.megamaker.codechallenge.domain.user.UserRepository;
 import com.megamaker.codechallenge.securityconfig.oauth2.CustomOAuth2User;
 import com.megamaker.codechallenge.securityconfig.oauth2.OAuth2Response;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +28,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        OAuth2Response oAuth2Response = Provider.getOAuth2Response(oAuth2User, registrationId);
-        // log.info("OAuth2User.getAttributes = {}", oAuth2User.getAttributes());
+        OAuth2Response oAuth2Response = ProviderEnum.getOAuth2Response(oAuth2User, registrationId);
 
-        Optional<User> foundUser = userRepository.findByProviderId(oAuth2Response.getProviderId());
+        Optional<User> foundUser = userRepository.findByProviderProviderId(oAuth2Response.getProviderId());
         Role role;
         if (foundUser.isEmpty()) {
+            Provider newProvider
+                    = new Provider(oAuth2Response.getProvider(), oAuth2Response.getProviderId(), oAuth2Response.getName());
+
             User newUser = User.builder()
-                    .provider(oAuth2Response.getProvider())
-                    .providerId(oAuth2Response.getProviderId())
-                    .providerNickname(oAuth2Response.getName())
+                    .provider(newProvider)
                     .score(0)
                     .role(Role.USER)
                     .build();

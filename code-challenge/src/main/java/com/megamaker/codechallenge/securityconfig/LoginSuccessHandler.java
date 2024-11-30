@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.securityconfig;
 
-import com.megamaker.codechallenge.repository.TokenRepository;
+import com.megamaker.codechallenge.domain.login.TokenRepository;
 import com.megamaker.codechallenge.securityconfig.oauth2.CustomOAuth2User;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.ServletException;
@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
@@ -41,6 +42,14 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         // return 값은 저장된 key
         String key = tokenRepository.save(token);
 
-        response.sendRedirect(environment.getProperty("login.success-uri") + "?key=" + key);
+        String redirectUri;
+        String referer = request.getHeader("Referer");
+        if (StringUtils.hasText(referer)
+                && (referer.contains("localhost") || referer.contains("127.0.0.1"))) {
+            redirectUri = environment.getProperty("dev.login.success-uri");
+        } else {
+            redirectUri = environment.getProperty("prod.login.success-uri");
+        }
+        response.sendRedirect(redirectUri + "?key=" + key);
     }
 }

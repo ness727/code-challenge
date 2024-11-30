@@ -1,4 +1,6 @@
 <%@ page contentType="text/html; UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -83,7 +85,10 @@
         <div class="container">
           <div class="page-inner">
             <div class="container">
-              <form class="form-signin" method="post" action="/login">
+
+              <c:if test="${empty auth}">
+                <!-- 로그인 화면 -->
+                <form class="form-signin" method="post" action="/login">
                 <h2 class="form-signin-heading">Please sign in</h2>
                 <p>
                   <label for="username" class="sr-only">Username</label>
@@ -96,6 +101,13 @@
                 <input name="_csrf" type="hidden" value="qNso5ds5dgEUkEhpYnlk3f3bJveWsm9a1PMPiFunIzpY3GkXnukR0b1YQGM5oXtYB1RQ6M3pC5au01l34cJpujiVGw1rvg1y" />
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
               </form>
+              </c:if>
+
+              <c:if test="${not empty auth}">
+                <!-- 로그인 후 -->
+                <h1>${auth.nickname}님, 환영합니다!</h1>
+              </c:if>
+
             </div>
           </div>
         </div>
