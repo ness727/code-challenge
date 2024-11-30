@@ -10,6 +10,7 @@ import com.megamaker.codechallenge.domain.user.User;
 import com.megamaker.codechallenge.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,10 +26,9 @@ public class ProblemService {
     private final UserRepository userRepository;
     private final ProblemMapper problemMapper;
 
-    public List<ResponseListProblem> getList(ProblemSearchCond problemSearchCond, Pageable pageable) {
-        return problemRepository.findAll(problemSearchCond, pageable).stream()
-                .map(problemMapper::toResponseListProblem)
-                .toList();
+    public Page<ResponseListProblem> getList(ProblemSearchCond problemSearchCond, Pageable pageable) {
+        return problemRepository.findAll(problemSearchCond, pageable)
+                .map(problemMapper::toResponseListProblem);
     }
 
     public ResponseProblem findById(Long id, String providerId) {

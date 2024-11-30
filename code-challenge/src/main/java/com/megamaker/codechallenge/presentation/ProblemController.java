@@ -7,6 +7,7 @@ import com.megamaker.codechallenge.domain.problem.dto.ResponseProblem;
 import com.megamaker.codechallenge.application.ProblemService;
 import com.megamaker.codechallenge.domain.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
@@ -34,7 +35,7 @@ public class ProblemController {
     private final ProblemService problemService;
 
     @GetMapping("/list")
-    public List<ResponseListProblem> getList(
+    public Page<ResponseListProblem> getList(
             @ModelAttribute ProblemSearchCond problemSearchCond,
             @PageableDefault(sort = "title", direction = ASC) Pageable pageable) {
         return problemService.getList(problemSearchCond, pageable);

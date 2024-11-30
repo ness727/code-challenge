@@ -167,7 +167,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
             } else {  // 리턴 값이 단일 값일 때
                 isCorrect = testcase.getResult().equals(String.valueOf(userCodeReturn));
             }
-            result.add(new ResponseUserCodeResult(endTime, testcase.getResult(), userCodeReturn, isCorrect));
+            result.add(new ResponseUserCodeResult(endTime, testcase.getParamData(), testcase.getResult(), userCodeReturn, isCorrect));
         }
         
         SecurityContext context = SecurityContextHolder.getContext();

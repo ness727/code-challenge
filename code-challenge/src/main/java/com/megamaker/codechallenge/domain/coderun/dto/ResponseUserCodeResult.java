@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseUserCodeResult {
     private Long runtime;
+    private String pramData;
     private String testcaseAnswer;
     private Object userAnswer;
     private Boolean isCorrect;

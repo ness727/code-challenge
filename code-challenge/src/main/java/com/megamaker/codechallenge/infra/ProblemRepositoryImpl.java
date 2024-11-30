@@ -11,6 +11,8 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
@@ -36,16 +38,22 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     // -------- 전체 조회 ---------
     
     @Override
-    public List<Problem> findAll(ProblemSearchCond problemSearchCond, Pageable pageable) {
+    public Page<Problem> findAll(ProblemSearchCond problemSearchCond, Pageable pageable) {
         BooleanBuilder builder = getCondResult(problemSearchCond);
 
-        return queryFactory.select(problem)
-                .from(problem)
+        int totalSize = queryFactory
+                .selectFrom(problem)
+                .where(builder)
+                .fetch().size();
+
+        List<Problem> foundProblemList = queryFactory
+                .selectFrom(problem)
                 .where(builder)
                 .orderBy(getOrderSpecifiers(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+        return new PageImpl<Problem>(foundProblemList, pageable, totalSize);
     }
 
     // 검색 로직
