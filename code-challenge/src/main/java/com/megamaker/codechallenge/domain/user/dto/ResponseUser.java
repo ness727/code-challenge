@@ -17,16 +17,19 @@ public class ResponseUser {
 
     private String avatar;
 
+    private Integer solveCount;
+
     private Integer score;
 
     private Role role;
 
     private List<ResponseBadge> userBadgeList;
 
-    public ResponseUser(Provider provider, String nickname, Integer score,
+    public ResponseUser(Provider provider, String nickname, Integer solveCount, Integer score,
                         Role role, List<ResponseBadge> userBadgeList) {
         this.provider = provider;
         this.nickname = nickname;
+        this.solveCount = solveCount;
         this.score = score;
         this.role = role;
         this.avatar = "https://github.com/" + provider.getProviderNickname() + ".png";

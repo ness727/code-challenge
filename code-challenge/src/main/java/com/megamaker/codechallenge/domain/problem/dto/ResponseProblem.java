@@ -23,6 +23,7 @@ public class ResponseProblem {
     private Float correctRate;
     private List<ResponseProblemPicture> problemPictureList;
     private List<ResponseTestcase> testcaseList;
+    private boolean solved;
 
     public String getParams() {
         String[] split = params.split(",");
@@ -33,5 +34,9 @@ public class ResponseProblem {
         }
         sb.replace(sb.length() - 2, sb.length(), "");
         return sb.toString();
+    }
+
+    public void setSolvedTrue() {
+        this.solved = true;
     }
 }

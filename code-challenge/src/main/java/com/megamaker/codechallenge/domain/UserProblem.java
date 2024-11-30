@@ -1,6 +1,5 @@
 package com.megamaker.codechallenge.domain;
 
-import com.megamaker.codechallenge.domain.BaseDateTime;
 import com.megamaker.codechallenge.domain.problem.Problem;
 import com.megamaker.codechallenge.domain.user.User;
 import jakarta.persistence.*;
