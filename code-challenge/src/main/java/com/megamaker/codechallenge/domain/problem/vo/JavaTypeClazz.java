@@ -50,9 +50,9 @@ public enum JavaTypeClazz {
     public static Class<?> stringTypeToClass(String str) {
         if (!StringUtils.hasText(str)) return null;
 
-        for (JavaTypeClazz typeConv : values()) {
+        for (JavaTypeClazz typeConv : JavaTypeClazz.values()) {
             if (typeConv.name().equals(str.toUpperCase())
-                    || (typeConv.name() + "[]").equals(str.toUpperCase())) {
+                    ||  str.toUpperCase().matches(typeConv.name() + "(\\[\\]){1,2}")) {
                 boolean isStartWithLowerCase = Character.isLowerCase(str.charAt(0));
 
                 // 배열일 때
