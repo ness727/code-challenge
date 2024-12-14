@@ -1,6 +1,6 @@
 package com.megamaker.codechallenge.presentation;
 
-import com.megamaker.codechallenge.application.CodeRunService;
+import com.megamaker.codechallenge.problem.application.CodeRunService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
