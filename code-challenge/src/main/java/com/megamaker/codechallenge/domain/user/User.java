@@ -9,7 +9,9 @@ import com.megamaker.codechallenge.domain.user.vo.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @DynamicInsert

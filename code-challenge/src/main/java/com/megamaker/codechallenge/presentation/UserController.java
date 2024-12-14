@@ -28,7 +28,7 @@ public class UserController {
         String providerId = authToProviderId(auth);
 
         ResponseUser responseUser = userService.get(providerId);
-        log.info("{}", responseUser);
+        // log.info("{}", responseUser);
         return responseUser;
     }
 
