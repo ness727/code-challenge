@@ -8,9 +8,11 @@ import com.megamaker.codechallenge.domain.badge.BadgeRepository;
 import com.megamaker.codechallenge.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -39,7 +41,7 @@ public class BadgeService {
         }
 
         // 유저 점수 별 랭킹 관련 뱃지
-        List<User> top3UserList = userRepository.findTop3ByOrderByScoreDesc();
+        List<User> top3UserList = userRepository.findTopNByOrderByScoreDesc(3);
 
         if (Objects.equals(user.getId(), top3UserList.get(0).getId())) {
             newBadgeSet.add(BadgeEnum.TOP1);

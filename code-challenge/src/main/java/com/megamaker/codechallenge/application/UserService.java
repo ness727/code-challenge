@@ -34,7 +34,7 @@ public class UserService {
     }
 
     public List<ResponseUserRank> getRank() {
-        List<User> foundUserList = userRepository.findTop10ByOrderByScoreDesc();
+        List<User> foundUserList = userRepository.findTopNByOrderByScoreDesc(10);
         return foundUserList.stream()
                 .filter(user ->
                     user.getRole() != Role.ADMIN
