@@ -1,6 +1,10 @@
 package com.megamaker.codechallenge.problem.application;
 
+import com.megamaker.codechallenge.badge.domain.Badge;
+import com.megamaker.codechallenge.badge.domain.BadgeRepository;
+import com.megamaker.codechallenge.badge.domain.vo.BadgeEnum;
 import com.megamaker.codechallenge.badge.service.BadgeService;
+import com.megamaker.codechallenge.common.UserBadge;
 import com.megamaker.codechallenge.problem.domain.vo.JavaTypeClazz;
 import com.megamaker.codechallenge.problem.domain.dto.coderun.RequestUserAnswer;
 import com.megamaker.codechallenge.problem.domain.dto.coderun.ResponseUserCodeResult;
@@ -11,6 +15,7 @@ import com.megamaker.codechallenge.user.domain.User;
 import com.megamaker.codechallenge.common.UserProblem;
 import com.megamaker.codechallenge.problem.domain.ProblemRepository;
 import com.megamaker.codechallenge.user.domain.UserProblemRepository;
+import com.megamaker.codechallenge.user.domain.UserJpaRepository;
 import com.megamaker.codechallenge.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +54,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
     private final ProblemRepository problemRepository;
     private final UserRepository userRepository;
     private final BadgeService badgeService;
+    private final BadgeRepository badgeRepository;
     private final UserProblemRepository userProblemRepository;
 
     @Transactional
@@ -195,7 +201,14 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
                 foundUser.addScoreAndSolveCount(problem.getScore());  // 유저 점수 추가
                 problem.increaseCorrectAnswerCount();  // 문제 정답자 카운트 증가
 
-                badgeService.correctCondCheck(foundUser); // 정답 시 뱃지 획득 조건 검사
+                Set<BadgeEnum> newBadgeSet = badgeService.correctCondCheck(foundUser);  // 정답 시 뱃지 획득 조건 검사
+                List<UserBadge> newUserBadgeList = newBadgeSet.stream()
+                    .map((badgeEnum) -> {
+                        Badge foundBadge = badgeRepository.getReferenceById(badgeEnum);
+                        return new UserBadge(null, foundUser, foundBadge, null);
+                    })
+                    .toList();
+                foundUser.getUserBadgeList().addAll(newUserBadgeList);  // 새로운 뱃지 추가
             }
         } else problem.increaseWrongAnswerCount();  // 문제 시도자 카운트 증가
 

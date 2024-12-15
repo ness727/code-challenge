@@ -1,15 +1,13 @@
 package com.megamaker.codechallenge.badge.service;
 
 import com.megamaker.codechallenge.badge.domain.vo.BadgeEnum;
-import com.megamaker.codechallenge.badge.domain.Badge;
-import com.megamaker.codechallenge.user.domain.User;
 import com.megamaker.codechallenge.common.UserBadge;
-import com.megamaker.codechallenge.badge.domain.BadgeRepository;
+import com.megamaker.codechallenge.user.domain.User;
+import com.megamaker.codechallenge.user.domain.UserJpaRepository;
 import com.megamaker.codechallenge.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,13 +16,11 @@ import java.util.Set;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class BadgeService {
-    private final BadgeRepository badgeRepository;
     private final UserRepository userRepository;
-    
-    public void correctCondCheck(User user) {
+
+    public Set<BadgeEnum> correctCondCheck(User user) {
         Set<BadgeEnum> newBadgeSet = new HashSet<>();
 
         // 뱃지 획득 조건 검사
@@ -54,16 +50,7 @@ public class BadgeService {
             newBadgeSet.remove(userBadge.getBadge().getId());
         }
 
-        // 새로운 UserBadge 엔티티 생성
-        List<UserBadge> newUserBadgeList = newBadgeSet.stream()
-                .map((badgeEnum) -> {
-                    Badge foundBadge = badgeRepository.getReferenceById(badgeEnum);
-                    return new UserBadge(null, user, foundBadge, null);
-                })
-                .toList();
-
-        // 유저 뱃지 저장
-        user.getUserBadgeList().addAll(newUserBadgeList);
+        // 새로운 유저 뱃지 리턴
+        return newBadgeSet;
     }
-
 }
