@@ -1,9 +1,9 @@
 package com.megamaker.codechallenge.web.securityconfig;
 
+import com.megamaker.codechallenge.user.domain.UserRepository;
 import com.megamaker.codechallenge.user.domain.vo.Provider;
 import com.megamaker.codechallenge.user.domain.vo.Role;
 import com.megamaker.codechallenge.user.domain.User;
-import com.megamaker.codechallenge.user.domain.UserRepository;
 import com.megamaker.codechallenge.web.securityconfig.oauth2.CustomOAuth2User;
 import com.megamaker.codechallenge.web.securityconfig.oauth2.OAuth2Response;
 import lombok.RequiredArgsConstructor;

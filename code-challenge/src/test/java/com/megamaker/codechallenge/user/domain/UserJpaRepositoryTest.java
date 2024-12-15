@@ -1,7 +1,5 @@
-package com.megamaker.codechallenge.domain.user;
+package com.megamaker.codechallenge.user.domain;
 
-import com.megamaker.codechallenge.user.domain.User;
-import com.megamaker.codechallenge.user.domain.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,9 +15,9 @@ import static org.assertj.core.api.Assertions.assertThat;
         @Sql(value = "/sql/user-delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 })
 @DataJpaTest
-class UserRepositoryTest {
+class UserJpaRepositoryTest {
     @Autowired
-    UserRepository userRepository;
+    UserJpaRepository userJpaRepository;
 
     @Test
     void providerId로_회원_조회_성공() {
@@ -27,7 +25,7 @@ class UserRepositoryTest {
         String providerId = "1";
 
         // when
-        User foundUser = userRepository.findByProviderProviderId(providerId).orElseThrow();
+        User foundUser = userJpaRepository.findByProviderProviderId(providerId).orElseThrow();
 
         // then
         assertThat(foundUser.getProvider().getProviderId()).isEqualTo(providerId);
@@ -39,7 +37,7 @@ class UserRepositoryTest {
         int n = 3;
 
         // when
-        List<User> foundUsers = userRepository.findTopNByOrderByScoreDesc(n);
+        List<User> foundUsers = userJpaRepository.findTopNByOrderByScoreDesc(n);
 
         // then
         for (int i = 0; i < foundUsers.size() - 1; i++) {
@@ -53,7 +51,7 @@ class UserRepositoryTest {
         int n = Integer.MAX_VALUE;
 
         // when
-        List<User> foundUsers = userRepository.findTopNByOrderByScoreDesc(n);
+        List<User> foundUsers = userJpaRepository.findTopNByOrderByScoreDesc(n);
 
         // then
         assertThat(foundUsers.size()).isLessThan(n);
@@ -69,7 +67,7 @@ class UserRepositoryTest {
         Long problemId = 1L;
 
         // when
-        String answer = userRepository.findAnswerByProviderIdAndProblemId(providerId, problemId).orElseThrow();
+        String answer = userJpaRepository.findAnswerByProviderIdAndProblemId(providerId, problemId).orElseThrow();
 
         // then
         assertThat(answer).isEqualTo("answer1");

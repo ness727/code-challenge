@@ -1,13 +1,13 @@
 package com.megamaker.codechallenge.user.application;
 
-import com.megamaker.codechallenge.user.domain.vo.Role;
+import com.megamaker.codechallenge.problem.exception.UserNotFoundException;
+import com.megamaker.codechallenge.user.domain.User;
+import com.megamaker.codechallenge.user.domain.UserRepository;
 import com.megamaker.codechallenge.user.domain.dto.RequestUserEdit;
 import com.megamaker.codechallenge.user.domain.dto.ResponseUser;
-import com.megamaker.codechallenge.user.domain.User;
 import com.megamaker.codechallenge.user.domain.dto.ResponseUserRank;
+import com.megamaker.codechallenge.user.domain.vo.Role;
 import com.megamaker.codechallenge.user.mapper.UserMapper;
-import com.megamaker.codechallenge.user.domain.UserRepository;
-import com.megamaker.codechallenge.problem.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Slf4j
-@Transactional
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -28,6 +27,7 @@ public class UserService {
         return userMapper.toResponseUser(foundUser);
     }
 
+    @Transactional
     public void edit(String providerId, RequestUserEdit requestUserEdit) {
         User foundUser = findUser(providerId);
         foundUser.updateNickname(requestUserEdit.getNickname());

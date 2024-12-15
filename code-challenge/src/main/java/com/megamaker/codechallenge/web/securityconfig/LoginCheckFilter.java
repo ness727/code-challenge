@@ -1,8 +1,8 @@
 package com.megamaker.codechallenge.web.securityconfig;
 
 import com.megamaker.codechallenge.user.domain.User;
-import com.megamaker.codechallenge.user.domain.UserRepository;
 import com.megamaker.codechallenge.problem.exception.UserNotFoundException;
+import com.megamaker.codechallenge.user.domain.UserRepository;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
