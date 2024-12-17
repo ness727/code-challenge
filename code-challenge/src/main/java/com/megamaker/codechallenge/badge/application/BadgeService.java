@@ -1,9 +1,8 @@
-package com.megamaker.codechallenge.badge.service;
+package com.megamaker.codechallenge.badge.application;
 
 import com.megamaker.codechallenge.badge.domain.vo.BadgeEnum;
-import com.megamaker.codechallenge.common.UserBadge;
+import com.megamaker.codechallenge.common.domain.UserBadge;
 import com.megamaker.codechallenge.user.domain.User;
-import com.megamaker.codechallenge.user.domain.UserJpaRepository;
 import com.megamaker.codechallenge.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
