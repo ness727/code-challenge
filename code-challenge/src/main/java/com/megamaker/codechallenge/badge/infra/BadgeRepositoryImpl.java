@@ -8,11 +8,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class BadgeJpaRepositoryImpl implements BadgeRepository {
+public class BadgeRepositoryImpl implements BadgeRepository {
     private final BadgeJpaRepository badgeJpaRepository;
+    private final BadgeMapper badgeMapper;
 
     @Override
     public Badge getReferenceById(BadgeEnum badgeEnum) {
-        return BadgeEntity.toModel(badgeJpaRepository.getReferenceById(badgeEnum));
+        return badgeMapper.toModel(badgeJpaRepository.getReferenceById(badgeEnum));
     }
 }

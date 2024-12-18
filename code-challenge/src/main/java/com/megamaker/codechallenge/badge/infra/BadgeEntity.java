@@ -19,12 +19,12 @@ public class BadgeEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-    public static Badge toModel(BadgeEntity badgeEntity) {
-        return new Badge(badgeEntity.getId(), badgeEntity.getDescription(), badgeEntity.getImageUrl());
-    }
-
-    public static BadgeEntity from(Badge badge) {
-        return new BadgeEntity(badge.getId(), badge.getDescription(), badge.getImageUrl());
-    }
+//    public Badge toModel() {
+//        return new Badge(id, description, imageUrl);
+//    }
+//
+//    public static BadgeEntity from(Badge badge) {
+//        return new BadgeEntity(badge.getId(), badge.getDescription(), badge.getImageUrl());
+//    }
 
 }

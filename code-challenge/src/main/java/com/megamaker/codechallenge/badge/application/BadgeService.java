@@ -19,7 +19,7 @@ import java.util.Set;
 public class BadgeService {
     private final UserRepository userRepository;
 
-    public Set<BadgeEnum> correctCondCheck(User user) {
+    public Set<BadgeEnum> getNewBadgeSet(User user) {
         Set<BadgeEnum> newBadgeSet = new HashSet<>();
 
         // 뱃지 획득 조건 검사
