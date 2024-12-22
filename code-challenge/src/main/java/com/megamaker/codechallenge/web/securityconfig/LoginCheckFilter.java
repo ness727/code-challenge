@@ -1,7 +1,7 @@
 package com.megamaker.codechallenge.web.securityconfig;
 
-import com.megamaker.codechallenge.user.domain.User;
 import com.megamaker.codechallenge.problem.exception.UserNotFoundException;
+import com.megamaker.codechallenge.user.domain.User;
 import com.megamaker.codechallenge.user.domain.UserRepository;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -52,7 +52,7 @@ public class LoginCheckFilter extends OncePerRequestFilter {
             String userId = jwtParser.parseSignedClaims(jwt).getPayload().getSubject();
 
             // 회원 조회
-            User foundUser = userRepository.findByProviderProviderId(userId).orElseThrow(UserNotFoundException::new);
+            User foundUser = userRepository.findByProviderId(userId).orElseThrow(UserNotFoundException::new);
 
             Authentication auth = new UsernamePasswordAuthenticationToken(  // 새 유저 인증 객체 생성
                     foundUser.getProvider().getProviderId(),
@@ -63,6 +63,7 @@ public class LoginCheckFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(auth);
             doFilter(request, response, filterChain);
         } catch (RuntimeException e) {
+            log.error("유저 인증 오류", e);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("application/json; charset=UTF-8");
             response.getWriter().write("{\"message\": \"토큰 파싱 에러\"}");

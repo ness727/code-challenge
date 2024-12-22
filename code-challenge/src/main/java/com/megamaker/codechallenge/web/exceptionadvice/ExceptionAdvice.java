@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
 @RequiredArgsConstructor
-@RestControllerAdvice(basePackages = "com.megamaker.codechallenge.presentation")
+@RestControllerAdvice(basePackages = {
+        "com.megamaker.codechallenge.user.presentation",
+        "com.megamaker.codechallenge.problem.presentation",
+})
 public class ExceptionAdvice {
     private final MessageSource ms;
 

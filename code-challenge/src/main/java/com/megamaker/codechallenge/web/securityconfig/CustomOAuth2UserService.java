@@ -1,9 +1,10 @@
 package com.megamaker.codechallenge.web.securityconfig;
 
+import com.megamaker.codechallenge.user.domain.User;
+import com.megamaker.codechallenge.user.infra.UserEntity;
 import com.megamaker.codechallenge.user.domain.UserRepository;
 import com.megamaker.codechallenge.user.domain.vo.Provider;
 import com.megamaker.codechallenge.user.domain.vo.Role;
-import com.megamaker.codechallenge.user.domain.User;
 import com.megamaker.codechallenge.web.securityconfig.oauth2.CustomOAuth2User;
 import com.megamaker.codechallenge.web.securityconfig.oauth2.OAuth2Response;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2Response oAuth2Response = ProviderEnum.getOAuth2Response(oAuth2User, registrationId);
 
-        Optional<User> foundUser = userRepository.findByProviderProviderId(oAuth2Response.getProviderId());
+        Optional<User> foundUser = userRepository.findByProviderId(oAuth2Response.getProviderId());
         Role role;
         if (foundUser.isEmpty()) {
             Provider newProvider

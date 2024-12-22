@@ -1,7 +1,6 @@
 package com.megamaker.codechallenge.web.securityconfig;
 
 import com.megamaker.codechallenge.user.domain.TokenRepository;
-import com.megamaker.codechallenge.user.domain.UserJpaRepository;
 import com.megamaker.codechallenge.user.domain.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

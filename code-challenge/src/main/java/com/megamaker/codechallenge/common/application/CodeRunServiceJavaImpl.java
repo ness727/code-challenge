@@ -1,27 +1,26 @@
-package com.megamaker.codechallenge.problem.application;
+package com.megamaker.codechallenge.common.application;
 
+import com.megamaker.codechallenge.badge.application.BadgeService;
 import com.megamaker.codechallenge.badge.domain.Badge;
 import com.megamaker.codechallenge.badge.domain.BadgeRepository;
 import com.megamaker.codechallenge.badge.domain.vo.BadgeEnum;
-import com.megamaker.codechallenge.badge.service.BadgeService;
-import com.megamaker.codechallenge.common.UserBadge;
-import com.megamaker.codechallenge.problem.domain.vo.JavaTypeClazz;
+import com.megamaker.codechallenge.problem.testcase.domain.TestcaseRepository;
+import com.megamaker.codechallenge.badge.userbadge.domain.UserBadge;
+import com.megamaker.codechallenge.badge.userbadge.domain.UserBadgeRepository;
+import com.megamaker.codechallenge.userproblem.domain.UserProblem;
+import com.megamaker.codechallenge.problem.domain.Problem;
+import com.megamaker.codechallenge.problem.domain.ProblemRepository;
+import com.megamaker.codechallenge.problem.testcase.domain.Testcase;
 import com.megamaker.codechallenge.problem.domain.dto.coderun.RequestUserAnswer;
 import com.megamaker.codechallenge.problem.domain.dto.coderun.ResponseUserCodeResult;
-import com.megamaker.codechallenge.problem.domain.Problem;
-import com.megamaker.codechallenge.problem.domain.vo.Testcase;
+import com.megamaker.codechallenge.problem.domain.vo.JavaTypeClazz;
 import com.megamaker.codechallenge.problem.exception.*;
 import com.megamaker.codechallenge.user.domain.User;
-import com.megamaker.codechallenge.common.UserProblem;
-import com.megamaker.codechallenge.problem.domain.ProblemRepository;
-import com.megamaker.codechallenge.user.domain.UserProblemRepository;
-import com.megamaker.codechallenge.user.domain.UserJpaRepository;
+import com.megamaker.codechallenge.userproblem.domain.UserProblemRepository;
 import com.megamaker.codechallenge.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -51,15 +50,17 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
     private static final String SOLUTION = "Solution";
     private static final String METHOD = "main";
 
-    private final ProblemRepository problemRepository;
-    private final UserRepository userRepository;
     private final BadgeService badgeService;
+    private final ProblemRepository problemRepository;
+    private final TestcaseRepository testcaseRepository;
+    private final UserRepository userRepository;
+    private final UserBadgeRepository userBadgeRepository;
     private final BadgeRepository badgeRepository;
     private final UserProblemRepository userProblemRepository;
 
     @Transactional
     @Override
-    public List<ResponseUserCodeResult> run(RequestUserAnswer requestUserAnswer) {
+    public List<ResponseUserCodeResult> run(RequestUserAnswer requestUserAnswer, User user) {
         String sourceCode = requestUserAnswer.getSourceCode();
 
         if (!sourceCode.contains(CLASS_SOLUTION)) throw new UserClassFormatException();
@@ -107,7 +108,7 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
                 Method method = loadedClass.getMethod(METHOD, paramClasses);
 
                 // 사용자 메서드 실행
-                return runUserMethod(instance, method, requestUserAnswer, foundProblem);  // 메인 로직 메서드 실행
+                return runUserMethod(instance, method, user, foundProblem, requestUserAnswer.getSourceCode());  // 메인 로직 메서드 실행
             } catch (NoSuchMethodException | SecurityException e) {
                 throw new UserMethodLoadException(e);  // 메서드명 다를 때
             } catch (Exception e) {
@@ -133,11 +134,11 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
 
     @Transactional
     public List<ResponseUserCodeResult> runUserMethod(Object instance, Method method,
-                                                      RequestUserAnswer requestUserAnswer, Problem problem) throws IllegalAccessException, InvocationTargetException {
-        List<Testcase> testcaseList = problemRepository.findTestcaseListById(requestUserAnswer.getProblemId());
+                                                      User user, Problem problem, String userCode) throws IllegalAccessException, InvocationTargetException {
+        List<Testcase> fountTestcaseList = testcaseRepository.findByProblemId(problem);
         List<ResponseUserCodeResult> result = new ArrayList<>();
 
-        for (Testcase testcase : testcaseList) {
+        for (Testcase testcase : fountTestcaseList) {
             String[] paramArr = testcase.getParamData().split("/");  // 파라미터 개수만큼 나누기
             Object[] paramTypeResult = new Object[paramArr.length];
 
@@ -177,42 +178,61 @@ public class CodeRunServiceJavaImpl implements CodeRunService {
             result.add(new ResponseUserCodeResult(endTime, testcase.getParamData(), testcase.getResult(), userCodeReturn, isCorrect));
         }
         
-        SecurityContext context = SecurityContextHolder.getContext();
-        String providerId = (String) context.getAuthentication().getPrincipal();
-        User foundUser = userRepository.findByProviderProviderId(providerId)
-                .orElseThrow(UserNotFoundException::new);
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        String providerId = (String) context.getAuthentication().getPrincipal();
+//        User foundUser = userRepository.findByProviderIdWithUserProblem(providerId).orElseThrow();
 
         // 정답인 유저에게 문제 점수만큼 유저 점수 추가
         boolean isAllCorrect = result.stream()
                 .filter(ResponseUserCodeResult::getIsCorrect)
                 .toArray().length == result.size();
         if (isAllCorrect) {
-            // 이미 풀었던 문제일 때
-            Optional<UserProblem> foundUserProblem = foundUser.getUserProblemList().stream()
-                    .filter(userProblem -> Objects.equals(userProblem.getProblem().getId(), problem.getId()))
-                    .findFirst();
-            if (foundUserProblem.isPresent()) {
-                foundUserProblem.get().updateUserAnswer(requestUserAnswer.getSourceCode());
-            } else {
-                // UserProblem 엔티티 새로 추가
-                UserProblem newUserProblem = new UserProblem(null, foundUser, problem, requestUserAnswer.getSourceCode());
-                userProblemRepository.save(newUserProblem);
-
-                foundUser.addScoreAndSolveCount(problem.getScore());  // 유저 점수 추가
-                problem.increaseCorrectAnswerCount();  // 문제 정답자 카운트 증가
-
-                Set<BadgeEnum> newBadgeSet = badgeService.correctCondCheck(foundUser);  // 정답 시 뱃지 획득 조건 검사
-                List<UserBadge> newUserBadgeList = newBadgeSet.stream()
-                    .map((badgeEnum) -> {
-                        Badge foundBadge = badgeRepository.getReferenceById(badgeEnum);
-                        return new UserBadge(null, foundUser, foundBadge, null);
-                    })
-                    .toList();
-                foundUser.getUserBadgeList().addAll(newUserBadgeList);  // 새로운 뱃지 추가
-            }
-        } else problem.increaseWrongAnswerCount();  // 문제 시도자 카운트 증가
-
+            addOrEditUserProblem(user, problem, userCode);
+        } else {
+            problem = Problem.increaseWrongAnswerCount(problem);  // 문제 시도자 카운트 증가
+            problemRepository.save(problem);
+        }
         return result;
+    }
+
+    private void addOrEditUserProblem(User user, Problem problem, String userCode) {
+        Long userId = user.getId();
+        Long problemId = problem.getId();
+        Optional<UserProblem> foundUserProblem
+                = userProblemRepository.findByUserIdAndProblemId(userId, problemId);
+
+        // 이미 풀었던 문제일 때
+        if (foundUserProblem.isPresent()) {
+            UserProblem editedUserProblem = foundUserProblem.get().updateAnswer(userCode);
+            userProblemRepository.save(editedUserProblem);
+        } else {
+            // UserProblem 엔티티 새로 추가
+            UserProblem newUserProblem = new UserProblem(null, userId, problemId, userCode);
+            user = user.addScoreAndSolveCount(problem.getScore());  // 유저 점수 추가
+            problem = Problem.increaseCorrectAnswerCount(problem);  // 문제 정답자 카운트 증가
+
+            addUserBadge(user);  // 새로운 뱃지 추가
+
+            userRepository.save(user);
+            userProblemRepository.save(newUserProblem);
+            problemRepository.save(problem);
+        }
+    }
+
+    private void addUserBadge(User user) {
+        Set<BadgeEnum> newBadgeSet = badgeService.getNewBadgeSet(user);  // 정답 시 뱃지 획득 조건 검사
+
+        List<UserBadge> newUserBadgeList = newBadgeSet.stream()
+                .map((badgeEnum) -> {
+                    Optional<Badge> foundBadge = badgeRepository.findById(badgeEnum);
+                    Badge badge = foundBadge.orElseThrow();
+                    return new UserBadge(null, user.getId(), badge, null);
+                    }
+                )
+                .toList();
+        //foundUser.getUserBadgeList().addAll(newUserBadgeList);
+
+        userBadgeRepository.saveAll(newUserBadgeList);
     }
 
     /**
