@@ -1,53 +1,52 @@
 package com.megamaker.codechallenge.user.domain;
 
-import com.megamaker.codechallenge.common.BaseDateTime;
-import com.megamaker.codechallenge.common.UserBadge;
-import com.megamaker.codechallenge.common.UserProblem;
 import com.megamaker.codechallenge.user.domain.vo.Provider;
 import com.megamaker.codechallenge.user.domain.vo.Role;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
+import lombok.Builder;
+import lombok.Getter;
 
-import java.util.List;
-
-@DynamicInsert
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Builder
-@Table(name = "users")
-@Entity
-public class User extends BaseDateTime {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User {
+    private final Long id;
 
-    @Embedded
-    private Provider provider;
+    private final Provider provider;
 
-    private String nickname;
+    private final String nickname;
 
-    @Column(name = "solve_count")
-    private Integer solveCount;
+    private final Integer solveCount;
 
-    private Integer score;
+    private final Integer score;
 
-    @Enumerated(EnumType.ORDINAL)
-    private Role role;
+    private final Role role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private List<UserBadge> userBadgeList;
+//    private final List<UserBadge> userBadgeList;
+//
+//    private final List<UserProblem> userProblemList;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private List<UserProblem> userProblemList;
-
-    public void addScoreAndSolveCount(Byte problemScore) {
-        this.score += problemScore;
-        this.solveCount++;
+    public User addScoreAndSolveCount(Byte problemScore) {
+        return User.builder()
+                .id(id)
+                .nickname(nickname)
+                .provider(provider)
+                .role(role)
+                .score(score + problemScore)
+                .solveCount(solveCount + 1)
+//                .userBadgeList(userBadgeList)
+//                .userProblemList(userProblemList)
+                .build();
     }
 
-    public void updateNickname(String nickname) {
-        this.nickname = nickname;
+    public User updateNickname(String newNickname) {
+        return User.builder()
+                .id(id)
+                .nickname(newNickname)
+                .provider(provider)
+                .role(role)
+                .score(score)
+                .solveCount(solveCount)
+//                .userBadgeList(userBadgeList)
+//                .userProblemList(userProblemList)
+                .build();
     }
 }
-

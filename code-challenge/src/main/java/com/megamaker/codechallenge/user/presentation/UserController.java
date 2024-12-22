@@ -1,5 +1,9 @@
 package com.megamaker.codechallenge.user.presentation;
 
+import com.megamaker.codechallenge.badge.application.BadgeService;
+import com.megamaker.codechallenge.badge.userbadge.domain.UserBadge;
+import com.megamaker.codechallenge.badge.userbadge.domain.dto.ResponseUserBadge;
+import com.megamaker.codechallenge.user.domain.User;
 import com.megamaker.codechallenge.user.domain.dto.RequestUserEdit;
 import com.megamaker.codechallenge.user.domain.dto.ResponseUser;
 import com.megamaker.codechallenge.user.domain.dto.ResponseUserRank;
@@ -21,15 +25,21 @@ import java.util.List;
 @RestController
 public class UserController {
     private final UserService userService;
+    private final BadgeService badgeService;
     private final TokenRepository tokenRepository;
 
     @GetMapping
     public ResponseUser get(Authentication auth) {
         String providerId = authToProviderId(auth);
 
-        ResponseUser responseUser = userService.get(providerId);
-        // log.info("{}", responseUser);
-        return responseUser;
+        User foundUser = userService.get(providerId);
+        List<UserBadge> userBadgeList = badgeService.getUserBadgeList(foundUser.getId());
+
+        return ResponseUser.from(foundUser,
+                userBadgeList.stream()
+                .map(ResponseUserBadge::from)
+                .toList()
+        );
     }
 
     @PutMapping
@@ -50,7 +60,15 @@ public class UserController {
 
     @GetMapping("/rank")
     public List<ResponseUserRank> getRank() {
-        return userService.getRank();
+        return userService.getRank().stream()
+                .map(user -> {
+                    if (user.getNickname() == null) {  // 닉네임 설정 안 되어 있을 때
+                        return new ResponseUserRank(
+                                user.getProvider().getProviderNickname() + "(GitHub)", user.getScore()
+                        );
+                    } else return ResponseUserRank.from(user);
+                })
+                .toList();
     }
 
     private static String authToProviderId(Authentication auth) {
