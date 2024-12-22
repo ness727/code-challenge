@@ -1,82 +1,115 @@
 package com.megamaker.codechallenge.problem.domain;
 
-import com.megamaker.codechallenge.common.BaseDateTime;
 import com.megamaker.codechallenge.problem.domain.vo.Level;
-import com.megamaker.codechallenge.problem.domain.vo.ProblemPicture;
-import com.megamaker.codechallenge.problem.domain.vo.Testcase;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
+import com.megamaker.codechallenge.problem.testcase.domain.Testcase;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 
-@ToString
-@DynamicInsert
-@Setter
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Builder
-@Table(name = "problems")
-@Entity
-public class Problem extends BaseDateTime {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Problem {
+    private final Long id;
 
-    private String title;
+    private final String title;
 
-    @Enumerated
-    private Level level;
+    private final Level level;
 
-    private Byte score;
+    private final Byte score;
 
-    private String params;
+    private final String params;
 
-    @Column(name = "return_type")
-    private String returnType;
+    private final String returnType;
 
-    private String description;
+    private final String description;
 
-    private String limitation;
+    private final String limitation;
 
-    @Column(name = "input_output")
-    private String inputOutput;
+    private final String inputOutput;
 
-    @Column(name = "solved_count")
-    private Long solvedCount;
+    private final Long solvedCount;
 
-    @Column(name = "try_count")
-    private Long tryCount;
+    private final Long tryCount;
 
-    @Column(name = "correct_rate")
-    private String correctRate;
+    private final String correctRate;
 
-    @ElementCollection
-    @CollectionTable(name = "problem_pictures", joinColumns = @JoinColumn(name = "problem_id"))
-    @OrderColumn(name = "problem_picture_idx")
-    private List<ProblemPicture> problemPictureList;
+    private final List<ProblemPicture> problemPictureList;
 
-    @ElementCollection
-    @CollectionTable(name = "testcases", joinColumns = @JoinColumn(name = "problem_id"))
-    @OrderColumn(name = "testcase_idx")
-    private List<Testcase> testcaseList;
+     private final List<Testcase> testcaseList;
 
-    public void addTestcase(Testcase testcase) {
-        testcaseList.add(testcase);
+//    public void addTestcase(Testcase testcase) {
+//        testcaseList.add(testcase);
+//    }
+
+//    public Problem update(Problem problem) {
+//        return Problem.builder()
+//                .id(problem.getId())
+//                .title(problem.getTitle())
+//                .level(problem.getLevel())
+//                .score(problem.getScore())
+//                .params(problem.getParams())
+//                .returnType(problem.getReturnType())
+//                .description(problem.getDescription())
+//                .limitation(problem.getLimitation())
+//                .inputOutput(problem.getInputOutput())
+//                .solvedCount(problem.getSolvedCount())
+//                .tryCount(problem.getTryCount())
+//                .correctRate(problem.getCorrectRate())
+//                .problemPictureList(problem.getProblemPictureList())
+//                .testcaseList(problem.getTestcaseList())
+//                .build();
+//    }
+
+    public static Problem increaseCorrectAnswerCount(Problem problem) {
+        Long newSolvedCount = problem.getSolvedCount() + 1;
+        Long newTryCount = problem.getSolvedCount() + 1;
+
+        return Problem.builder()
+                .id(problem.getId())
+                .title(problem.getTitle())
+                .level(problem.getLevel())
+                .score(problem.getScore())
+                .params(problem.getParams())
+                .returnType(problem.getReturnType())
+                .description(problem.getDescription())
+                .limitation(problem.getLimitation())
+                .inputOutput(problem.getInputOutput())
+                .solvedCount(newSolvedCount)
+                .tryCount(newTryCount)
+                .correctRate(
+                        reCalcCorrectRate(newSolvedCount, newTryCount)
+                )
+                .problemPictureList(problem.getProblemPictureList())
+//                .testcaseList(problem.getTestcaseList())
+                .build();
+
     }
 
-    public void increaseCorrectAnswerCount() {
-        this.solvedCount++;
-        this.tryCount++;
-        reCalcCorrectRate();
+    public static Problem increaseWrongAnswerCount(Problem problem) {
+        Long newTryCount = problem.getSolvedCount() + 1;
+
+        return Problem.builder()
+                .id(problem.getId())
+                .title(problem.getTitle())
+                .level(problem.getLevel())
+                .score(problem.getScore())
+                .params(problem.getParams())
+                .returnType(problem.getReturnType())
+                .description(problem.getDescription())
+                .limitation(problem.getLimitation())
+                .inputOutput(problem.getInputOutput())
+                .solvedCount(problem.getSolvedCount())
+                .tryCount(newTryCount)
+                .correctRate(
+                        reCalcCorrectRate(problem.getSolvedCount(), newTryCount)
+                )
+                .problemPictureList(problem.getProblemPictureList())
+//                .testcaseList(problem.getTestcaseList())
+                .build();
     }
 
-    public void increaseWrongAnswerCount() {
-        this.tryCount++;
-        reCalcCorrectRate();
-    }
-
-    private void reCalcCorrectRate() {
-        this.correctRate = String.valueOf((Float.valueOf(solvedCount) / tryCount) * 100).split("\\.")[0];
+    private static String reCalcCorrectRate(Long solvedCount, Long tryCount) {
+        return String.valueOf((Float.valueOf(solvedCount) / tryCount) * 100).split("\\.")[0];
     }
 }

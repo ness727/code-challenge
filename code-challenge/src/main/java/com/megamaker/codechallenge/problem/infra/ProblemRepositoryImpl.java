@@ -4,7 +4,6 @@ import com.megamaker.codechallenge.problem.domain.Problem;
 import com.megamaker.codechallenge.problem.domain.ProblemRepository;
 import com.megamaker.codechallenge.problem.domain.dto.ProblemSearchCond;
 import com.megamaker.codechallenge.problem.domain.vo.Level;
-import com.megamaker.codechallenge.problem.domain.vo.Testcase;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
@@ -19,10 +18,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
-import static com.megamaker.codechallenge.problem.domain.QProblem.problem;
+import static com.megamaker.codechallenge.problem.infra.QProblemEntity.problemEntity;
 
 
 @Repository
@@ -36,24 +34,28 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     }
 
     // -------- 전체 조회 ---------
-    
+
     @Override
     public Page<Problem> findAll(ProblemSearchCond problemSearchCond, Pageable pageable) {
         BooleanBuilder builder = getCondResult(problemSearchCond);
 
         int totalSize = queryFactory
-                .selectFrom(problem)
+                .selectFrom(problemEntity)
                 .where(builder)
                 .fetch().size();
 
-        List<Problem> foundProblemList = queryFactory
-                .selectFrom(problem)
+        List<ProblemEntity> foundProblemListEntity = queryFactory
+                .selectFrom(problemEntity)
                 .where(builder)
                 .orderBy(getOrderSpecifiers(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-        return new PageImpl<Problem>(foundProblemList, pageable, totalSize);
+        return new PageImpl<>(
+                foundProblemListEntity.stream()
+                        .map(ProblemEntity::toModel)
+                        .toList(),
+                pageable, totalSize);
     }
 
     // 검색 로직
@@ -64,11 +66,11 @@ public class ProblemRepositoryImpl implements ProblemRepository {
 
         // 제목으로 검색
         if (StringUtils.hasText(title)) {
-            booleanBuilder.and(problem.title.contains(title));  // 해당 글자 포함으로 검색
+            booleanBuilder.and(problemEntity.title.contains(title));  // 해당 글자 포함으로 검색
         }
         // 레벨로 검색
         if (level != null) {
-            booleanBuilder.and(problem.level.eq(level));  // 해당 레벨과 동일한 결과 검색
+            booleanBuilder.and(problemEntity.level.eq(level));  // 해당 레벨과 동일한 결과 검색
         }
         return booleanBuilder;
     }
@@ -79,9 +81,9 @@ public class ProblemRepositoryImpl implements ProblemRepository {
                 .map((Sort.Order order) -> {
                     Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
                     Expression<?> expression = switch (order.getProperty()) {
-                        case "title" -> problem.title;
-                        case "level" -> problem.level;
-                        case "correctRate" -> problem.correctRate;
+                        case "title" -> problemEntity.title;
+                        case "level" -> problemEntity.level;
+                        case "correctRate" -> problemEntity.correctRate;
                         default -> null;
                     };
                     return new OrderSpecifier(direction, expression);
@@ -92,18 +94,28 @@ public class ProblemRepositoryImpl implements ProblemRepository {
     
     @Override
     public Optional<Problem> findById(Long id) {
-        return Optional.ofNullable(
-                queryFactory.selectFrom(problem)
-                        .where(problem.id.eq(id))
-                        .fetchFirst()
-        );
+        ProblemEntity foundProblemEntity = queryFactory.selectFrom(problemEntity)
+                .where(problemEntity.id.eq(id))
+                .fetchFirst();
+        return Optional.ofNullable(foundProblemEntity).map(ProblemEntity::toModel);
     }
 
+//    @Override
+//    public List<Testcase> findTestcaseListById(Long id) {
+//        return Objects.requireNonNull(queryFactory.select(problemEntity)
+//                        .from(problemEntity)
+//                        .innerJoin(problemEntity.testcaseEntityList, QTestcaseEntity.testcaseEntity).fetchJoin()
+//                        .where(problemEntity.id.eq(id))
+//                        .fetchFirst())
+//                .getTestcaseEntityList().stream()
+//                .map(TestcaseEntity::toModel)
+//                .toList();
+//    }
+
     @Override
-    public List<Testcase> findTestcaseListById(Long id) {
-        return Objects.requireNonNull(queryFactory.select(problem)
-                .from(problem)
-                .where(problem.id.eq(id))
-                .fetchFirst()).getTestcaseList();
+    public void save(Problem problem) {
+        ProblemEntity foundProblemEntity = entityManager.find(ProblemEntity.class, problem.getId());
+        foundProblemEntity.update(problem);
+//        entityManager.persist(ProblemEntity.from(problem));
     }
 }
