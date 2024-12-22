@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.common;
+package com.megamaker.codechallenge.common.infra;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseDateTime {
     @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 }
