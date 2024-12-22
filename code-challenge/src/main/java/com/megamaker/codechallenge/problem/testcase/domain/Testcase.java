@@ -1,4 +1,4 @@
-package com.megamaker.codechallenge.testcase.domain;
+package com.megamaker.codechallenge.problem.testcase.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Getter;
 public class Testcase {
     private Integer id;
 
-    private Long problemId;
+//    private Long problemId;
 
     private String paramData;
 
