@@ -1,16 +1,13 @@
 package com.megamaker.codechallenge.problem.domain.dto;
 
+import com.megamaker.codechallenge.problem.domain.Problem;
 import com.megamaker.codechallenge.problem.domain.vo.Level;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@Builder
 public class ResponseProblem {
     private String title;
     private Level level;
@@ -20,7 +17,7 @@ public class ResponseProblem {
     private String description;
     private String limitation;
     private String inputOutput;
-    private Float correctRate;
+    private String correctRate;
     private List<ResponseProblemPicture> problemPictureList;
     private List<ResponseTestcase> testcaseList;
     private boolean solved;
@@ -38,5 +35,30 @@ public class ResponseProblem {
 
     public void setSolvedTrue() {
         this.solved = true;
+    }
+
+    public static ResponseProblem from(Problem problem, boolean isSolved) {
+        return ResponseProblem.builder()
+                .title(problem.getTitle())
+                .level(problem.getLevel())
+                .score(problem.getScore())
+                .params(problem.getParams())
+                .returnType(problem.getReturnType())
+                .description(problem.getDescription())
+                .limitation(problem.getLimitation())
+                .inputOutput(problem.getInputOutput())
+                .correctRate(problem.getCorrectRate())
+                .problemPictureList(
+                        problem.getProblemPictureList().stream()
+                                .map(ResponseProblemPicture::from)
+                                .toList()
+                )
+                .testcaseList(
+                        problem.getTestcaseList().stream()
+                                .map(ResponseTestcase::from)
+                                .toList()
+                )
+                .solved(isSolved)
+                .build();
     }
 }
