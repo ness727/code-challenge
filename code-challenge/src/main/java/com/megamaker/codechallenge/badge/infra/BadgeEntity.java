@@ -3,7 +3,10 @@ package com.megamaker.codechallenge.badge.infra;
 import com.megamaker.codechallenge.badge.domain.Badge;
 import com.megamaker.codechallenge.badge.domain.vo.BadgeEnum;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,12 +22,14 @@ public class BadgeEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-//    public Badge toModel() {
-//        return new Badge(id, description, imageUrl);
-//    }
-//
-//    public static BadgeEntity from(Badge badge) {
-//        return new BadgeEntity(badge.getId(), badge.getDescription(), badge.getImageUrl());
-//    }
+//    @OneToMany(mappedBy = "badgeEntity")
+//    private List<UserBadgeEntity> userBadgeList;
 
+    public Badge toModel() {
+        return new Badge(id, description, imageUrl);
+    }
+
+    public static BadgeEntity from(Badge badge) {
+        return new BadgeEntity(badge.getId(), badge.getDescription(), badge.getImageUrl());
+    }
 }

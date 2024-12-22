@@ -1,7 +1,8 @@
 package com.megamaker.codechallenge.badge.application;
 
+import com.megamaker.codechallenge.badge.userbadge.domain.UserBadge;
+import com.megamaker.codechallenge.badge.userbadge.domain.UserBadgeRepository;
 import com.megamaker.codechallenge.badge.domain.vo.BadgeEnum;
-import com.megamaker.codechallenge.common.domain.UserBadge;
 import com.megamaker.codechallenge.user.domain.User;
 import com.megamaker.codechallenge.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Service
 public class BadgeService {
     private final UserRepository userRepository;
+    private final UserBadgeRepository userBadgeRepository;
 
     public Set<BadgeEnum> getNewBadgeSet(User user) {
         Set<BadgeEnum> newBadgeSet = new HashSet<>();
@@ -45,11 +47,19 @@ public class BadgeService {
         }
 
         // 이미 가지고 있는 뱃지 삭제
-        for (UserBadge userBadge : user.getUserBadgeList()) {
-            newBadgeSet.remove(userBadge.getBadge().getId());
+//        for (UserBadge userBadge : user.getUserBadgeList()) {
+//            newBadgeSet.remove(userBadge.getBadge().getId());
+//        }
+        List<UserBadge> userBadgeList = userBadgeRepository.findByUserId(user.getId());
+        if (userBadgeList != null && !userBadgeList.isEmpty()) {
+            userBadgeList.forEach(userBadge -> newBadgeSet.remove(userBadge.getBadge().getId()));
         }
 
         // 새로운 유저 뱃지 리턴
         return newBadgeSet;
+    }
+
+    public List<UserBadge> getUserBadgeList(Long userId) {
+        return userBadgeRepository.findByUserId(userId);
     }
 }
