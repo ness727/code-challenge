@@ -1,5 +1,7 @@
-package com.megamaker.codechallenge.user.domain;
+package com.megamaker.codechallenge.user.infra;
 
+import com.megamaker.codechallenge.user.infra.UserEntity;
+import com.megamaker.codechallenge.user.infra.UserJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -15,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         @Sql(value = "/sql/user-delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 })
 @DataJpaTest
-class UserJpaRepositoryTest {
+class UserEntityJpaRepositoryTest {
     @Autowired
     UserJpaRepository userJpaRepository;
 
@@ -25,10 +27,10 @@ class UserJpaRepositoryTest {
         String providerId = "1";
 
         // when
-        User foundUser = userJpaRepository.findByProviderProviderId(providerId).orElseThrow();
+        UserEntity foundUserEntity = userJpaRepository.findByProviderId(providerId).orElseThrow();
 
         // then
-        assertThat(foundUser.getProvider().getProviderId()).isEqualTo(providerId);
+        assertThat(foundUserEntity.getProviderId()).isEqualTo(providerId);
     }
 
     @Test
@@ -37,11 +39,11 @@ class UserJpaRepositoryTest {
         int n = 3;
 
         // when
-        List<User> foundUsers = userJpaRepository.findTopNByOrderByScoreDesc(n);
+        List<UserEntity> foundUserEntities = userJpaRepository.findTopNByOrderByScoreDesc(n);
 
         // then
-        for (int i = 0; i < foundUsers.size() - 1; i++) {
-            assertThat(foundUsers.get(i).getScore()).isGreaterThan(foundUsers.get(i + 1).getScore());
+        for (int i = 0; i < foundUserEntities.size() - 1; i++) {
+            assertThat(foundUserEntities.get(i).getScore()).isGreaterThan(foundUserEntities.get(i + 1).getScore());
         }
     }
 
@@ -51,12 +53,12 @@ class UserJpaRepositoryTest {
         int n = Integer.MAX_VALUE;
 
         // when
-        List<User> foundUsers = userJpaRepository.findTopNByOrderByScoreDesc(n);
+        List<UserEntity> foundUserEntities = userJpaRepository.findTopNByOrderByScoreDesc(n);
 
         // then
-        assertThat(foundUsers.size()).isLessThan(n);
-        for (int i = 0; i < foundUsers.size() - 1; i++) {
-            assertThat(foundUsers.get(i).getScore()).isGreaterThan(foundUsers.get(i + 1).getScore());
+        assertThat(foundUserEntities.size()).isLessThan(n);
+        for (int i = 0; i < foundUserEntities.size() - 1; i++) {
+            assertThat(foundUserEntities.get(i).getScore()).isGreaterThan(foundUserEntities.get(i + 1).getScore());
         }
     }
 
