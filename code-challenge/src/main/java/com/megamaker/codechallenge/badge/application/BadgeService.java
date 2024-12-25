@@ -38,14 +38,15 @@ public class BadgeService {
         // 유저 점수 별 랭킹 관련 뱃지
         List<User> top3UserList = userRepository.findTopNByOrderByScoreDesc(3);
 
-        if (Objects.equals(user.getId(), top3UserList.get(0).getId())) {
-            newBadgeSet.add(BadgeEnum.TOP1);
-        } else if (Objects.equals(user.getId(), top3UserList.get(1).getId())) {
-            newBadgeSet.add(BadgeEnum.TOP2);
-        } else if (Objects.equals(user.getId(), top3UserList.get(2).getId())) {
-            newBadgeSet.add(BadgeEnum.TOP3);
+        if (!top3UserList.isEmpty()) {
+            if (Objects.equals(user.getId(), top3UserList.get(0).getId())) {
+                newBadgeSet.add(BadgeEnum.TOP1);
+            } else if (Objects.equals(user.getId(), top3UserList.get(1).getId())) {
+                newBadgeSet.add(BadgeEnum.TOP2);
+            } else if (Objects.equals(user.getId(), top3UserList.get(2).getId())) {
+                newBadgeSet.add(BadgeEnum.TOP3);
+            }
         }
-
         // 이미 가지고 있는 뱃지 삭제
 //        for (UserBadge userBadge : user.getUserBadgeList()) {
 //            newBadgeSet.remove(userBadge.getBadge().getId());
@@ -57,9 +58,5 @@ public class BadgeService {
 
         // 새로운 유저 뱃지 리턴
         return newBadgeSet;
-    }
-
-    public List<UserBadge> getUserBadgeList(Long userId) {
-        return userBadgeRepository.findByUserId(userId);
     }
 }
