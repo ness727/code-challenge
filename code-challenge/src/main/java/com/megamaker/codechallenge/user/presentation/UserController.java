@@ -1,7 +1,9 @@
 package com.megamaker.codechallenge.user.presentation;
 
 import com.megamaker.codechallenge.badge.application.BadgeService;
+import com.megamaker.codechallenge.badge.userbadge.application.UserBadgeService;
 import com.megamaker.codechallenge.badge.userbadge.domain.UserBadge;
+import com.megamaker.codechallenge.badge.userbadge.domain.UserBadgeRepository;
 import com.megamaker.codechallenge.badge.userbadge.domain.dto.ResponseUserBadge;
 import com.megamaker.codechallenge.user.domain.User;
 import com.megamaker.codechallenge.user.domain.dto.RequestUserEdit;
@@ -25,7 +27,7 @@ import java.util.List;
 @RestController
 public class UserController {
     private final UserService userService;
-    private final BadgeService badgeService;
+    private final UserBadgeService userBadgeService;
     private final TokenRepository tokenRepository;
 
     @GetMapping
@@ -33,7 +35,7 @@ public class UserController {
         String providerId = authToProviderId(auth);
 
         User foundUser = userService.get(providerId);
-        List<UserBadge> userBadgeList = badgeService.getUserBadgeList(foundUser.getId());
+        List<UserBadge> userBadgeList = userBadgeService.getUserBadgeList(foundUser.getId());
 
         return ResponseUser.from(foundUser,
                 userBadgeList.stream()
