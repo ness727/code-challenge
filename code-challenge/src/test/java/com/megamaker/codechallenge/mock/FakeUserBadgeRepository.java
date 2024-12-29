@@ -23,7 +23,8 @@ public class FakeUserBadgeRepository implements UserBadgeRepository {
         this.userBadgeList.addAll(
                 userBadgeList.stream()
                         .map(userBadge -> new UserBadge(increaseIdAndGet(), userBadge.getUserId(),
-                                userBadge.getBadge(), LocalDateTime.now())
+                                userBadge.getBadge(),
+                                userBadge.getCreatedAt() == null ? LocalDateTime.now() : userBadge.getCreatedAt())
                         )
                         .toList()
         );
