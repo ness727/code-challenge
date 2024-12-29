@@ -1,0 +1,1 @@
+insert into badges(id, description, image_url) VALUES (1, '풀이 10문제', 'asdf.jpg');

@@ -17,8 +17,7 @@ import java.time.LocalDateTime;
 @Table(name = "user_badges")
 @Entity
 public class UserBadgeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "user_id")
